@@ -1,1 +1,1 @@
-head -c 512 mbr | hd
+head -c 512 disk.bin | hd
