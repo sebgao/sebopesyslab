@@ -4,6 +4,23 @@
 .globl start          # 将符号 start 暴露给链接器
 start:                # start 表示代码的起始地址
   cli                 # 关中断
+
+seta20.1:
+  inb     $0x64,%al               # Wait for not busy
+  testb   $0x2,%al
+  jnz     seta20.1
+
+  movb    $0xd1,%al               # 0xd1 -> port 0x64
+  outb    %al,$0x64
+
+seta20.2:
+  inb     $0x64,%al               # Wait for not busy
+  testb   $0x2,%al
+  jnz     seta20.2
+
+  movb    $0xdf,%al               # 0xdf -> port 0x60
+  outb    %al,$0x60
+
   mov $0x13, %ah      # 设置模式：显式字符串
   mov $0x01, %al      # 设置显式模式：(1) 使用 BL 指定的样式 (2) 更新光标
   mov $0x00, %bh      # 设置代码页，与字体相关； QEMU 下仅第一个代码页可用
@@ -18,5 +35,5 @@ loop:                 # loop 表示下面这条指令的首地址
   jmp loop            # 无限循环，防止继续执行超出内存
 
 str:                  # str 表示字符串首地址
-  .ascii "Hello, World!"
+  .ascii "Comsumerism!"
 end:                  # end 表示字符串之后的地址，用于计算长度
