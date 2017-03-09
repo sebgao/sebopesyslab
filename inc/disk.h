@@ -1,25 +1,33 @@
-static inline void waitdisk(void)
-{
-    // wait for disk reaady
-    while ((inb(0x1F7) & 0xC0) != 0x40)
-        // do nothing;
+#define SECTSIZE    512
+
+static inline void
+waitdisk(void) {
+    while((inb(0x1F7) & 0xC0) != 0x40);
 }
 
-static inline void readsect(void *dst, uint32_t offset)
-{
-    // wait for disk to be ready
+static inline void
+readsect(void *dst, int offset) {
+    int i;
     waitdisk();
-
-    outb(0x1F2, 1);     // count = 1
-    outb(0x1F3, offset);    //address = offset | 0xe0000000
+    outb(0x1F2, 1);
+    outb(0x1F3, offset);
     outb(0x1F4, offset >> 8);
     outb(0x1F5, offset >> 16);
     outb(0x1F6, (offset >> 24) | 0xE0);
-    outb(0x1F7, 0x20);  // cmd 0x20 - read sectors
+    outb(0x1F7, 0x20);
 
-    // wait for disk to be ready
     waitdisk();
+    for (i = 0; i < SECTSIZE / 4; i ++) {
+        ((int *)dst)[i] = inl(0x1F0);
+    }
+}
 
-    // read a sector
-    insl(0x1F0, dst, SECTSIZE/4);
+static inline void
+readseg(unsigned char *pa, int count, int offset) {
+    unsigned char *epa;
+    epa = pa + count;
+    pa -= offset % SECTSIZE;
+    offset = (offset / SECTSIZE) + 1;
+    for(; pa < epa; pa += SECTSIZE, offset ++)
+        readsect(pa, offset);
 }
