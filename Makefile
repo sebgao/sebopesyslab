@@ -21,6 +21,8 @@ QEMU_OPTIONS := -serial stdio #以标准输入输为串口(COM1)
 QEMU_OPTIONS += -d int #输出中断信息
 QEMU_OPTIONS += -monitor telnet:127.0.0.1:1111,server,nowait #telnet monitor
 
+QEMU_RUN_OPTIONS := -serial stdio #以标准输入输为串口(COM1)
+
 QEMU_DEBUG_OPTIONS := -S #启动不执行
 QEMU_DEBUG_OPTIONS += -s #GDB调试服务器: 127.0.0.1:1234
 
@@ -46,7 +48,7 @@ BOOT_O := $(BOOT_S:%.S=$(OBJ_DIR)/%.o)
 BOOT_O += $(BOOT_C:%.c=$(OBJ_DIR)/%.o)
 
 KERNEL_C := $(shell find $(KERNEL_DIR) -name "*.c")
-KERNEL_S := $(wildcard $(KERNEL_DIR)/*.S)
+KERNEL_S := $(shell find $(KERNEL_DIR) -name "*.S")
 KERNEL_O := $(KERNEL_C:%.c=$(OBJ_DIR)/%.o)
 KERNEL_O += $(KERNEL_S:%.S=$(OBJ_DIR)/%.o)
 
@@ -88,6 +90,9 @@ DEPS := $(shell find -name "*.d")
 
 qemu: $(IMAGE)
 	$(QEMU) $(QEMU_OPTIONS) $(IMAGE)
+
+run: $(IMAGE)
+	$(QEMU) $(QEMU_RUN_OPTIONS) $(IMAGE)
 
 # Faster, but not suitable for debugging
 qemu-kvm: $(IMAGE)

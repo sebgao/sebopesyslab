@@ -1,32 +1,47 @@
 #include "lib/common.h"
 
-//extern 
+#include "lib/serial.h"
+#include "lib/i8259.h"
+#include "lib/timer.h"
+#include "lib/irq.h"
+//extern
+static int letter_code[] = {
+	30, 48, 46, 32, 18, 33, 34, 35, 23, 36,
+	37, 38, 50, 49, 24, 25, 16, 19, 31, 20,
+	22, 47, 17, 45, 21, 44
+};
+void press(int code){
+	printk("code: %x\n", code);
+	int i=0;
+	for(;i<26;i++){
+		if(letter_code[i]==code){
+			printk("%c", 'a'+i);
+			printk("\n");
+			return;
+		}
+	}
+}
+void timer(){
+	//printk("turn the speak up\n");
+}
 int main(){
+	init_serial();
+	init_timer();
+	init_idt();
+	init_intr();
+	set_keyboard_intr_handler(press);
+	set_timer_intr_handler(timer);
+	enable_interrupt();
 	//int i = 0;
 	//char string[2000];
 	//sprintf(string, "%s %s", "hello", ", world!");
-	printk("Printk test begin...\n");
-printk("the answer should be:\n");
-printk("#######################################################\n");
-printk("Hello, welcome to OSlab! I'm the body of the game. ");
-printk("Bootblock loads me to the memory position of 0x100000, and Makefile also tells me that I'm at the location of 0x100000. ");
-printk("~!@#$^&*()_+`1234567890-=...... ");
-printk("Now I will test your printk: ");
-printk("1 + 1 = 2, 123 * 456 = 56088\n0, -1, -2147483648, -1412505855, -32768, 102030\n0, ffffffff, 80000000, abcdef01, ffff8000, 18e8e\n");
-printk("#######################################################\n");
-printk("your answer:\n");
-printk("=======================================================\n");
-printk("%s %s%scome %co%s", "Hello,", "", "wel", 't', " ");
-printk("%c%c%c%c%c! ", 'O', 'S', 'l', 'a', 'b');
-printk("I'm the %s of %s. %s 0x%x, %s 0x%x. ", "body", "the game", "Bootblock loads me to the memory position of",
-    0x100000, "and Makefile also tells me that I'm at the location of", 0x100000);
-printk("~!@#$^&*()_+`1234567890-=...... ");
-printk("Now I will test your printk: ");
-printk("%d + %d = %d, %d * %d = %d\n", 1, 1, 1 + 1, 123, 456, 123 * 456);
-printk("%d, %d, %d, %d, %d, %d\n", 0, 0xffffffff, 0x80000000, 0xabcedf01, -32768, 102030);
-printk("%x, %x, %x, %x, %x, %x\n", 0, 0xffffffff, 0x80000000, 0xabcedf01, -32768, 102030);
-printk("=======================================================\n");
-printk("Test end!!! Good luck!!!\n");
-	while(1);
+	printk("Here we go!\n");
+	while(1){
+		//printk("We wait\n");
+		wait_for_interrupt();
+		disable_interrupt();
+		//printk("Once up a time\n");
+		enable_interrupt();
+	}
 	return 1;
 };
