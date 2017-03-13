@@ -2,6 +2,7 @@
 
 #include "lib/irq.h"
 #include "lib/video.h"
+#include "lib/stage.h"
 static int letter[] = {
 	30, 48, 46, 32, 18, 33, 34, 35, 23, 36,
 	37, 38, 50, 49, 24, 25, 16, 19, 31, 20,
@@ -13,11 +14,14 @@ static int keydown[26];
 //static int py = 50;
 //static int pw = 2;
 static int timestamp = 0;
-void clear_key(){
+static inline void clear_key(){
 	int i = 0;
 	for(i=0; i<26; i++){
 		keydown[i] = 0;
 	}
+}
+static inline int8_t key(char s){
+	return keydown[s-'a'];
 }
 void press(int code){
 	int i=0;
@@ -38,19 +42,22 @@ void press(int code){
 		}
 	}
 }
-
+int x=0, y=0;
 void timer(){
 	disable_interrupt();
 	timestamp++;
-	if(timestamp%30==1){
-	int x=0, y=0;
-	for(x=0;x<VHEIGHT;x++){
-		for(y=0;y<VWIDTH;y++){
-			setPixelAt(x, y, timestamp%0x10);
-		}
+	if(timestamp%10==1){
+
+		if(key('a'))x--;
+		if(key('d'))x++;
+		if(key('w'))y--;
+		if(key('s'))y++;
+
+		clearStage();
+		drawRect(x, y, 6, 3, 3);
+		drawStage();
 	}
-	}
-	flushVCache();
+	
 	enable_interrupt();
 }
 

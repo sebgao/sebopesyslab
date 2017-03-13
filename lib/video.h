@@ -11,46 +11,40 @@
 
 uint8_t* VRAM = VRAMP;
 uint8_t VCACHE[VSIZE];
+uint8_t VEMPTY[VSIZE]={0};
 uint8_t VDIRTY[VHEIGHT];
-static inline void memcpy(void* dst, void* src, int len){
-	asm volatile ("cld; rep movsl" : : "c"(len), "S"(src), "D"(dst));
-}
 static inline void initVCache(){
-	int x, y;
+	int x;
+
+	memcpy(VCACHE, VEMPTY, VSIZE/4);
 	for(x=0;x<VHEIGHT;x++){
-		for(y=0; y<VWIDTH; y++){
-			VCACHE[VWIDTH*x+y] = 0;
-			VRAM[VWIDTH*x+y] = 0;
-			VDIRTY[x] = 0;
-		}
+		VDIRTY[x] = 0;
 	}
 }
 static inline void refreshVCache(){
 	int x;
+
 	for(x=0; x<VHEIGHT; x++){
 		VDIRTY[x] = 0;
 	};
 }
 static inline void flushVCache(){
+
 	int x;
 	for(x=0; x<VHEIGHT; x++){
 		if(VDIRTY[x]){
 			memcpy(VRAM+VWIDTH*x, VCACHE+VWIDTH*x, VWIDTH/4);
 		}
 	}
+
 }
-static inline void setPixelAt(int x, int y, uint8_t color){
+static inline void setPixelAt(int y, int x, uint8_t color){
+
 	VDIRTY[x] = 1;
 	VCACHE[VWIDTH*x+y]=color;
 }
-
 static inline void clearVRAM(){
-	int x, y;
-	for(x=0;x<VHEIGHT;x++){
-		for(y=0; y<VWIDTH; y++){
-			VRAM[VWIDTH*x+y] = 0;
-			VDIRTY[x] = 0;
-		}
-	}
+
+	memcpy(VRAM, VEMPTY, VSIZE/4);
 }
 #endif
