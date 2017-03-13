@@ -46,15 +46,17 @@ int x=0, y=0;
 void timer(){
 	disable_interrupt();
 	timestamp++;
-	if(timestamp%10==1){
-
+	if(timestamp%3 == 1){
 		if(key('a'))x--;
 		if(key('d'))x++;
 		if(key('w'))y--;
 		if(key('s'))y++;
+	}
+	if(timestamp%2==1){
 
 		clearStage();
-		drawRect(x, y, 6, 3, 3);
+		//drawRect(60+x, 60+y, 40, 40, 3);
+		drawCirc(60+x, 60+y, 6, 3);
 		drawStage();
 	}
 	
