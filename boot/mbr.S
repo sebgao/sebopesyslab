@@ -31,16 +31,19 @@ seta20.2:
   movb    $0xdf,%al   
   outb    %al,$0x60
 
-  mov $0x13, %ah      
-  mov $0x01, %al      
-  mov $0x00, %bh      
-  mov $0x4F, %bl      
-  mov $(end-str), %cx 
-  mov $str, %dx       
-  mov %dx, %bp        
-  mov $0x00, %dh      
-  mov $0x00, %dl      
-  int $0x10           
+  movw  $0x13, %ax
+  int   $0x10
+
+  #mov $0x13, %ah      
+  #mov $0x01, %al      
+  #mov $0x00, %bh      
+  #mov $0x4F, %bl      
+  #mov $(end-str), %cx 
+  #mov $str, %dx       
+  #mov %dx, %bp        
+  #mov $0x00, %dh      
+  #mov $0x00, %dl      
+  #int $0x10           
 
   lgdt    gdtdesc
   movl    %cr0, %eax
