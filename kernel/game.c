@@ -180,7 +180,7 @@ void createMonster(){
 		if(KISS()%(250*MONSTER_SIZE) == 0){
 			mon.status = MONSTER_ALIVE;
 			mon.size = 2 + 2*(KISS()%size);
-			mon.size = mon.size >13?13:mon.size; 
+			mon.size = mon.size >14?14:mon.size; 
 			mon.x = VWIDTH/2;
 			mon.y = VHEIGHT/2;
 			mon.sx = -1 + KISS()%3;
