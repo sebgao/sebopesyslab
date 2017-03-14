@@ -4,6 +4,8 @@
 #include "lib/video.h"
 #include "lib/stage.h"
 
+#define QUICK
+
 
 static int letter[] = {
 	30, 48, 46, 32, 18, 33, 34, 35, 23, 36,
@@ -15,7 +17,8 @@ int keydown[26];
 //static int px = 50;
 //static int py = 50;
 //static int pw = 2;
-static int timestamp = 0;
+static int timestamp = 1;
+static int curtime = 0;
 static inline void clear_key(){
 	int i = 0;
 	for(i=0; i<26; i++){
@@ -48,11 +51,8 @@ void press(int code){
 void dreamOf100HZ(int);
 
 void timer(){
-	disable_interrupt();
-	if(timestamp%4==0)
-		dreamOf100HZ(timestamp%4);
 	timestamp++;
-	enable_interrupt();
+	
 }
 
 
@@ -68,9 +68,21 @@ void game_logic(){
 	while(1){
 		//printk("We wait\n");
 		wait_for_interrupt();
+		disable_interrupt();
 		
-	/**/
+		while(curtime<timestamp){
+	
+			#ifdef QUICK
+			dreamOf100HZ(timestamp);
+			#else
+			if(timestamp%4==0)
+				dreamOf100HZ(timestamp>>2);
+			#endif
+	/**/	curtime++;
+		}
+	
 
+		enable_interrupt();
 		
 	}
 };
@@ -129,7 +141,7 @@ int hitMonster(){
 		if(mon.status == MONSTER_ALIVE && dx <= mon.size && dy <= mon.size && dx >= -mon.size && dy >= -mon.size){
 			if(mon.size <= size){
 				mon.status = MONSTER_DEAD;
-				if(size<11)size++;
+				if(size<13)size++;
 				score += mon.size;
 			}else{
 				gameStatus = GAME_END;
@@ -226,6 +238,7 @@ void dreamOf100HZ(int timestamp){
 	}
 	if(gameStatus == GAME_READY){
 		if(key('q') ){
+			printk("Press W, A, S, D to move\n");
 			gameStatus = GAME_ING;
 		}
 	}
@@ -264,7 +277,8 @@ void dreamOf100HZ(int timestamp){
 		//}
 	}
 	if(gameStatus == GAME_END){
-		printk("You are dead\n");
+		printk("You're dead\n");
+		printk("Score: %d\n", score);
 		clearStage();
 		drawStage();
 		gameStatus = GAME_START;
