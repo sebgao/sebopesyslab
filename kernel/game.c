@@ -152,7 +152,7 @@ void drawMonster(){
 			if(mon.x > VWIDTH-10) mon.x--;
 			if(mon.y < 10) mon.y++;
 			if(mon.y > VHEIGHT-10) mon.y--;
-			int color = size>mon.size?15:5;
+			int color = size>=mon.size?15:5;
 			drawCirc(mon.x, mon.y, mon.size, color);
 			if(KISS()%60==0){
 				mon.sx = -1 + KISS()%3;
@@ -264,7 +264,7 @@ void dreamOf100HZ(int timestamp){
 		//}
 	}
 	if(gameStatus == GAME_END){
-		printk("Dead\n");
+		printk("You are dead\n");
 		clearStage();
 		drawStage();
 		gameStatus = GAME_START;
