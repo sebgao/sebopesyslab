@@ -3,12 +3,14 @@
 #include "lib/irq.h"
 #include "lib/video.h"
 #include "lib/stage.h"
+
+
 static int letter[] = {
 	30, 48, 46, 32, 18, 33, 34, 35, 23, 36,
 	37, 38, 50, 49, 24, 25, 16, 19, 31, 20,
 	22, 47, 17, 45, 21, 44
 };
-static int keydown[26];
+int keydown[26];
 
 //static int px = 50;
 //static int py = 50;
@@ -42,24 +44,14 @@ void press(int code){
 		}
 	}
 }
-int x=0, y=0;
+
+void dreamOf100HZ(int);
+
 void timer(){
 	disable_interrupt();
+	//if(timestamp%2==0)
+		dreamOf100HZ(timestamp);
 	timestamp++;
-	if(timestamp%3 == 1){
-		if(key('a'))x--;
-		if(key('d'))x++;
-		if(key('w'))y--;
-		if(key('s'))y++;
-	}
-	if(timestamp%2==1){
-
-		clearStage();
-		//drawRect(60+x, 60+y, 40, 40, 3);
-		drawCirc(60+x, 60+y, 6, 3);
-		drawStage();
-	}
-	
 	enable_interrupt();
 }
 
@@ -77,7 +69,204 @@ void game_logic(){
 		//printk("We wait\n");
 		wait_for_interrupt();
 		
+	/**/
 
 		
 	}
 };
+
+
+
+
+#define domain static
+
+typedef enum{
+	GAME_START,
+	GAME_READY,
+	GAME_ING,
+	GAME_END
+} GAME_STATUS;
+
+typedef enum{
+	MONSTER_ALIVE,
+	MONSTER_DEAD,
+	MONSTER_READY,
+	MONSTER_AWAIT,
+	MONSTER_SLEEP
+} MONSTER_STATUS;
+
+#define MONSTER_SIZE 20
+
+typedef struct{
+	int size;
+	int x;
+	int y;
+	int sx;
+	int sy;
+	int status;
+	int count;
+} MONSTER;
+
+extern uint32_t UKISS();
+#define REP_MONSTER() for(; i<MONSTER_SIZE; i++)
+#define mon monsters[i]
+#define abs(x) (x)>0?(x):(-x)
+#define KISS() (UKISS()+x+y)
+
+
+domain GAME_STATUS gameStatus = GAME_START;
+domain int x, y, size, score = 0;
+
+domain MONSTER monsters[MONSTER_SIZE+20];
+
+
+int hitMonster(){
+	int i=0;
+	REP_MONSTER(){
+		int dx = x-mon.x; 
+		int dy = y-mon.y;
+		//printk("%d %d", dx, dy);
+		if(mon.status == MONSTER_ALIVE && dx <= mon.size && dy <= mon.size && dx >= -mon.size && dy >= -mon.size){
+			if(mon.size <= size){
+				mon.status = MONSTER_DEAD;
+				if(size<11)size++;
+				score += mon.size;
+			}else{
+				gameStatus = GAME_END;
+				return 0;
+			}
+			return 1;
+		}
+	}
+	return 0;
+}
+
+void drawMonster(){
+	int i=0;
+	REP_MONSTER(){
+		if(mon.status == MONSTER_ALIVE){
+			mon.x += mon.sx;
+			mon.y += mon.sy;
+
+			if(mon.x < 10) mon.x++;
+			if(mon.x > VWIDTH-10) mon.x--;
+			if(mon.y < 10) mon.y++;
+			if(mon.y > VHEIGHT-10) mon.y--;
+			int color = size>mon.size?15:5;
+			drawCirc(mon.x, mon.y, mon.size, color);
+			if(KISS()%60==0){
+				mon.sx = -1 + KISS()%3;
+				mon.sy = -1 + KISS()%3;
+			}
+		}
+	}
+}
+void createMonster(){
+	int i=0;
+	REP_MONSTER(){
+		if(mon.status == MONSTER_ALIVE) continue;
+		if(KISS()%(250*MONSTER_SIZE) == 0){
+			mon.status = MONSTER_ALIVE;
+			mon.size = 2 + 2*(KISS()%size);
+			mon.size = mon.size >13?13:mon.size; 
+			mon.x = VWIDTH/2;
+			mon.y = VHEIGHT/2;
+			mon.sx = -1 + KISS()%3;
+			mon.sy = -1 + KISS()%3;
+		}
+	}
+}
+void dreamOf100HZ(int timestamp){
+	/*if(timestamp%6 == 1){
+		if(key('a'))x--;
+		if(key('d'))x++;
+		if(key('w'))y--;
+		if(key('s'))y++;
+	}
+	if(timestamp%5==1){
+
+		clearStage();
+		//drawRect(60+x, 60+y, 40, 40, 3);
+		drawCirc(60+x, 60+y, 15, 3);
+		drawCirc(70+x, 60+y, 15, 6);
+		drawStage();
+	}*/
+	if(gameStatus == GAME_START){
+		clearStage();
+		drawText1();
+		//drawNumber(timestamp, 0, 0, 2, 15);
+		drawStage();
+
+		int i=0;
+		x = 30;
+		y = 30;
+		size = 4;
+		score = 0;
+		monsters[i].status = MONSTER_ALIVE;
+		monsters[i].size = 1 + (KISS()%size);
+		monsters[i].x = KISS()%VWIDTH;
+		monsters[i].y = KISS()%VHEIGHT;
+		monsters[i].sx = -1 + KISS()%3;
+		monsters[i].sy = -1 + KISS()%3;
+		i++;
+		REP_MONSTER(){
+			monsters[i].status = MONSTER_SLEEP;
+			monsters[i].count = 0;
+			if(KISS()%MONSTER_SIZE < size+3){
+				monsters[i].status = MONSTER_ALIVE;
+				monsters[i].size = 1 + 2*(KISS()%size);
+				monsters[i].x = KISS()%VWIDTH;
+				monsters[i].y = KISS()%VHEIGHT;
+				monsters[i].sx = -1 + KISS()%3;
+				monsters[i].sy = -1 + KISS()%3;
+			}
+		}
+		printk("Press Q to start\n");
+		gameStatus = GAME_READY;
+	}
+	if(gameStatus == GAME_READY){
+		if(key('q') ){
+			gameStatus = GAME_ING;
+		}
+	}
+
+	if(gameStatus == GAME_ING){
+
+
+
+
+		//if(x>0 && x<VWIDTH && y>0 && y<VHEIGHT){
+		//if(timestamp % 3){
+			if(key('a'))x--;
+			if(key('d'))x++;
+			if(key('w'))y--;
+			if(key('s'))y++;
+		//}
+
+		if(x < 0) x++;
+		if(x > VWIDTH) x--;
+		if(y < 0) y++;
+		if(y > VHEIGHT) y--;
+		//}
+		//else{
+		clearStage();
+		drawCirc(x, y, size, 3);
+		
+
+		drawMonster();
+		drawCirc(x, y, size, 3);
+		drawNumber(score, 0, 180, 1, 7);
+		drawStage();
+		
+		
+		createMonster();
+		while(hitMonster());
+		//}
+	}
+	if(gameStatus == GAME_END){
+		printk("Dead\n");
+		clearStage();
+		drawStage();
+		gameStatus = GAME_START;
+	}
+}

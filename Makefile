@@ -91,6 +91,8 @@ DEPS := $(shell find -name "*.d")
 qemu: $(IMAGE)
 	$(QEMU) $(QEMU_OPTIONS) $(IMAGE)
 
+image: $(IMAGE)
+
 run: $(IMAGE)
 	$(QEMU) $(QEMU_RUN_OPTIONS) $(IMAGE)
 
