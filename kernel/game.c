@@ -47,12 +47,12 @@ void press(int code){
 		}
 	}
 }
-
+static int score;
 void dreamOf100HZ(int);
 
 void timer(){
 	timestamp++;
-	
+	if(timestamp % 400 == 0)score++;
 }
 
 
