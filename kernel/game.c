@@ -49,8 +49,8 @@ void dreamOf100HZ(int);
 
 void timer(){
 	disable_interrupt();
-	//if(timestamp%2==0)
-		dreamOf100HZ(timestamp);
+	if(timestamp%4==0)
+		dreamOf100HZ(timestamp%4);
 	timestamp++;
 	enable_interrupt();
 }
