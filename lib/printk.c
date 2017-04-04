@@ -8,7 +8,7 @@
 #define XNEXT(ptr) ptr++
 
 void printch(char c){
-  asm volatile("int $0x80": : "a"(SYS_PRINT_CHAR), "b"(c));
+  asm volatile("int $0x80": : "a"(SYS_PRINT_CHAR), "b"(c)); //SYSCALL HERE!
 }
 
 enum{

@@ -1,4 +1,5 @@
 #include "lib/common.h"
+
 #include "lib/serial.h"
 void do_syscall(struct TrapFrame *tf) {
 	switch(tf->eax) {

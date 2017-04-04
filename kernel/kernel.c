@@ -35,7 +35,7 @@ int main(){
 	init_intr();
 
   while(1){
-    printk("haha");
+    printk("haha\n");
   }
 	//game_logic();
 
