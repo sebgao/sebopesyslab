@@ -3,17 +3,11 @@
 #include "lib/serial.h"
 #include "lib/video.h"
 #include "lib/keyboard.h"
-/*
-#define SYS_INIT_CACHE	1100
-#define SYS_CLEAR_VRAM	1101
-#define SYS_FLUSH_VCACHE	1102
-#define SYS_SET_PIXEL	1103
-#define SYS_DRAW_TEXT1	1104
-#define SYS_DRAW_RECT	1105
-#define SYS_DRAW_NUMBER	1106
-*/
+
+extern timer_handler timer_handlers[TIMER_HANDLERS_MAX];
 
 void do_syscall(struct TrapFrame *tf) {
+	int i;
 	switch(tf->eax) {
 		case SYS_PRINT_CHAR:
 			serial_printc(tf->ebx);
@@ -34,6 +28,15 @@ void do_syscall(struct TrapFrame *tf) {
 		break;
 		case SYS_GET_KEY:
 			tf->eax = get_key(tf->ebx);
+		break;
+		case SYS_ADD_TIMER:
+			for(i=0;i<TIMER_HANDLERS_MAX;i++){
+				if(!timer_handlers[i].used){
+					timer_handlers[i].ptr = (void*)tf->ebx;
+					timer_handlers[i].used = 1;
+					break;
+				}
+			}
 		break;
 		/* The `add_irq_handle' system call is artificial. We use it to
 		 * let user program register its interrupt handlers. But this is

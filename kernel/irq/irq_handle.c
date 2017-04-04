@@ -1,12 +1,22 @@
 #include "lib/common.h"
 #include "lib/serial.h"
-static void (*do_timer)(void);
+#include "lib/syscall.h"
+//static void (*do_timer)(void);
 static void (*do_keyboard)(int);
 
-void
+timer_handler timer_handlers[TIMER_HANDLERS_MAX];
+
+static void do_timer(){
+	int i;
+	for(i=0;i<TIMER_HANDLERS_MAX;i++){
+		if(timer_handlers[i].used)timer_handlers[i].ptr();
+	}
+}
+
+/*void
 set_timer_intr_handler( void (*ptr)(void) ) {
 	do_timer = ptr;
-}
+}*/
 void
 set_keyboard_intr_handler( void (*ptr)(int) ) {
 	do_keyboard = ptr;

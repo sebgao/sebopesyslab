@@ -112,7 +112,7 @@ void vfprintf(void (*printer)(char), const char *ctl, void **args) {
 void __attribute__((__noinline__)) 
 printf(const char *ctl, ...) {
 	void **args = (void **)&ctl + 1;
-	vfprintf(printch, ctl, args);
+	vfprintf(sys_printch, ctl, args);
 }
 
 void __attribute__((__noinline__)) 

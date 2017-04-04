@@ -29,7 +29,7 @@ unsigned int UKISS()
     return x+y+z;    
 }  
 static void timer(){
-
+  printk("h");
 }
 int main(){
 	init_serial();
@@ -37,12 +37,12 @@ int main(){
 	init_idt();
 	init_intr();
   set_keyboard_intr_handler(press_key);
-  set_timer_intr_handler(timer);
+  sys_add_timer(timer);
   printf("%s\n", "Here we go!");
-	//game_logic();
+	game_logic();
   enable_interrupt();
   while(1){
-    if(key_down('a'))printf("%s\n", "hahahah");;
+    if(sys_key_down('a'))printf("%s\n", "hahahah");;
     //printf("%c", get_lastkey());
     wait_for_interrupt();
     disable_interrupt();

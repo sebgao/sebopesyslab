@@ -189,10 +189,10 @@ static inline int isqrt(uint32_t x) {
 
 static inline void clearStage(){
 	hash = 0;
-	init_cache();
+	sys_init_vcache();
 }
 static inline void drawPoint(int x, int y, uint8_t color){
-	set_pixel(y, x, color);
+	sys_set_pixel(y, x, color);
 }
 static inline void drawRect(int x, int y, int w, int h, uint8_t color){
 	hash += 29*x+57*y+13*color;
@@ -257,7 +257,7 @@ static inline void drawNumber(int num, int x, int y, int size, uint8_t color){
 static inline void drawStage(){
 	if(lhash == hash)return;
 	//clear_vram();
-	flush_vcache();
+	sys_flush_vcache();
 	lhash = hash;
 }
 #endif

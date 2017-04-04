@@ -1,27 +1,34 @@
 #include "lib/common.h"
-
-#include "lib/irq.h"
-#include "lib/video.h"
+#include "lib/syscall.h"
+//#include "lib/irq.h"
+//#include "lib/video.h"
 #include "lib/stage.h"
 
 #define QUICK
 
+#define VWIDTH 320
+#define VHEIGHT 200
+#define VSIZE (VWIDTH*VHEIGHT)
 
 static int timestamp = 1;
 static int curtime = 0;
 static int score;
 void dreamOf100HZ(int);
 
-void timer(){
+static inline void timer(){
 	//printk("7\n");
 	timestamp++;
 	//printk("8\n");
 	if(timestamp % 400 == 0)score++;
 	//printk("9\n");
 }
-int8_t key(char s){
-	return key_down(s);
+static inline int8_t key(char s){
+	return sys_key_down(s);
 }
+static inline void set_timer_intr_handler(void (*ptr)(void) ){
+	sys_add_timer(ptr);
+};
+
 
 
 void game_logic(){
@@ -33,7 +40,7 @@ void game_logic(){
 	//printk("3\n");
 	enable_interrupt();
 	//printk("4\n");
-	initVCache();
+	//initVCache();
 	//printk("5\n");
 	//clear_key();
 	//printk("6\n");
@@ -208,7 +215,7 @@ void dreamOf100HZ(int timestamp){
 		gameStatus = GAME_READY;
 	}
 	if(gameStatus == GAME_READY){
-		printf("%d\n", key('q'));
+		//printf("%d\n", key('q'));
 		if(key('q') ){
 			printk("Press W, A, S, D to move\n");
 			gameStatus = GAME_ING;
