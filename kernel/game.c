@@ -51,36 +51,43 @@ static int score;
 void dreamOf100HZ(int);
 
 void timer(){
+	//printk("7\n");
 	timestamp++;
+	//printk("8\n");
 	if(timestamp % 400 == 0)score++;
+	//printk("9\n");
 }
 
 
 
 void game_logic(){
 
-
+	//printk("1\n");
 	set_keyboard_intr_handler(press);
+	//printk("2\n");
 	set_timer_intr_handler(timer);
+	//printk("3\n");
 	enable_interrupt();
+	//printk("4\n");
 	initVCache();
+	//printk("5\n");
 	clear_key();
+	//printk("6\n");
 	while(1){
-		//printk("We wait\n");
+		
 		wait_for_interrupt();
 		disable_interrupt();
-		
 		while(curtime<timestamp){
-	
+			
 			#ifdef QUICK
 			dreamOf100HZ(timestamp);
 			#else
 			if(timestamp%4==0)
 				dreamOf100HZ(timestamp>>2);
 			#endif
-	/**/	curtime++;
+		curtime++;
 		}
-	
+		
 
 		enable_interrupt();
 		

@@ -4,6 +4,8 @@
 
 #include "common.h"
 #include <stdarg.h>
+#include "serial.h"
+
 #define XGET(ptr, TYPE) *((TYPE*)(ptr))
 #define XNEXT(ptr) ptr++
 
@@ -121,6 +123,12 @@ void __attribute__((__noinline__))
 printk(const char *ctl, ...) {
 	void **args = (void **)&ctl + 1;
 	vfprintf(printch, ctl, args);
+}
+
+void __attribute__((__noinline__)) 
+stprintk(const char *ctl, ...) {
+	void **args = (void **)&ctl + 1;
+	vfprintf(serial_printc, ctl, args);
 }
 #undef cur
 #undef GETS

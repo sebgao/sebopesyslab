@@ -8,6 +8,7 @@
 
 
 void printk(const char *ctl, ...);
+void stprintk(const char *ctl, ...);
 static inline void memcpy(void* dst, void* src, int len){
 	asm volatile ("cld; rep movsl" : : "c"(len), "S"(src), "D"(dst));
 }
