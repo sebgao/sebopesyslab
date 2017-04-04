@@ -7,46 +7,8 @@
 #define QUICK
 
 
-static int letter[] = {
-	30, 48, 46, 32, 18, 33, 34, 35, 23, 36,
-	37, 38, 50, 49, 24, 25, 16, 19, 31, 20,
-	22, 47, 17, 45, 21, 44
-};
-int keydown[26];
-
-//static int px = 50;
-//static int py = 50;
-//static int pw = 2;
 static int timestamp = 1;
 static int curtime = 0;
-static inline void clear_key(){
-	int i = 0;
-	for(i=0; i<26; i++){
-		keydown[i] = 0;
-	}
-}
-static inline int8_t key(char s){
-	return keydown[s-'a'];
-}
-void press(int code){
-	int i=0;
-	if((code & 0x80) == 0){
-		for(;i<26;i++){
-			if(letter[i]==code){
-				keydown[i] = 1;
-				return;
-			}
-		}
-	}else{
-		code &= 0x7F;
-		for(;i<26;i++){
-			if(letter[i]==code){
-				keydown[i] = 0;
-				return;
-			}
-		}
-	}
-}
 static int score;
 void dreamOf100HZ(int);
 
@@ -57,13 +19,15 @@ void timer(){
 	if(timestamp % 400 == 0)score++;
 	//printk("9\n");
 }
-
+int8_t key(char s){
+	return key_down(s);
+}
 
 
 void game_logic(){
 
 	//printk("1\n");
-	set_keyboard_intr_handler(press);
+	//set_keyboard_intr_handler(press);
 	//printk("2\n");
 	set_timer_intr_handler(timer);
 	//printk("3\n");
@@ -71,7 +35,7 @@ void game_logic(){
 	//printk("4\n");
 	initVCache();
 	//printk("5\n");
-	clear_key();
+	//clear_key();
 	//printk("6\n");
 	while(1){
 		
@@ -244,6 +208,7 @@ void dreamOf100HZ(int timestamp){
 		gameStatus = GAME_READY;
 	}
 	if(gameStatus == GAME_READY){
+		printf("%d\n", key('q'));
 		if(key('q') ){
 			printk("Press W, A, S, D to move\n");
 			gameStatus = GAME_ING;

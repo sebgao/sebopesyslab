@@ -1,7 +1,8 @@
 #ifndef H_STAGE_
 #define H_STAGE_
 #include "common.h"
-#include "lib/video.h"
+
+#include "lib/syscall.h"
 
 uint32_t hash=0;
 uint32_t lhash=0;
@@ -188,10 +189,10 @@ static inline int isqrt(uint32_t x) {
 
 static inline void clearStage(){
 	hash = 0;
-	initVCache();
+	init_cache();
 }
 static inline void drawPoint(int x, int y, uint8_t color){
-	setPixelAt(y, x, color);
+	set_pixel(y, x, color);
 }
 static inline void drawRect(int x, int y, int w, int h, uint8_t color){
 	hash += 29*x+57*y+13*color;
@@ -255,8 +256,8 @@ static inline void drawNumber(int num, int x, int y, int size, uint8_t color){
 
 static inline void drawStage(){
 	if(lhash == hash)return;
-	clearVRAM();
-	flushVCache();
+	//clear_vram();
+	flush_vcache();
 	lhash = hash;
 }
 #endif

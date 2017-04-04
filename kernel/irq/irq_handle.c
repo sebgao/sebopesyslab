@@ -1,4 +1,5 @@
 #include "lib/common.h"
+#include "lib/serial.h"
 static void (*do_timer)(void);
 static void (*do_keyboard)(int);
 
@@ -16,8 +17,9 @@ void do_syscall(struct TrapFrame *);
 void
 irq_handle(struct TrapFrame *tf) {
 	//stprintk("%d\n", tf->irq);
-	//printk("%x %x %x %x %x \n", tf->irq, tf->eax, tf->ecx, tf->edx);
+	//printk("%x %d %d %d %d \n", tf->irq, tf->eax, tf->ecx, tf->edx);
 	if(tf->irq < 1000) {
+
 		if(tf->irq == -1) {
 			//printk("%s, %d: Unhandled exception!\n", __FUNCTION__, __LINE__);
 		}
@@ -31,8 +33,10 @@ irq_handle(struct TrapFrame *tf) {
 	}
 	if (tf->irq == 1000) {
 		//printk("haha");
+		//serial_printc('t');
 		do_timer();
 	} else if (tf->irq == 1001) {
+		//serial_printc('k');
 		uint32_t code = inb(0x60);
 		uint32_t val = inb(0x61);
 		outb(0x61, val | 0x80);

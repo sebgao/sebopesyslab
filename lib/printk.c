@@ -1,17 +1,7 @@
-
-#ifndef _PRINTK_H
-#define _PRINTK_H
-
-#include "common.h"
-#include <stdarg.h>
-#include "serial.h"
-
+#include "printk.h"
 #define XGET(ptr, TYPE) *((TYPE*)(ptr))
 #define XNEXT(ptr) ptr++
 
-void printch(char c){
-  asm volatile("int $0x80": : "a"(SYS_PRINT_CHAR), "b"(c)); //SYSCALL HERE!
-}
 
 enum{
 	NONE,
@@ -120,16 +110,15 @@ void vfprintf(void (*printer)(char), const char *ctl, void **args) {
 }
 
 void __attribute__((__noinline__)) 
-printk(const char *ctl, ...) {
+printf(const char *ctl, ...) {
 	void **args = (void **)&ctl + 1;
 	vfprintf(printch, ctl, args);
 }
 
 void __attribute__((__noinline__)) 
-stprintk(const char *ctl, ...) {
+printk(const char *ctl, ...) {
 	void **args = (void **)&ctl + 1;
 	vfprintf(serial_printc, ctl, args);
 }
 #undef cur
 #undef GETS
-#endif

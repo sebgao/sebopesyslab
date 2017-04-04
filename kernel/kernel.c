@@ -1,10 +1,11 @@
 #include "lib/common.h"
-
 #include "lib/serial.h"
 #include "lib/i8259.h"
 #include "lib/timer.h"
 #include "lib/irq.h"
-
+#include "lib/printk.h"
+#include "lib/keyboard.h"
+#include "lib/syscall.h"
 extern void game_logic();
 
 static unsigned int x = 123456789,  
@@ -27,14 +28,25 @@ unsigned int UKISS()
        
     return x+y+z;    
 }  
+static void timer(){
 
+}
 int main(){
 	init_serial();
 	init_timer();
 	init_idt();
 	init_intr();
-
-	game_logic();
-
+  set_keyboard_intr_handler(press_key);
+  set_timer_intr_handler(timer);
+  printf("%s\n", "Here we go!");
+	//game_logic();
+  enable_interrupt();
+  while(1){
+    if(key_down('a'))printf("%s\n", "hahahah");;
+    //printf("%c", get_lastkey());
+    wait_for_interrupt();
+    disable_interrupt();
+    enable_interrupt();
+  };
 	return 1;
 };
