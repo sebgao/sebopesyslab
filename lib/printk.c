@@ -4,10 +4,12 @@
 
 #include "common.h"
 #include <stdarg.h>
-#include "lib/serial.h"
 #define XGET(ptr, TYPE) *((TYPE*)(ptr))
 #define XNEXT(ptr) ptr++
-extern void serial_printc(char);
+
+void printch(char c){
+  asm volatile("int $0x80": : "a"(SYS_PRINT_CHAR), "b"(c));
+}
 
 enum{
 	NONE,
@@ -118,7 +120,7 @@ void vfprintf(void (*printer)(char), const char *ctl, void **args) {
 void __attribute__((__noinline__)) 
 printk(const char *ctl, ...) {
 	void **args = (void **)&ctl + 1;
-	vfprintf(serial_printc, ctl, args);
+	vfprintf(printch, ctl, args);
 }
 #undef cur
 #undef GETS

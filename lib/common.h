@@ -4,6 +4,7 @@
 #include "inc/types.h"
 #include "inc/x86.h"
 
+#define SYS_PRINT_CHAR 1000
 
 
 void printk(const char *ctl, ...);

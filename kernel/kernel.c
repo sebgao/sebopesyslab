@@ -34,7 +34,10 @@ int main(){
 	init_idt();
 	init_intr();
 
-	game_logic();
+  while(1){
+    printk("haha");
+  }
+	//game_logic();
 
 	return 1;
 };
