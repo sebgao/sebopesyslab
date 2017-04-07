@@ -9,7 +9,7 @@ extern timer_handler timer_handlers[TIMER_HANDLERS_MAX];
 extern uint32_t tick();
 
 void do_syscall(struct TrapFrame *tf) {
-	disable_interrupt();
+	//disable_interrupt();
 	int i;
 	switch(tf->eax) {
 		case SYS_PRINT_CHAR:
@@ -52,5 +52,5 @@ void do_syscall(struct TrapFrame *tf) {
 		 */
 
 	}
-	enable_interrupt();
+	//enable_interrupt();
 }

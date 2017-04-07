@@ -44,13 +44,13 @@ static inline void sys_add_timer(void (*ptr)(void)){
 	asm volatile("int $0x80": : "a"(SYS_ADD_TIMER), "b"(ptr));
 }
 static inline char sys_key_down(char s){
-	char r_eax;
+	char r_eax = 0;
 	asm volatile("int $0x80": : "a"(SYS_GET_KEY), "b"(s)); //SYSCALL HERE!
 	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
 	return r_eax;
 }
 static inline uint32_t sys_get_tick(){
-	uint32_t r_eax;
+	uint32_t r_eax = 0;
 	asm volatile("int $0x80": : "a"(SYS_GET_TICK)); //SYSCALL HERE!
 	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
 	return r_eax;

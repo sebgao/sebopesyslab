@@ -31,6 +31,7 @@
 
 
 asm_do_irq:
+	cli
 	pushal
 	
 	pushl %esp			# ???
@@ -39,4 +40,5 @@ asm_do_irq:
 
 	popal
 	addl $8, %esp
+	sti
 	iret

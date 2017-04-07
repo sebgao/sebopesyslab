@@ -73,6 +73,7 @@ $(IMAGE): $(BOOT) $(KERNEL) $(GAME)
 	@$(DD) if=/dev/zero of=$(IMAGE) count=10000		 > /dev/null # 准备磁盘文件
 	@$(DD) if=$(BOOT) of=$(IMAGE) conv=notrunc		  > /dev/null # 填充 boot loader
 	@$(DD) if=$(KERNEL) of=$(IMAGE) seek=1 conv=notrunc > /dev/null # 填充 kernel, 跨过 mbr
+	@$(DD) if=$(GAME) of=$(IMAGE) seek=201 conv=notrunc > /dev/null # 填充 kernel, 跨过 mbr
 
 $(BOOT): $(BOOT_O)
 	$(LD) -e start -Ttext=0x7C00 -m elf_i386 -nostdlib -o $@.out $^
@@ -90,10 +91,11 @@ $(OBJ_BOOT_DIR)/%.o: $(BOOT_DIR)/%.c
 
 $(KERNEL): $(LD_SCRIPT)
 $(KERNEL): $(KERNEL_O) $(LIB_O)
-	$(LD) -m elf_i386 -T $(LD_SCRIPT) -nostdlib -o $@ $^ $(shell $(CC) $(KERNEL_CFLAGS) -print-libgcc-file-name)
+	$(LD) -e main -Ttext=0x100000 -m elf_i386 -T $(LD_SCRIPT) -nostdlib -o $@ $^ $(shell $(CC) $(KERNEL_CFLAGS) -print-libgcc-file-name)
+	./fill.sh $@
 
 $(GAME): $(GAME_O) $(LIB_O)
-	$(LD) -m elf_i386 -nostdlib -o $@ $^ $(shell $(CC) $(GAME_CFLAGS) -print-libgcc-file-name)
+	$(LD) -e main -Ttext=0x200000 -m elf_i386 -nostdlib -o $@ $^ $(shell $(CC) $(GAME_CFLAGS) -print-libgcc-file-name)
 
 $(OBJ_LIB_DIR)/%.o : $(LIB_DIR)/%.c
 	@mkdir -p $(OBJ_LIB_DIR)

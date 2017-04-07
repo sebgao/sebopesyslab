@@ -13,27 +13,18 @@
 
 static int timestamp = 1;
 static int curtime = 0;
+
 static int score;
 void dreamOf100HZ(int);
 
-static inline void timer(){
-	//printk("7\n");
-	timestamp++;
-	//printk("8\n");
-	if(timestamp % 400 == 0)score++;
-	//printk("9\n");
-}
 static inline int8_t key(char s){
 	return sys_key_down(s);
 }
-static inline void set_timer_intr_handler(void (*ptr)(void) ){
-	sys_add_timer(ptr);
-};
 
 
 
 int main(){
-
+	printf("GAME START!\n");
 	//printk("1\n");
 	//set_keyboard_intr_handler(press);
 	//printk("2\n");

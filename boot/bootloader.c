@@ -3,7 +3,7 @@
 #include "inc/disk.h"
 #include "inc/types.h"
 
-#define elf		((struct ELFHeader *) 0x8000)
+#define elf		((struct ELFHeader *) 0x8001)
 
 void readseg(unsigned char *, int, int);
 
