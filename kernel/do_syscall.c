@@ -5,8 +5,10 @@
 #include "lib/keyboard.h"
 
 extern timer_handler timer_handlers[TIMER_HANDLERS_MAX];
+extern uint32_t tick();
 
 void do_syscall(struct TrapFrame *tf) {
+	disable_interrupt();
 	int i;
 	switch(tf->eax) {
 		case SYS_PRINT_CHAR:
@@ -29,6 +31,10 @@ void do_syscall(struct TrapFrame *tf) {
 		case SYS_GET_KEY:
 			tf->eax = get_key(tf->ebx);
 		break;
+		case SYS_GET_TICK:
+			tf->eax = tick();
+			//printk("%d\n", tf->eax);
+		break;
 		case SYS_ADD_TIMER:
 			for(i=0;i<TIMER_HANDLERS_MAX;i++){
 				if(!timer_handlers[i].used){
@@ -45,4 +51,5 @@ void do_syscall(struct TrapFrame *tf) {
 		 */
 
 	}
+	enable_interrupt();
 }

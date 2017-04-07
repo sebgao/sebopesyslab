@@ -36,18 +36,18 @@ void game_logic(){
 	//printk("1\n");
 	//set_keyboard_intr_handler(press);
 	//printk("2\n");
-	set_timer_intr_handler(timer);
+	//set_timer_intr_handler(timer);
 	//printk("3\n");
-	enable_interrupt();
+	//enable_interrupt();
 	//printk("4\n");
 	//initVCache();
 	//printk("5\n");
 	//clear_key();
 	//printk("6\n");
 	while(1){
-		
-		wait_for_interrupt();
-		disable_interrupt();
+		timestamp = sys_get_tick();
+		//wait_for_interrupt();
+		//disable_interrupt();
 		while(curtime<timestamp){
 			
 			#ifdef QUICK
@@ -56,11 +56,11 @@ void game_logic(){
 			if(timestamp%4==0)
 				dreamOf100HZ(timestamp>>2);
 			#endif
-		curtime++;
+			curtime++;
 		}
 		
 
-		enable_interrupt();
+		//enable_interrupt();
 		
 	}
 };
@@ -211,13 +211,13 @@ void dreamOf100HZ(int timestamp){
 				monsters[i].sy = -1 + KISS()%3;
 			}
 		}
-		printk("Press Q to start\n");
+		printf("Press Q to start\n");
 		gameStatus = GAME_READY;
 	}
 	if(gameStatus == GAME_READY){
 		//printf("%d\n", key('q'));
 		if(key('q') ){
-			printk("Press W, A, S, D to move\n");
+			printf("Press W, A, S, D to move\n");
 			gameStatus = GAME_ING;
 		}
 	}
@@ -256,8 +256,8 @@ void dreamOf100HZ(int timestamp){
 		//}
 	}
 	if(gameStatus == GAME_END){
-		printk("You're dead\n");
-		printk("Score: %d\n", score);
+		printf("You're dead\n");
+		printf("Score: %d\n", score);
 		clearStage();
 		drawStage();
 		gameStatus = GAME_START;

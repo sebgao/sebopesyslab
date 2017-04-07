@@ -2,25 +2,23 @@
 #include "lib/serial.h"
 #include "lib/syscall.h"
 //static void (*do_timer)(void);
-static void (*do_keyboard)(int);
+extern void press_key(int code);
 
 timer_handler timer_handlers[TIMER_HANDLERS_MAX];
 
-static void do_timer(){
+/*static void do_timer_x(){
 	int i;
 	for(i=0;i<TIMER_HANDLERS_MAX;i++){
 		if(timer_handlers[i].used)timer_handlers[i].ptr();
 	}
-}
+}*/
+extern void do_timer();
 
 /*void
 set_timer_intr_handler( void (*ptr)(void) ) {
 	do_timer = ptr;
 }*/
-void
-set_keyboard_intr_handler( void (*ptr)(int) ) {
-	do_keyboard = ptr;
-}
+
 void do_syscall(struct TrapFrame *);
 /* TrapFrame的定义在include/x86/memory.h
  * 请仔细理解这段程序的含义，这些内容将在后续的实验中被反复使用。 */
@@ -51,7 +49,7 @@ irq_handle(struct TrapFrame *tf) {
 		uint32_t val = inb(0x61);
 		outb(0x61, val | 0x80);
 		outb(0x61, val);
-		do_keyboard(code);
+		press_key(code);
 	} else {
 		
 	}

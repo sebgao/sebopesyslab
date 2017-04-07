@@ -14,12 +14,13 @@
 #define SYS_DRAW_NUMBER	1106
 #define SYS_GET_KEY		1200
 #define SYS_ADD_TIMER	1300
+#define SYS_GET_TICK	1301
 
 #define TIMER_HANDLERS_MAX 100
 typedef struct timer_handler{
 	void (*ptr)(void);
 	int used;
-	
+
 }timer_handler;
 
 static inline void sys_printch(char c){
@@ -45,6 +46,12 @@ static inline void sys_add_timer(void (*ptr)(void)){
 static inline char sys_key_down(char s){
 	char r_eax;
 	asm volatile("int $0x80": : "a"(SYS_GET_KEY), "b"(s)); //SYSCALL HERE!
+	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
+	return r_eax;
+}
+static inline uint32_t sys_get_tick(){
+	uint32_t r_eax;
+	asm volatile("int $0x80": : "a"(SYS_GET_TICK)); //SYSCALL HERE!
 	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
 	return r_eax;
 }

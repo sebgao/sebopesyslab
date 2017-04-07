@@ -28,25 +28,23 @@ unsigned int UKISS()
        
     return x+y+z;    
 }  
-static void timer(){
-  printk("h");
-}
+
 int main(){
 	init_serial();
 	init_timer();
 	init_idt();
 	init_intr();
-  set_keyboard_intr_handler(press_key);
-  sys_add_timer(timer);
   printf("%s\n", "Here we go!");
-	game_logic();
   enable_interrupt();
+	game_logic();
   while(1){
-    if(sys_key_down('a'))printf("%s\n", "hahahah");;
+    //uint32_t tick = sys_get_tick();
+    //printk("%d\n", tick);
+    /*if(sys_key_down('a'))printf("%s\n", "hahahah");;
     //printf("%c", get_lastkey());
     wait_for_interrupt();
     disable_interrupt();
-    enable_interrupt();
+    enable_interrupt();*/
   };
 	return 1;
 };
