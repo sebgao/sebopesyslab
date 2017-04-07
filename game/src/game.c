@@ -1,9 +1,9 @@
-#include "lib/common.h"
-#include "lib/syscall.h"
+#include "common.h"
+#include "syscall.h"
 //#include "lib/irq.h"
 //#include "lib/video.h"
-#include "lib/stage.h"
-
+#include "stage.h"
+#include "rnd.h"
 #define QUICK
 
 #define VWIDTH 320
@@ -31,7 +31,7 @@ static inline void set_timer_intr_handler(void (*ptr)(void) ){
 
 
 
-void game_logic(){
+int main(){
 
 	//printk("1\n");
 	//set_keyboard_intr_handler(press);
@@ -63,6 +63,7 @@ void game_logic(){
 		//enable_interrupt();
 		
 	}
+	return 1;
 };
 
 

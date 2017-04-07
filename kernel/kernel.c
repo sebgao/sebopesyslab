@@ -36,10 +36,14 @@ int main(){
 	init_intr();
   printf("%s\n", "Here we go!");
   enable_interrupt();
-	game_logic();
+	//game_logic();
+  uint32_t cur = 0;
   while(1){
-    //uint32_t tick = sys_get_tick();
-    //printk("%d\n", tick);
+    uint32_t tick = sys_get_tick();
+    while(cur++<tick){
+
+    }
+    
     /*if(sys_key_down('a'))printf("%s\n", "hahahah");;
     //printf("%c", get_lastkey());
     wait_for_interrupt();

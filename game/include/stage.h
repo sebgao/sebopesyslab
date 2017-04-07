@@ -1,8 +1,8 @@
-#ifndef H_STAGE_
-#define H_STAGE_
+#ifndef _STAGE_H
+#define _STAGE_H
 #include "common.h"
 
-#include "lib/syscall.h"
+#include "syscall.h"
 
 uint32_t hash=0;
 uint32_t lhash=0;
