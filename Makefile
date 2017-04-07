@@ -40,6 +40,9 @@ GAME_DIR     := game
 GAME_CFLAGS := $(CFLAGS)
 GAME_CFLAGS += -I $(GAME_DIR)/include
 
+KERNEL_CFLAGS := $(CFLAGS)
+KERNEL_CFLAGS += -I $(KERNEL_DIR)/include
+
 OBJ_LIB_DIR	:= $(OBJ_DIR)/$(LIB_DIR)
 OBJ_BOOT_DIR   := $(OBJ_DIR)/$(BOOT_DIR)
 OBJ_KERNEL_DIR := $(OBJ_DIR)/$(KERNEL_DIR)
@@ -87,7 +90,7 @@ $(OBJ_BOOT_DIR)/%.o: $(BOOT_DIR)/%.c
 
 $(KERNEL): $(LD_SCRIPT)
 $(KERNEL): $(KERNEL_O) $(LIB_O)
-	$(LD) -m elf_i386 -T $(LD_SCRIPT) -nostdlib -o $@ $^ $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
+	$(LD) -m elf_i386 -T $(LD_SCRIPT) -nostdlib -o $@ $^ $(shell $(CC) $(KERNEL_CFLAGS) -print-libgcc-file-name)
 
 $(GAME): $(GAME_O) $(LIB_O)
 	$(LD) -m elf_i386 -nostdlib -o $@ $^ $(shell $(CC) $(GAME_CFLAGS) -print-libgcc-file-name)
@@ -98,7 +101,7 @@ $(OBJ_LIB_DIR)/%.o : $(LIB_DIR)/%.c
 
 $(OBJ_KERNEL_DIR)/%.o: $(KERNEL_DIR)/%.[cS]
 	mkdir -p $(OBJ_DIR)/$(dir $<)
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(KERNEL_CFLAGS) $< -o $@
 
 $(OBJ_GAME_DIR)/%.o: $(GAME_DIR)/%.[cS]
 	mkdir -p $(OBJ_DIR)/$(dir $<)

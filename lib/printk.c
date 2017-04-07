@@ -115,10 +115,10 @@ printf(const char *ctl, ...) {
 	vfprintf(sys_printch, ctl, args);
 }
 
-void __attribute__((__noinline__)) 
+/*void __attribute__((__noinline__)) 
 printk(const char *ctl, ...) {
 	void **args = (void **)&ctl + 1;
 	vfprintf(serial_printc, ctl, args);
-}
+}*/
 #undef cur
 #undef GETS

@@ -1,8 +1,9 @@
-#include "lib/common.h"
+#include "common.h"
+#include "serial.h"
+#include "video.h"
+#include "keyboard.h"
+
 #include "lib/syscall.h"
-#include "lib/serial.h"
-#include "lib/video.h"
-#include "lib/keyboard.h"
 
 extern timer_handler timer_handlers[TIMER_HANDLERS_MAX];
 extern uint32_t tick();

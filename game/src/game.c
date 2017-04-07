@@ -1,9 +1,10 @@
 #include "common.h"
-#include "syscall.h"
 //#include "lib/irq.h"
 //#include "lib/video.h"
 #include "stage.h"
 #include "rnd.h"
+
+#include "lib/syscall.h"
 #define QUICK
 
 #define VWIDTH 320

@@ -1,5 +1,5 @@
-#ifndef H_VIDEO
-#define H_VIDEO
+#ifndef _H_VIDEO
+#define _H_VIDEO
 
 #include "common.h"
 

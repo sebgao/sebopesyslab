@@ -2,7 +2,7 @@
 #define _STAGE_H
 #include "common.h"
 
-#include "syscall.h"
+#include "lib/syscall.h"
 
 uint32_t hash=0;
 uint32_t lhash=0;

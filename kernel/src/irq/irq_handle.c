@@ -1,5 +1,5 @@
-#include "lib/common.h"
-#include "lib/serial.h"
+#include "common.h"
+//#include "serial.h"
 #include "lib/syscall.h"
 //static void (*do_timer)(void);
 extern void press_key(int code);
