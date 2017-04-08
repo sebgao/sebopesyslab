@@ -65,12 +65,11 @@ asm_do_irq:
   movw %ax, %ds
   movw %ax, %es
 
-	pushl %esp			# ???
-	call irq_handle
-
-	addl $4, %esp
-
-	popal
+  pushl %esp			# ???
+  call irq_handle
+  addl $4, %esp
+  popal
+  
   popl %gs
   popl %fs
   popl %es

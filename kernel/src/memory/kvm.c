@@ -74,11 +74,11 @@ init_page(void) {
 }
 
 /* One TSS will be enough for all processes in ring 3. It will be used in Lab3. */
-TSS tss; 
+static TSS tss; 
 
 static void set_tss(SegDesc *ptr) {
 	tss.ss0 = SELECTOR_KERNEL(SEG_KERNEL_DATA);		// only one ring 0 stack segment
-	tss.esp0 = KSTACKTOP;
+	//tss.esp0 = KSTACKTOP;
 	uint32_t base = (uint32_t)&tss;
 	uint32_t limit = sizeof(TSS) - 1;
 	ptr->limit_15_0  = limit & 0xffff;
@@ -96,7 +96,7 @@ static void set_tss(SegDesc *ptr) {
 	ptr->base_31_24  = base >> 24;
 }
 
-void set_tss_esp0(uint32_t esp) {
+static void set_tss_esp0(uint32_t esp) {
 	tss.esp0 = esp;
 }
 
@@ -141,46 +141,19 @@ init_segment(void) {
 	write_tr( SELECTOR_USER(SEG_TSS) );
 }
 
-void switch_process(PCB *p)
+
+void enter_pcb(PCB* pcb)
 {
-	//lcr3(PADDR(p->pgdir));
-	//tss.esp0 = (uint32_t)KSTACK_TOP(p->kstack) - 8;
-
-	tss.esp0 = KSTACKTOP;
-
-	struct TrapFrame *tf = p->tf;
-	asm volatile("mov %0, %%esp; \
-				  add $0x4, %%esp; \
-				  popal; \
-				  add $0x8, %%esp" : : "r"(tf));
-	/*
-	asm volatile("pushl %0" : : "r"((uint32_t)p->tf.ss));
-	asm volatile("pushl %0" : : "r"(p->tf.esp));
-	asm volatile("pushl %0" : : "r"(p->tf.eflags));
-	asm volatile("pushl %0" : : "r"((uint32_t)p->tf.cs));
-	asm volatile("pushl %0" : : "r"(p->tf.eip));
-	*/
-	//uint32_t esp;
-	//asm volatile("mov %%esp, %0" : "=a"(esp));
-	//printk("%x", esp);
-	asm volatile("iret");
-}
-void enter_user_space(struct TrapFrame *tf)
-{
-
-	tss.esp0 = KSTACKTOP;
-
-	//struct TrapFrame *tf = p->tf;
-
-	asm volatile("mov %0, %%esp; \
-				  popal; \
-				  add $0x8, %%esp" : : "r"(tf));
-	/*
-	asm volatile("pushl %0" : : "r"((uint32_t)p->tf.ss));
-	asm volatile("pushl %0" : : "r"(p->tf.esp));
-	asm volatile("pushl %0" : : "r"(p->tf.eflags));
-	asm volatile("pushl %0" : : "r"((uint32_t)p->tf.cs));
-	asm volatile("pushl %0" : : "r"(p->tf.eip));
-	*/
-	asm volatile("iret");
+	set_tss_esp0((uint32_t)pcb->kstack);
+	struct TrapFrame *tf = pcb->tf;
+	asm volatile("mov %0, %%ds" : : "r"(tf->ds));
+	asm volatile("mov %0, %%es" : : "r"(tf->es));
+	asm volatile("mov %0, %%fs" : : "r"(tf->fs));
+	asm volatile("mov %0, %%gs" : : "r"(tf->gs));
+	asm volatile("pushl %0" : : "r"((uint32_t)tf->ss));
+	asm volatile("pushl %0" : : "r"(tf->esp));
+	asm volatile("pushl %0" : : "r"(tf->eflags));
+	asm volatile("pushl %0" : : "r"((uint32_t)tf->cs));
+	asm volatile("pushl %0" : : "r"(tf->eip));
+	asm volatile("iret"); 
 }
