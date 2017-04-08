@@ -24,7 +24,7 @@ static inline int8_t key(char s){
 
 
 int main(){
-	printf("GAME START!\n");
+	//printf("GAME START!\n");
 	//printk("1\n");
 	//set_keyboard_intr_handler(press);
 	//printk("2\n");

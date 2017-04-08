@@ -10,6 +10,7 @@ extern uint32_t tick();
 
 void do_syscall(struct TrapFrame *tf) {
 	//disable_interrupt();
+	//printk("%d\n", tf->cs&0x3);
 	int i;
 	switch(tf->eax) {
 		case SYS_PRINT_CHAR:

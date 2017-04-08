@@ -12,1966 +12,2793 @@ Disassembly of section .text:
 unsigned int UKISS()  
 {    
   200000:	55                   	push   %ebp
-  200001:	57                   	push   %edi
-  200002:	56                   	push   %esi
+  200001:	89 e5                	mov    %esp,%ebp
   200003:	53                   	push   %ebx
+  200004:	83 ec 14             	sub    $0x14,%esp
     unsigned long long t, A = 698769069ULL;    
+  200007:	c7 45 f0 ad 5e a6 29 	movl   $0x29a65ead,-0x10(%ebp)
+  20000e:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
   
     x = 69069*x+12345;    
-  200004:	69 2d 0c 20 20 00 cd 	imul   $0x10dcd,0x20200c,%ebp
-  20000b:	0d 01 00 
-  20000e:	81 c5 39 30 00 00    	add    $0x3039,%ebp
-  200014:	89 2d 0c 20 20 00    	mov    %ebp,0x20200c
+  200015:	a1 00 30 20 00       	mov    0x203000,%eax
+  20001a:	69 c0 cd 0d 01 00    	imul   $0x10dcd,%eax,%eax
+  200020:	05 39 30 00 00       	add    $0x3039,%eax
+  200025:	a3 00 30 20 00       	mov    %eax,0x203000
     y ^= (y<<13);   
-  20001a:	a1 08 20 20 00       	mov    0x202008,%eax
-  20001f:	89 c3                	mov    %eax,%ebx
-  200021:	c1 e3 0d             	shl    $0xd,%ebx
-  200024:	31 c3                	xor    %eax,%ebx
+  20002a:	a1 04 30 20 00       	mov    0x203004,%eax
+  20002f:	c1 e0 0d             	shl    $0xd,%eax
+  200032:	89 c2                	mov    %eax,%edx
+  200034:	a1 04 30 20 00       	mov    0x203004,%eax
+  200039:	31 d0                	xor    %edx,%eax
+  20003b:	a3 04 30 20 00       	mov    %eax,0x203004
     y ^= (y>>17);   
-  200026:	89 d8                	mov    %ebx,%eax
-  200028:	c1 e8 11             	shr    $0x11,%eax
-  20002b:	31 c3                	xor    %eax,%ebx
+  200040:	a1 04 30 20 00       	mov    0x203004,%eax
+  200045:	c1 e8 11             	shr    $0x11,%eax
+  200048:	89 c2                	mov    %eax,%edx
+  20004a:	a1 04 30 20 00       	mov    0x203004,%eax
+  20004f:	31 d0                	xor    %edx,%eax
+  200051:	a3 04 30 20 00       	mov    %eax,0x203004
     y ^= (y<<5);    
-  20002d:	89 d8                	mov    %ebx,%eax
-  20002f:	c1 e0 05             	shl    $0x5,%eax
-  200032:	31 c3                	xor    %eax,%ebx
-  200034:	89 1d 08 20 20 00    	mov    %ebx,0x202008
+  200056:	a1 04 30 20 00       	mov    0x203004,%eax
+  20005b:	c1 e0 05             	shl    $0x5,%eax
+  20005e:	89 c2                	mov    %eax,%edx
+  200060:	a1 04 30 20 00       	mov    0x203004,%eax
+  200065:	31 d0                	xor    %edx,%eax
+  200067:	a3 04 30 20 00       	mov    %eax,0x203004
       
     t = (A*z + c);  
-  20003a:	b9 ad 5e a6 29       	mov    $0x29a65ead,%ecx
-  20003f:	89 c8                	mov    %ecx,%eax
-  200041:	f7 25 04 20 20 00    	mull   0x202004
-  200047:	89 d1                	mov    %edx,%ecx
-  200049:	89 c2                	mov    %eax,%edx
-  20004b:	8b 35 00 20 20 00    	mov    0x202000,%esi
-  200051:	bf 00 00 00 00       	mov    $0x0,%edi
-  200056:	01 d6                	add    %edx,%esi
-  200058:	11 cf                	adc    %ecx,%edi
+  20006c:	a1 08 30 20 00       	mov    0x203008,%eax
+  200071:	ba 00 00 00 00       	mov    $0x0,%edx
+  200076:	8b 4d f0             	mov    -0x10(%ebp),%ecx
+  200079:	89 cb                	mov    %ecx,%ebx
+  20007b:	0f af da             	imul   %edx,%ebx
+  20007e:	8b 4d f4             	mov    -0xc(%ebp),%ecx
+  200081:	0f af c8             	imul   %eax,%ecx
+  200084:	01 d9                	add    %ebx,%ecx
+  200086:	f7 65 f0             	mull   -0x10(%ebp)
+  200089:	01 d1                	add    %edx,%ecx
+  20008b:	89 ca                	mov    %ecx,%edx
+  20008d:	8b 0d 0c 30 20 00    	mov    0x20300c,%ecx
+  200093:	bb 00 00 00 00       	mov    $0x0,%ebx
+  200098:	01 c8                	add    %ecx,%eax
+  20009a:	11 da                	adc    %ebx,%edx
+  20009c:	89 45 e8             	mov    %eax,-0x18(%ebp)
+  20009f:	89 55 ec             	mov    %edx,-0x14(%ebp)
     c = (t >> 32);  
-  20005a:	89 3d 00 20 20 00    	mov    %edi,0x202000
+  2000a2:	8b 45 e8             	mov    -0x18(%ebp),%eax
+  2000a5:	8b 55 ec             	mov    -0x14(%ebp),%edx
+  2000a8:	89 d0                	mov    %edx,%eax
+  2000aa:	31 d2                	xor    %edx,%edx
+  2000ac:	a3 0c 30 20 00       	mov    %eax,0x20300c
     z = t;  
-  200060:	89 f0                	mov    %esi,%eax
-  200062:	89 35 04 20 20 00    	mov    %esi,0x202004
-  200068:	01 e8                	add    %ebp,%eax
+  2000b1:	8b 45 e8             	mov    -0x18(%ebp),%eax
+  2000b4:	a3 08 30 20 00       	mov    %eax,0x203008
        
     return x+y+z;    
-  20006a:	01 d8                	add    %ebx,%eax
-  20006c:	5b                   	pop    %ebx
-  20006d:	5e                   	pop    %esi
-  20006e:	5f                   	pop    %edi
-  20006f:	5d                   	pop    %ebp
-  200070:	c3                   	ret    
+  2000b9:	8b 15 00 30 20 00    	mov    0x203000,%edx
+  2000bf:	a1 04 30 20 00       	mov    0x203004,%eax
+  2000c4:	01 c2                	add    %eax,%edx
+  2000c6:	a1 08 30 20 00       	mov    0x203008,%eax
+  2000cb:	01 d0                	add    %edx,%eax
+  2000cd:	83 c4 14             	add    $0x14,%esp
+  2000d0:	5b                   	pop    %ebx
+  2000d1:	5d                   	pop    %ebp
+  2000d2:	c3                   	ret    
 
-00200071 <hitMonster>:
-domain int x, y, size, score = 0;
+002000d3 <sys_init_vcache>:
 
-domain MONSTER monsters[MONSTER_SIZE+20];
-
-
-int hitMonster(){
-  200071:	55                   	push   %ebp
-  200072:	57                   	push   %edi
-  200073:	56                   	push   %esi
-  200074:	53                   	push   %ebx
-  200075:	83 ec 0c             	sub    $0xc,%esp
-	int i=0;
-	REP_MONSTER(){
-		int dx = x-mon.x; 
-  200078:	a1 68 2e 20 00       	mov    0x202e68,%eax
-  20007d:	89 04 24             	mov    %eax,(%esp)
-		int dy = y-mon.y;
-  200080:	a1 64 2e 20 00       	mov    0x202e64,%eax
-  200085:	89 44 24 04          	mov    %eax,0x4(%esp)
-  200089:	ba 04 2a 20 00       	mov    $0x202a04,%edx
-  20008e:	bd 34 2c 20 00       	mov    $0x202c34,%ebp
-
-domain MONSTER monsters[MONSTER_SIZE+20];
-
-
-int hitMonster(){
-	int i=0;
-  200093:	b9 00 00 00 00       	mov    $0x0,%ecx
-	REP_MONSTER(){
-		int dx = x-mon.x; 
-  200098:	8b 32                	mov    (%edx),%esi
-		int dy = y-mon.y;
-  20009a:	8b 5a 04             	mov    0x4(%edx),%ebx
-		//printk("%d %d", dx, dy);
-		if(mon.status == MONSTER_ALIVE && dx <= mon.size && dy <= mon.size && dx >= -mon.size && dy >= -mon.size){
-  20009d:	8b 42 10             	mov    0x10(%edx),%eax
-  2000a0:	85 c0                	test   %eax,%eax
-  2000a2:	75 66                	jne    20010a <hitMonster+0x99>
-
-
-int hitMonster(){
-	int i=0;
-	REP_MONSTER(){
-		int dx = x-mon.x; 
-  2000a4:	8b 3c 24             	mov    (%esp),%edi
-  2000a7:	29 f7                	sub    %esi,%edi
-		int dy = y-mon.y;
-  2000a9:	8b 74 24 04          	mov    0x4(%esp),%esi
-  2000ad:	29 de                	sub    %ebx,%esi
-		//printk("%d %d", dx, dy);
-		if(mon.status == MONSTER_ALIVE && dx <= mon.size && dy <= mon.size && dx >= -mon.size && dy >= -mon.size){
-  2000af:	8b 5a fc             	mov    -0x4(%edx),%ebx
-  2000b2:	39 de                	cmp    %ebx,%esi
-  2000b4:	7f 54                	jg     20010a <hitMonster+0x99>
-  2000b6:	89 7c 24 08          	mov    %edi,0x8(%esp)
-  2000ba:	39 df                	cmp    %ebx,%edi
-  2000bc:	7f 4c                	jg     20010a <hitMonster+0x99>
-  2000be:	89 df                	mov    %ebx,%edi
-  2000c0:	f7 df                	neg    %edi
-  2000c2:	39 fe                	cmp    %edi,%esi
-  2000c4:	7c 44                	jl     20010a <hitMonster+0x99>
-  2000c6:	39 7c 24 08          	cmp    %edi,0x8(%esp)
-  2000ca:	7c 3e                	jl     20010a <hitMonster+0x99>
-			if(mon.size <= size){
-  2000cc:	8b 15 60 2e 20 00    	mov    0x202e60,%edx
-  2000d2:	39 d3                	cmp    %edx,%ebx
-  2000d4:	7f 28                	jg     2000fe <hitMonster+0x8d>
-				mon.status = MONSTER_DEAD;
-  2000d6:	6b c9 1c             	imul   $0x1c,%ecx,%ecx
-  2000d9:	c7 81 14 2a 20 00 01 	movl   $0x1,0x202a14(%ecx)
-  2000e0:	00 00 00 
-				if(size<13)size++;
-  2000e3:	83 fa 0c             	cmp    $0xc,%edx
-  2000e6:	7f 09                	jg     2000f1 <hitMonster+0x80>
-  2000e8:	83 c2 01             	add    $0x1,%edx
-  2000eb:	89 15 60 2e 20 00    	mov    %edx,0x202e60
-				score += mon.size;
-  2000f1:	01 1d 70 2e 20 00    	add    %ebx,0x202e70
-			}else{
-				gameStatus = GAME_END;
-				return 0;
-			}
-			return 1;
-  2000f7:	b8 01 00 00 00       	mov    $0x1,%eax
-  2000fc:	eb 1b                	jmp    200119 <hitMonster+0xa8>
-			if(mon.size <= size){
-				mon.status = MONSTER_DEAD;
-				if(size<13)size++;
-				score += mon.size;
-			}else{
-				gameStatus = GAME_END;
-  2000fe:	c7 05 6c 2e 20 00 03 	movl   $0x3,0x202e6c
-  200105:	00 00 00 
-				return 0;
-  200108:	eb 0f                	jmp    200119 <hitMonster+0xa8>
-domain MONSTER monsters[MONSTER_SIZE+20];
-
-
-int hitMonster(){
-	int i=0;
-	REP_MONSTER(){
-  20010a:	83 c1 01             	add    $0x1,%ecx
-  20010d:	83 c2 1c             	add    $0x1c,%edx
-  200110:	39 ea                	cmp    %ebp,%edx
-  200112:	75 84                	jne    200098 <hitMonster+0x27>
-				return 0;
-			}
-			return 1;
-		}
-	}
-	return 0;
-  200114:	b8 00 00 00 00       	mov    $0x0,%eax
-}
-  200119:	83 c4 0c             	add    $0xc,%esp
-  20011c:	5b                   	pop    %ebx
-  20011d:	5e                   	pop    %esi
-  20011e:	5f                   	pop    %edi
-  20011f:	5d                   	pop    %ebp
-  200120:	c3                   	ret    
-
-00200121 <drawMonster>:
-
-void drawMonster(){
-  200121:	55                   	push   %ebp
-  200122:	57                   	push   %edi
-  200123:	56                   	push   %esi
-  200124:	53                   	push   %ebx
-  200125:	83 ec 2c             	sub    $0x2c,%esp
-  200128:	c7 44 24 18 08 2a 20 	movl   $0x202a08,0x18(%esp)
-  20012f:	00 
-  200130:	8b 44 24 18          	mov    0x18(%esp),%eax
-  200134:	89 44 24 1c          	mov    %eax,0x1c(%esp)
-	int i=0;
-	REP_MONSTER(){
-		if(mon.status == MONSTER_ALIVE){
-  200138:	83 78 0c 00          	cmpl   $0x0,0xc(%eax)
-  20013c:	0f 85 e1 01 00 00    	jne    200323 <drawMonster+0x202>
-			mon.x += mon.sx;
-  200142:	89 c1                	mov    %eax,%ecx
-  200144:	8b 50 04             	mov    0x4(%eax),%edx
-  200147:	03 50 fc             	add    -0x4(%eax),%edx
-  20014a:	89 50 fc             	mov    %edx,-0x4(%eax)
-			mon.y += mon.sy;
-  20014d:	8b 40 08             	mov    0x8(%eax),%eax
-  200150:	03 01                	add    (%ecx),%eax
-  200152:	89 01                	mov    %eax,(%ecx)
-
-			if(mon.x < 10) mon.x++;
-  200154:	83 fa 09             	cmp    $0x9,%edx
-  200157:	7f 06                	jg     20015f <drawMonster+0x3e>
-  200159:	83 c2 01             	add    $0x1,%edx
-  20015c:	89 51 fc             	mov    %edx,-0x4(%ecx)
-			if(mon.x > VWIDTH-10) mon.x--;
-  20015f:	8b 54 24 1c          	mov    0x1c(%esp),%edx
-  200163:	8b 52 fc             	mov    -0x4(%edx),%edx
-  200166:	81 fa 36 01 00 00    	cmp    $0x136,%edx
-  20016c:	7e 0a                	jle    200178 <drawMonster+0x57>
-  20016e:	83 ea 01             	sub    $0x1,%edx
-  200171:	8b 4c 24 1c          	mov    0x1c(%esp),%ecx
-  200175:	89 51 fc             	mov    %edx,-0x4(%ecx)
-			if(mon.y < 10) mon.y++;
-  200178:	83 f8 09             	cmp    $0x9,%eax
-  20017b:	7f 09                	jg     200186 <drawMonster+0x65>
-  20017d:	83 c0 01             	add    $0x1,%eax
-  200180:	8b 54 24 1c          	mov    0x1c(%esp),%edx
-  200184:	89 02                	mov    %eax,(%edx)
-			if(mon.y > VHEIGHT-10) mon.y--;
-  200186:	8b 44 24 1c          	mov    0x1c(%esp),%eax
-  20018a:	8b 00                	mov    (%eax),%eax
-  20018c:	3d be 00 00 00       	cmp    $0xbe,%eax
-  200191:	7e 09                	jle    20019c <drawMonster+0x7b>
-  200193:	83 e8 01             	sub    $0x1,%eax
-  200196:	8b 54 24 1c          	mov    0x1c(%esp),%edx
-  20019a:	89 02                	mov    %eax,(%edx)
-			int color = size>=mon.size?15:5;
-  20019c:	8b 4c 24 1c          	mov    0x1c(%esp),%ecx
-  2001a0:	8b 41 f8             	mov    -0x8(%ecx),%eax
-  2001a3:	89 c7                	mov    %eax,%edi
-  2001a5:	89 44 24 0c          	mov    %eax,0xc(%esp)
-  2001a9:	3b 05 60 2e 20 00    	cmp    0x202e60,%eax
-  2001af:	0f 9e c2             	setle  %dl
-  2001b2:	0f b6 d2             	movzbl %dl,%edx
-  2001b5:	83 ea 01             	sub    $0x1,%edx
-  2001b8:	83 e2 f6             	and    $0xfffffff6,%edx
-  2001bb:	83 c2 0f             	add    $0xf,%edx
-			drawCirc(mon.x, mon.y, mon.size, color);
-  2001be:	8b 29                	mov    (%ecx),%ebp
-  2001c0:	8b 41 fc             	mov    -0x4(%ecx),%eax
-  2001c3:	89 44 24 14          	mov    %eax,0x14(%esp)
-}
-
-
-static inline void drawCirc(int x, int y, int r, uint8_t color){
-	int i, j;
-	hash += 329*x+157*y+713*r;
-  2001c7:	69 c8 49 01 00 00    	imul   $0x149,%eax,%ecx
-  2001cd:	69 c5 9d 00 00 00    	imul   $0x9d,%ebp,%eax
-  2001d3:	01 c1                	add    %eax,%ecx
-  2001d5:	69 c7 c9 02 00 00    	imul   $0x2c9,%edi,%eax
-  2001db:	01 c8                	add    %ecx,%eax
-  2001dd:	01 05 e4 29 20 00    	add    %eax,0x2029e4
-	for(i=-r; i<=r; i++){
-  2001e3:	89 f9                	mov    %edi,%ecx
-  2001e5:	f7 d9                	neg    %ecx
-  2001e7:	89 4c 24 08          	mov    %ecx,0x8(%esp)
-  2001eb:	39 cf                	cmp    %ecx,%edi
-  2001ed:	0f 8c b7 00 00 00    	jl     2002aa <drawMonster+0x189>
-		int delta = isqrt(r*r-i*i)+1;
-  2001f3:	89 f9                	mov    %edi,%ecx
-  2001f5:	0f af cf             	imul   %edi,%ecx
-  2001f8:	89 4c 24 10          	mov    %ecx,0x10(%esp)
-static inline void clearStage(){
-	hash = 0;
-	sys_init_vcache();
-}
-static inline void drawPoint(int x, int y, uint8_t color){
-	sys_set_pixel(y, x, color);
-  2001fc:	0f b6 d2             	movzbl %dl,%edx
-}
-static inline void sys_flush_vcache(){
-	asm volatile("int $0x80": : "a"(SYS_FLUSH_VCACHE)); //SYSCALL HERE!
-}
-static inline void sys_set_pixel(int x, int y, int color){
-	asm volatile("int $0x80": : "a"(SYS_SET_PIXEL), "b"(x), "c"(y), "d"(color)); //SYSCALL HERE!
-  2001ff:	b8 4f 04 00 00       	mov    $0x44f,%eax
-
-static inline void drawCirc(int x, int y, int r, uint8_t color){
-	int i, j;
-	hash += 329*x+157*y+713*r;
-	for(i=-r; i<=r; i++){
-		int delta = isqrt(r*r-i*i)+1;
-  200204:	8b 7c 24 08          	mov    0x8(%esp),%edi
-  200208:	89 f9                	mov    %edi,%ecx
-  20020a:	0f af cf             	imul   %edi,%ecx
-  20020d:	8b 5c 24 10          	mov    0x10(%esp),%ebx
-  200211:	29 cb                	sub    %ecx,%ebx
-};
-const char* nums[10]={
-    num0, num1, num2, num3, num4, num5, num6, num7, num8, num9
-};
-static inline int isqrt(uint32_t x) {
-    if(memoriza[x] > 0) return memoriza[x];
-  200213:	8b 3c 9d 80 20 20 00 	mov    0x202080(,%ebx,4),%edi
-  20021a:	85 ff                	test   %edi,%edi
-  20021c:	75 5a                	jne    200278 <drawMonster+0x157>
-    const uint16_t *p = squares;
-  20021e:	b9 80 15 20 00       	mov    $0x201580,%ecx
-    //if (p[128] <= x) p += 128;
-    //if (p[ 64] <= x) p +=  64;
-    if (p[ 32] <= x) p +=  32;
-  200223:	81 fb ff 03 00 00    	cmp    $0x3ff,%ebx
-  200229:	76 05                	jbe    200230 <drawMonster+0x10f>
-  20022b:	b9 c0 15 20 00       	mov    $0x2015c0,%ecx
-    if (p[ 16] <= x) p +=  16;
-  200230:	0f b7 71 20          	movzwl 0x20(%ecx),%esi
-  200234:	39 f3                	cmp    %esi,%ebx
-  200236:	72 03                	jb     20023b <drawMonster+0x11a>
-  200238:	83 c1 20             	add    $0x20,%ecx
-    if (p[  8] <= x) p +=   8;
-  20023b:	0f b7 71 10          	movzwl 0x10(%ecx),%esi
-  20023f:	39 f3                	cmp    %esi,%ebx
-  200241:	72 03                	jb     200246 <drawMonster+0x125>
-  200243:	83 c1 10             	add    $0x10,%ecx
-    if (p[  4] <= x) p +=   4;
-  200246:	0f b7 71 08          	movzwl 0x8(%ecx),%esi
-  20024a:	39 f3                	cmp    %esi,%ebx
-  20024c:	72 03                	jb     200251 <drawMonster+0x130>
-  20024e:	83 c1 08             	add    $0x8,%ecx
-    if (p[  2] <= x) p +=   2;
-  200251:	0f b7 71 04          	movzwl 0x4(%ecx),%esi
-  200255:	39 f3                	cmp    %esi,%ebx
-  200257:	72 03                	jb     20025c <drawMonster+0x13b>
-  200259:	83 c1 04             	add    $0x4,%ecx
-    if (p[  1] <= x) p +=   1;
-  20025c:	0f b7 71 02          	movzwl 0x2(%ecx),%esi
-  200260:	39 f3                	cmp    %esi,%ebx
-  200262:	72 03                	jb     200267 <drawMonster+0x146>
-  200264:	83 c1 02             	add    $0x2,%ecx
-    memoriza[x] = p - squares;
-  200267:	81 e9 80 15 20 00    	sub    $0x201580,%ecx
-  20026d:	d1 f9                	sar    %ecx
-  20026f:	89 cf                	mov    %ecx,%edi
-  200271:	89 0c 9d 80 20 20 00 	mov    %ecx,0x202080(,%ebx,4)
-
-static inline void drawCirc(int x, int y, int r, uint8_t color){
-	int i, j;
-	hash += 329*x+157*y+713*r;
-	for(i=-r; i<=r; i++){
-		int delta = isqrt(r*r-i*i)+1;
-  200278:	83 c7 01             	add    $0x1,%edi
-		//printk("%d\n", delta);
-		for(j=-delta; j<=delta; j++){
-  20027b:	89 fe                	mov    %edi,%esi
-  20027d:	f7 de                	neg    %esi
-  20027f:	39 f7                	cmp    %esi,%edi
-  200281:	7c 14                	jl     200297 <drawMonster+0x176>
-  200283:	8b 4c 24 08          	mov    0x8(%esp),%ecx
-  200287:	03 4c 24 14          	add    0x14(%esp),%ecx
-  20028b:	8d 1c 2e             	lea    (%esi,%ebp,1),%ebx
-  20028e:	cd 80                	int    $0x80
-  200290:	83 c6 01             	add    $0x1,%esi
-  200293:	39 f7                	cmp    %esi,%edi
-  200295:	7d f4                	jge    20028b <drawMonster+0x16a>
-
-
-static inline void drawCirc(int x, int y, int r, uint8_t color){
-	int i, j;
-	hash += 329*x+157*y+713*r;
-	for(i=-r; i<=r; i++){
-  200297:	83 44 24 08 01       	addl   $0x1,0x8(%esp)
-  20029c:	8b 7c 24 08          	mov    0x8(%esp),%edi
-  2002a0:	39 7c 24 0c          	cmp    %edi,0xc(%esp)
-  2002a4:	0f 8d 5a ff ff ff    	jge    200204 <drawMonster+0xe3>
-			if(KISS()%60==0){
-  2002aa:	e8 51 fd ff ff       	call   200000 <UKISS>
-  2002af:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  2002b5:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  2002bb:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  2002be:	b8 89 88 88 88       	mov    $0x88888889,%eax
-  2002c3:	f7 e1                	mul    %ecx
-  2002c5:	c1 ea 05             	shr    $0x5,%edx
-  2002c8:	6b d2 3c             	imul   $0x3c,%edx,%edx
-  2002cb:	39 d1                	cmp    %edx,%ecx
-  2002cd:	75 54                	jne    200323 <drawMonster+0x202>
-				mon.sx = -1 + KISS()%3;
-  2002cf:	e8 2c fd ff ff       	call   200000 <UKISS>
-  2002d4:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  2002da:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  2002e0:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  2002e3:	b8 ab aa aa aa       	mov    $0xaaaaaaab,%eax
-  2002e8:	f7 e1                	mul    %ecx
-  2002ea:	d1 ea                	shr    %edx
-  2002ec:	8d 04 52             	lea    (%edx,%edx,2),%eax
-  2002ef:	29 c1                	sub    %eax,%ecx
-  2002f1:	8d 41 ff             	lea    -0x1(%ecx),%eax
-  2002f4:	8b 7c 24 1c          	mov    0x1c(%esp),%edi
-  2002f8:	89 47 04             	mov    %eax,0x4(%edi)
-				mon.sy = -1 + KISS()%3;
-  2002fb:	e8 00 fd ff ff       	call   200000 <UKISS>
-  200300:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  200306:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  20030c:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  20030f:	b8 ab aa aa aa       	mov    $0xaaaaaaab,%eax
-  200314:	f7 e1                	mul    %ecx
-  200316:	d1 ea                	shr    %edx
-  200318:	8d 04 52             	lea    (%edx,%edx,2),%eax
-  20031b:	29 c1                	sub    %eax,%ecx
-  20031d:	8d 41 ff             	lea    -0x1(%ecx),%eax
-  200320:	89 47 08             	mov    %eax,0x8(%edi)
-  200323:	83 44 24 18 1c       	addl   $0x1c,0x18(%esp)
-  200328:	8b 44 24 18          	mov    0x18(%esp),%eax
-	return 0;
-}
-
-void drawMonster(){
-	int i=0;
-	REP_MONSTER(){
-  20032c:	3d 38 2c 20 00       	cmp    $0x202c38,%eax
-  200331:	0f 85 f9 fd ff ff    	jne    200130 <drawMonster+0xf>
-				mon.sx = -1 + KISS()%3;
-				mon.sy = -1 + KISS()%3;
-			}
-		}
-	}
-}
-  200337:	83 c4 2c             	add    $0x2c,%esp
-  20033a:	5b                   	pop    %ebx
-  20033b:	5e                   	pop    %esi
-  20033c:	5f                   	pop    %edi
-  20033d:	5d                   	pop    %ebp
-  20033e:	c3                   	ret    
-
-0020033f <createMonster>:
-void createMonster(){
-  20033f:	55                   	push   %ebp
-  200340:	57                   	push   %edi
-  200341:	56                   	push   %esi
-  200342:	53                   	push   %ebx
-  200343:	83 ec 0c             	sub    $0xc,%esp
-  200346:	bb 14 2a 20 00       	mov    $0x202a14,%ebx
-  20034b:	bf 44 2c 20 00       	mov    $0x202c44,%edi
-	int i=0;
-	REP_MONSTER(){
-		if(mon.status == MONSTER_ALIVE) continue;
-		if(KISS()%(250*MONSTER_SIZE) == 0){
-  200350:	bd 59 17 b7 d1       	mov    $0xd1b71759,%ebp
-  200355:	89 de                	mov    %ebx,%esi
-	}
-}
-void createMonster(){
-	int i=0;
-	REP_MONSTER(){
-		if(mon.status == MONSTER_ALIVE) continue;
-  200357:	83 3b 00             	cmpl   $0x0,(%ebx)
-  20035a:	0f 84 c1 00 00 00    	je     200421 <createMonster+0xe2>
-		if(KISS()%(250*MONSTER_SIZE) == 0){
-  200360:	e8 9b fc ff ff       	call   200000 <UKISS>
-  200365:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  20036b:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  200371:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  200374:	89 c8                	mov    %ecx,%eax
-  200376:	f7 e5                	mul    %ebp
-  200378:	c1 ea 0c             	shr    $0xc,%edx
-  20037b:	69 d2 88 13 00 00    	imul   $0x1388,%edx,%edx
-  200381:	39 d1                	cmp    %edx,%ecx
-  200383:	0f 85 98 00 00 00    	jne    200421 <createMonster+0xe2>
-			mon.status = MONSTER_ALIVE;
-  200389:	c7 03 00 00 00 00    	movl   $0x0,(%ebx)
-			mon.size = 2 + 2*(KISS()%size);
-  20038f:	e8 6c fc ff ff       	call   200000 <UKISS>
-  200394:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  20039a:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  2003a0:	01 d0                	add    %edx,%eax
-  2003a2:	ba 00 00 00 00       	mov    $0x0,%edx
-  2003a7:	f7 35 60 2e 20 00    	divl   0x202e60
-  2003ad:	8d 44 12 02          	lea    0x2(%edx,%edx,1),%eax
-  2003b1:	89 43 ec             	mov    %eax,-0x14(%ebx)
-			mon.size = mon.size >14?14:mon.size; 
-  2003b4:	89 c2                	mov    %eax,%edx
-  2003b6:	83 f8 0e             	cmp    $0xe,%eax
-  2003b9:	7e 05                	jle    2003c0 <createMonster+0x81>
-  2003bb:	ba 0e 00 00 00       	mov    $0xe,%edx
-  2003c0:	89 56 ec             	mov    %edx,-0x14(%esi)
-			mon.x = VWIDTH/2;
-  2003c3:	c7 46 f0 a0 00 00 00 	movl   $0xa0,-0x10(%esi)
-			mon.y = VHEIGHT/2;
-  2003ca:	c7 46 f4 64 00 00 00 	movl   $0x64,-0xc(%esi)
-			mon.sx = -1 + KISS()%3;
-  2003d1:	e8 2a fc ff ff       	call   200000 <UKISS>
-  2003d6:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  2003dc:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  2003e2:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  2003e5:	b8 ab aa aa aa       	mov    $0xaaaaaaab,%eax
-  2003ea:	f7 e1                	mul    %ecx
-  2003ec:	d1 ea                	shr    %edx
-  2003ee:	8d 04 52             	lea    (%edx,%edx,2),%eax
-  2003f1:	29 c1                	sub    %eax,%ecx
-  2003f3:	83 e9 01             	sub    $0x1,%ecx
-  2003f6:	89 4e f8             	mov    %ecx,-0x8(%esi)
-			mon.sy = -1 + KISS()%3;
-  2003f9:	e8 02 fc ff ff       	call   200000 <UKISS>
-  2003fe:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  200404:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  20040a:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  20040d:	b8 ab aa aa aa       	mov    $0xaaaaaaab,%eax
-  200412:	f7 e1                	mul    %ecx
-  200414:	d1 ea                	shr    %edx
-  200416:	8d 04 52             	lea    (%edx,%edx,2),%eax
-  200419:	29 c1                	sub    %eax,%ecx
-  20041b:	83 e9 01             	sub    $0x1,%ecx
-  20041e:	89 4e fc             	mov    %ecx,-0x4(%esi)
-  200421:	83 c3 1c             	add    $0x1c,%ebx
-		}
-	}
-}
-void createMonster(){
-	int i=0;
-	REP_MONSTER(){
-  200424:	39 fb                	cmp    %edi,%ebx
-  200426:	0f 85 29 ff ff ff    	jne    200355 <createMonster+0x16>
-			mon.y = VHEIGHT/2;
-			mon.sx = -1 + KISS()%3;
-			mon.sy = -1 + KISS()%3;
-		}
-	}
-}
-  20042c:	83 c4 0c             	add    $0xc,%esp
-  20042f:	5b                   	pop    %ebx
-  200430:	5e                   	pop    %esi
-  200431:	5f                   	pop    %edi
-  200432:	5d                   	pop    %ebp
-  200433:	c3                   	ret    
-
-00200434 <dreamOf100HZ>:
-void dreamOf100HZ(int timestamp){
-  200434:	55                   	push   %ebp
-  200435:	57                   	push   %edi
-  200436:	56                   	push   %esi
-  200437:	53                   	push   %ebx
-  200438:	83 ec 3c             	sub    $0x3c,%esp
-		//drawRect(60+x, 60+y, 40, 40, 3);
-		drawCirc(60+x, 60+y, 15, 3);
-		drawCirc(70+x, 60+y, 15, 6);
-		drawStage();
-	}*/
-	if(gameStatus == GAME_START){
-  20043b:	a1 6c 2e 20 00       	mov    0x202e6c,%eax
-  200440:	85 c0                	test   %eax,%eax
-  200442:	0f 85 1b 03 00 00    	jne    200763 <dreamOf100HZ+0x32f>
 static inline void sys_printch(char c){
 	asm volatile("int $0x80": : "a"(SYS_PRINT_CHAR), "b"(c)); //SYSCALL HERE!
 }
 
 static inline void sys_init_vcache(){
+  2000d3:	55                   	push   %ebp
+  2000d4:	89 e5                	mov    %esp,%ebp
 	asm volatile("int $0x80": : "a"(SYS_INIT_CACHE)); //SYSCALL HERE!
-  200448:	66 b8 4c 04          	mov    $0x44c,%ax
-  20044c:	cd 80                	int    $0x80
-  20044e:	c7 44 24 14 40 11 20 	movl   $0x201140,0x14(%esp)
-  200455:	00 
-  200456:	c7 44 24 08 14 00 00 	movl   $0x14,0x8(%esp)
-  20045d:	00 
-  20045e:	c7 44 24 18 d4 0a 00 	movl   $0xad4,0x18(%esp)
-  200465:	00 
-  200466:	c7 44 24 10 00 00 00 	movl   $0x0,0x10(%esp)
-  20046d:	00 
+  2000d6:	b8 4c 04 00 00       	mov    $0x44c,%eax
+  2000db:	cd 80                	int    $0x80
+}
+  2000dd:	5d                   	pop    %ebp
+  2000de:	c3                   	ret    
+
+002000df <sys_flush_vcache>:
+
+static inline void sys_clear_vram(){
+	asm volatile("int $0x80": : "a"(SYS_CLEAR_VRAM)); //SYSCALL HERE!
 }
 static inline void sys_flush_vcache(){
+  2000df:	55                   	push   %ebp
+  2000e0:	89 e5                	mov    %esp,%ebp
 	asm volatile("int $0x80": : "a"(SYS_FLUSH_VCACHE)); //SYSCALL HERE!
+  2000e2:	b8 4e 04 00 00       	mov    $0x44e,%eax
+  2000e7:	cd 80                	int    $0x80
 }
-static inline void sys_set_pixel(int x, int y, int color){
-	asm volatile("int $0x80": : "a"(SYS_SET_PIXEL), "b"(x), "c"(y), "d"(color)); //SYSCALL HERE!
-  20046e:	b0 4f                	mov    $0x4f,%al
-  200470:	ba 0e 00 00 00       	mov    $0xe,%edx
-  200475:	eb 57                	jmp    2004ce <dreamOf100HZ+0x9a>
+  2000e9:	5d                   	pop    %ebp
+  2000ea:	c3                   	ret    
 
-static inline void drawText1(){
-    int i=0, j=0;
-    for(j=0;j<20;j++){
-        for(i=0;i<52;i++){
-            if(text1[j*52+i])drawRect(50+i*4, 20+j*5, 4, 5, 14);
-  200477:	80 7d 00 00          	cmpb   $0x0,0x0(%ebp)
-  20047b:	74 23                	je     2004a0 <dreamOf100HZ+0x6c>
+002000eb <sys_set_pixel>:
+static inline void sys_set_pixel(int x, int y, int color){
+  2000eb:	55                   	push   %ebp
+  2000ec:	89 e5                	mov    %esp,%ebp
+  2000ee:	53                   	push   %ebx
+	asm volatile("int $0x80": : "a"(SYS_SET_PIXEL), "b"(x), "c"(y), "d"(color)); //SYSCALL HERE!
+  2000ef:	b8 4f 04 00 00       	mov    $0x44f,%eax
+  2000f4:	8b 5d 08             	mov    0x8(%ebp),%ebx
+  2000f7:	8b 4d 0c             	mov    0xc(%ebp),%ecx
+  2000fa:	8b 55 10             	mov    0x10(%ebp),%edx
+  2000fd:	cd 80                	int    $0x80
 }
+  2000ff:	5b                   	pop    %ebx
+  200100:	5d                   	pop    %ebp
+  200101:	c3                   	ret    
+
+00200102 <sys_key_down>:
+static inline void sys_add_timer(void (*ptr)(void)){
+	asm volatile("int $0x80": : "a"(SYS_ADD_TIMER), "b"(ptr));
+}
+static inline char sys_key_down(char s){
+  200102:	55                   	push   %ebp
+  200103:	89 e5                	mov    %esp,%ebp
+  200105:	53                   	push   %ebx
+  200106:	83 ec 14             	sub    $0x14,%esp
+  200109:	8b 45 08             	mov    0x8(%ebp),%eax
+  20010c:	88 45 e8             	mov    %al,-0x18(%ebp)
+	char r_eax = 0;
+  20010f:	c6 45 fb 00          	movb   $0x0,-0x5(%ebp)
+	asm volatile("int $0x80": "=a"(r_eax) : "a"(SYS_GET_KEY), "b"(s)); //SYSCALL HERE!
+  200113:	b8 b0 04 00 00       	mov    $0x4b0,%eax
+  200118:	0f b6 55 e8          	movzbl -0x18(%ebp),%edx
+  20011c:	89 d3                	mov    %edx,%ebx
+  20011e:	cd 80                	int    $0x80
+  200120:	88 45 fb             	mov    %al,-0x5(%ebp)
+	//asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
+	return r_eax;
+  200123:	0f b6 45 fb          	movzbl -0x5(%ebp),%eax
+}
+  200127:	83 c4 14             	add    $0x14,%esp
+  20012a:	5b                   	pop    %ebx
+  20012b:	5d                   	pop    %ebp
+  20012c:	c3                   	ret    
+
+0020012d <sys_get_tick>:
+static inline uint32_t sys_get_tick(){
+  20012d:	55                   	push   %ebp
+  20012e:	89 e5                	mov    %esp,%ebp
+  200130:	83 ec 10             	sub    $0x10,%esp
+	uint32_t r_eax = 0;
+  200133:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
+	asm volatile("int $0x80": "=a"(r_eax) : "a"(SYS_GET_TICK)); //SYSCALL HERE!
+  20013a:	b8 15 05 00 00       	mov    $0x515,%eax
+  20013f:	cd 80                	int    $0x80
+  200141:	89 45 fc             	mov    %eax,-0x4(%ebp)
+	//asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
+	return r_eax;
+  200144:	8b 45 fc             	mov    -0x4(%ebp),%eax
+}
+  200147:	c9                   	leave  
+  200148:	c3                   	ret    
+
+00200149 <isqrt>:
+    1,1,1,1,1
+};
+const char* nums[10]={
+    num0, num1, num2, num3, num4, num5, num6, num7, num8, num9
+};
+static inline int isqrt(uint32_t x) {
+  200149:	55                   	push   %ebp
+  20014a:	89 e5                	mov    %esp,%ebp
+  20014c:	83 ec 10             	sub    $0x10,%esp
+    if(memoriza[x] > 0) return memoriza[x];
+  20014f:	8b 45 08             	mov    0x8(%ebp),%eax
+  200152:	8b 04 85 c0 30 20 00 	mov    0x2030c0(,%eax,4),%eax
+  200159:	85 c0                	test   %eax,%eax
+  20015b:	74 0f                	je     20016c <isqrt+0x23>
+  20015d:	8b 45 08             	mov    0x8(%ebp),%eax
+  200160:	8b 04 85 c0 30 20 00 	mov    0x2030c0(,%eax,4),%eax
+  200167:	e9 a9 00 00 00       	jmp    200215 <isqrt+0xcc>
+    const uint16_t *p = squares;
+  20016c:	c7 45 fc 40 19 20 00 	movl   $0x201940,-0x4(%ebp)
+    //if (p[128] <= x) p += 128;
+    //if (p[ 64] <= x) p +=  64;
+    if (p[ 32] <= x) p +=  32;
+  200173:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  200176:	83 c0 40             	add    $0x40,%eax
+  200179:	0f b7 00             	movzwl (%eax),%eax
+  20017c:	0f b7 c0             	movzwl %ax,%eax
+  20017f:	3b 45 08             	cmp    0x8(%ebp),%eax
+  200182:	77 04                	ja     200188 <isqrt+0x3f>
+  200184:	83 45 fc 40          	addl   $0x40,-0x4(%ebp)
+    if (p[ 16] <= x) p +=  16;
+  200188:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  20018b:	83 c0 20             	add    $0x20,%eax
+  20018e:	0f b7 00             	movzwl (%eax),%eax
+  200191:	0f b7 c0             	movzwl %ax,%eax
+  200194:	3b 45 08             	cmp    0x8(%ebp),%eax
+  200197:	77 04                	ja     20019d <isqrt+0x54>
+  200199:	83 45 fc 20          	addl   $0x20,-0x4(%ebp)
+    if (p[  8] <= x) p +=   8;
+  20019d:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  2001a0:	83 c0 10             	add    $0x10,%eax
+  2001a3:	0f b7 00             	movzwl (%eax),%eax
+  2001a6:	0f b7 c0             	movzwl %ax,%eax
+  2001a9:	3b 45 08             	cmp    0x8(%ebp),%eax
+  2001ac:	77 04                	ja     2001b2 <isqrt+0x69>
+  2001ae:	83 45 fc 10          	addl   $0x10,-0x4(%ebp)
+    if (p[  4] <= x) p +=   4;
+  2001b2:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  2001b5:	83 c0 08             	add    $0x8,%eax
+  2001b8:	0f b7 00             	movzwl (%eax),%eax
+  2001bb:	0f b7 c0             	movzwl %ax,%eax
+  2001be:	3b 45 08             	cmp    0x8(%ebp),%eax
+  2001c1:	77 04                	ja     2001c7 <isqrt+0x7e>
+  2001c3:	83 45 fc 08          	addl   $0x8,-0x4(%ebp)
+    if (p[  2] <= x) p +=   2;
+  2001c7:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  2001ca:	83 c0 04             	add    $0x4,%eax
+  2001cd:	0f b7 00             	movzwl (%eax),%eax
+  2001d0:	0f b7 c0             	movzwl %ax,%eax
+  2001d3:	3b 45 08             	cmp    0x8(%ebp),%eax
+  2001d6:	77 04                	ja     2001dc <isqrt+0x93>
+  2001d8:	83 45 fc 04          	addl   $0x4,-0x4(%ebp)
+    if (p[  1] <= x) p +=   1;
+  2001dc:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  2001df:	83 c0 02             	add    $0x2,%eax
+  2001e2:	0f b7 00             	movzwl (%eax),%eax
+  2001e5:	0f b7 c0             	movzwl %ax,%eax
+  2001e8:	3b 45 08             	cmp    0x8(%ebp),%eax
+  2001eb:	77 04                	ja     2001f1 <isqrt+0xa8>
+  2001ed:	83 45 fc 02          	addl   $0x2,-0x4(%ebp)
+    memoriza[x] = p - squares;
+  2001f1:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  2001f4:	ba 40 19 20 00       	mov    $0x201940,%edx
+  2001f9:	29 d0                	sub    %edx,%eax
+  2001fb:	d1 f8                	sar    %eax
+  2001fd:	89 c2                	mov    %eax,%edx
+  2001ff:	8b 45 08             	mov    0x8(%ebp),%eax
+  200202:	89 14 85 c0 30 20 00 	mov    %edx,0x2030c0(,%eax,4)
+    return p - squares;
+  200209:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  20020c:	ba 40 19 20 00       	mov    $0x201940,%edx
+  200211:	29 d0                	sub    %edx,%eax
+  200213:	d1 f8                	sar    %eax
+}
+  200215:	c9                   	leave  
+  200216:	c3                   	ret    
+
+00200217 <clearStage>:
+
+
+static inline void clearStage(){
+  200217:	55                   	push   %ebp
+  200218:	89 e5                	mov    %esp,%ebp
+	hash = 0;
+  20021a:	c7 05 80 30 20 00 00 	movl   $0x0,0x203080
+  200221:	00 00 00 
+	sys_init_vcache();
+  200224:	e8 aa fe ff ff       	call   2000d3 <sys_init_vcache>
+}
+  200229:	5d                   	pop    %ebp
+  20022a:	c3                   	ret    
+
+0020022b <drawPoint>:
 static inline void drawPoint(int x, int y, uint8_t color){
+  20022b:	55                   	push   %ebp
+  20022c:	89 e5                	mov    %esp,%ebp
+  20022e:	83 ec 04             	sub    $0x4,%esp
+  200231:	8b 45 10             	mov    0x10(%ebp),%eax
+  200234:	88 45 fc             	mov    %al,-0x4(%ebp)
 	sys_set_pixel(y, x, color);
+  200237:	0f b6 45 fc          	movzbl -0x4(%ebp),%eax
+  20023b:	50                   	push   %eax
+  20023c:	ff 75 08             	pushl  0x8(%ebp)
+  20023f:	ff 75 0c             	pushl  0xc(%ebp)
+  200242:	e8 a4 fe ff ff       	call   2000eb <sys_set_pixel>
+  200247:	83 c4 0c             	add    $0xc,%esp
+}
+  20024a:	c9                   	leave  
+  20024b:	c3                   	ret    
+
+0020024c <drawRect>:
+static inline void drawRect(int x, int y, int w, int h, uint8_t color){
+  20024c:	55                   	push   %ebp
+  20024d:	89 e5                	mov    %esp,%ebp
+  20024f:	53                   	push   %ebx
+  200250:	83 ec 14             	sub    $0x14,%esp
+  200253:	8b 45 18             	mov    0x18(%ebp),%eax
+  200256:	88 45 e8             	mov    %al,-0x18(%ebp)
+	hash += 29*x+57*y+13*color;
+  200259:	8b 45 08             	mov    0x8(%ebp),%eax
+  20025c:	6b d0 1d             	imul   $0x1d,%eax,%edx
+  20025f:	8b 45 0c             	mov    0xc(%ebp),%eax
+  200262:	6b c0 39             	imul   $0x39,%eax,%eax
+  200265:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200268:	0f b6 55 e8          	movzbl -0x18(%ebp),%edx
+  20026c:	89 d0                	mov    %edx,%eax
+  20026e:	01 c0                	add    %eax,%eax
+  200270:	01 d0                	add    %edx,%eax
+  200272:	c1 e0 02             	shl    $0x2,%eax
+  200275:	01 d0                	add    %edx,%eax
+  200277:	01 c8                	add    %ecx,%eax
+  200279:	89 c2                	mov    %eax,%edx
+  20027b:	a1 80 30 20 00       	mov    0x203080,%eax
+  200280:	01 d0                	add    %edx,%eax
+  200282:	a3 80 30 20 00       	mov    %eax,0x203080
+	int i=0, j=0;
+  200287:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+  20028e:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+	for(i=0;i<w;i++){
+  200295:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+  20029c:	eb 38                	jmp    2002d6 <drawRect+0x8a>
+		for(j=0;j<h;j++){
+  20029e:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+  2002a5:	eb 23                	jmp    2002ca <drawRect+0x7e>
+			drawPoint(x+i, y+j, color);
+  2002a7:	0f b6 45 e8          	movzbl -0x18(%ebp),%eax
+  2002ab:	8b 4d 0c             	mov    0xc(%ebp),%ecx
+  2002ae:	8b 55 f4             	mov    -0xc(%ebp),%edx
+  2002b1:	01 d1                	add    %edx,%ecx
+  2002b3:	8b 5d 08             	mov    0x8(%ebp),%ebx
+  2002b6:	8b 55 f8             	mov    -0x8(%ebp),%edx
+  2002b9:	01 da                	add    %ebx,%edx
+  2002bb:	50                   	push   %eax
+  2002bc:	51                   	push   %ecx
+  2002bd:	52                   	push   %edx
+  2002be:	e8 68 ff ff ff       	call   20022b <drawPoint>
+  2002c3:	83 c4 0c             	add    $0xc,%esp
 }
 static inline void drawRect(int x, int y, int w, int h, uint8_t color){
 	hash += 29*x+57*y+13*color;
-  20047d:	8b 5c 24 0c          	mov    0xc(%esp),%ebx
-  200481:	01 5c 24 10          	add    %ebx,0x10(%esp)
-  200485:	8d 4f fc             	lea    -0x4(%edi),%ecx
-  200488:	eb 10                	jmp    20049a <dreamOf100HZ+0x66>
-  20048a:	cd 80                	int    $0x80
-  20048c:	83 c3 01             	add    $0x1,%ebx
 	int i=0, j=0;
 	for(i=0;i<w;i++){
 		for(j=0;j<h;j++){
-  20048f:	39 f3                	cmp    %esi,%ebx
-  200491:	75 f7                	jne    20048a <dreamOf100HZ+0x56>
-  200493:	83 c1 01             	add    $0x1,%ecx
+  2002c6:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+  2002ca:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2002cd:	3b 45 14             	cmp    0x14(%ebp),%eax
+  2002d0:	7c d5                	jl     2002a7 <drawRect+0x5b>
 	sys_set_pixel(y, x, color);
 }
 static inline void drawRect(int x, int y, int w, int h, uint8_t color){
 	hash += 29*x+57*y+13*color;
 	int i=0, j=0;
 	for(i=0;i<w;i++){
-  200496:	39 cf                	cmp    %ecx,%edi
-  200498:	74 06                	je     2004a0 <dreamOf100HZ+0x6c>
-			mon.sx = -1 + KISS()%3;
-			mon.sy = -1 + KISS()%3;
+  2002d2:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
+  2002d6:	8b 45 f8             	mov    -0x8(%ebp),%eax
+  2002d9:	3b 45 10             	cmp    0x10(%ebp),%eax
+  2002dc:	7c c0                	jl     20029e <drawRect+0x52>
+		for(j=0;j<h;j++){
+			drawPoint(x+i, y+j, color);
 		}
 	}
 }
-void dreamOf100HZ(int timestamp){
-  20049a:	8b 5c 24 08          	mov    0x8(%esp),%ebx
-  20049e:	eb ea                	jmp    20048a <dreamOf100HZ+0x56>
-  2004a0:	83 c5 01             	add    $0x1,%ebp
-  2004a3:	83 c7 04             	add    $0x4,%edi
-  2004a6:	83 44 24 0c 74       	addl   $0x74,0xc(%esp)
+  2002de:	8b 5d fc             	mov    -0x4(%ebp),%ebx
+  2002e1:	c9                   	leave  
+  2002e2:	c3                   	ret    
+
+002002e3 <drawCirc>:
+
+
+static inline void drawCirc(int x, int y, int r, uint8_t color){
+  2002e3:	55                   	push   %ebp
+  2002e4:	89 e5                	mov    %esp,%ebp
+  2002e6:	53                   	push   %ebx
+  2002e7:	83 ec 14             	sub    $0x14,%esp
+  2002ea:	8b 45 14             	mov    0x14(%ebp),%eax
+  2002ed:	88 45 e8             	mov    %al,-0x18(%ebp)
+	int i, j;
+	hash += 329*x+157*y+713*r;
+  2002f0:	8b 45 08             	mov    0x8(%ebp),%eax
+  2002f3:	69 d0 49 01 00 00    	imul   $0x149,%eax,%edx
+  2002f9:	8b 45 0c             	mov    0xc(%ebp),%eax
+  2002fc:	69 c0 9d 00 00 00    	imul   $0x9d,%eax,%eax
+  200302:	01 c2                	add    %eax,%edx
+  200304:	8b 45 10             	mov    0x10(%ebp),%eax
+  200307:	69 c0 c9 02 00 00    	imul   $0x2c9,%eax,%eax
+  20030d:	01 d0                	add    %edx,%eax
+  20030f:	89 c2                	mov    %eax,%edx
+  200311:	a1 80 30 20 00       	mov    0x203080,%eax
+  200316:	01 d0                	add    %edx,%eax
+  200318:	a3 80 30 20 00       	mov    %eax,0x203080
+	for(i=-r; i<=r; i++){
+  20031d:	8b 45 10             	mov    0x10(%ebp),%eax
+  200320:	f7 d8                	neg    %eax
+  200322:	89 45 f8             	mov    %eax,-0x8(%ebp)
+  200325:	eb 5c                	jmp    200383 <drawCirc+0xa0>
+		int delta = isqrt(r*r-i*i)+1;
+  200327:	8b 45 10             	mov    0x10(%ebp),%eax
+  20032a:	0f af 45 10          	imul   0x10(%ebp),%eax
+  20032e:	89 c2                	mov    %eax,%edx
+  200330:	8b 45 f8             	mov    -0x8(%ebp),%eax
+  200333:	0f af 45 f8          	imul   -0x8(%ebp),%eax
+  200337:	29 c2                	sub    %eax,%edx
+  200339:	89 d0                	mov    %edx,%eax
+  20033b:	50                   	push   %eax
+  20033c:	e8 08 fe ff ff       	call   200149 <isqrt>
+  200341:	83 c4 04             	add    $0x4,%esp
+  200344:	83 c0 01             	add    $0x1,%eax
+  200347:	89 45 f0             	mov    %eax,-0x10(%ebp)
+		//printk("%d\n", delta);
+		for(j=-delta; j<=delta; j++){
+  20034a:	8b 45 f0             	mov    -0x10(%ebp),%eax
+  20034d:	f7 d8                	neg    %eax
+  20034f:	89 45 f4             	mov    %eax,-0xc(%ebp)
+  200352:	eb 23                	jmp    200377 <drawCirc+0x94>
+			//printk("(%d, %d)", x+i, y+j);
+			drawPoint(x+i, y+j, color);
+  200354:	0f b6 45 e8          	movzbl -0x18(%ebp),%eax
+  200358:	8b 4d 0c             	mov    0xc(%ebp),%ecx
+  20035b:	8b 55 f4             	mov    -0xc(%ebp),%edx
+  20035e:	01 d1                	add    %edx,%ecx
+  200360:	8b 5d 08             	mov    0x8(%ebp),%ebx
+  200363:	8b 55 f8             	mov    -0x8(%ebp),%edx
+  200366:	01 da                	add    %ebx,%edx
+  200368:	50                   	push   %eax
+  200369:	51                   	push   %ecx
+  20036a:	52                   	push   %edx
+  20036b:	e8 bb fe ff ff       	call   20022b <drawPoint>
+  200370:	83 c4 0c             	add    $0xc,%esp
+	int i, j;
+	hash += 329*x+157*y+713*r;
+	for(i=-r; i<=r; i++){
+		int delta = isqrt(r*r-i*i)+1;
+		//printk("%d\n", delta);
+		for(j=-delta; j<=delta; j++){
+  200373:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+  200377:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  20037a:	3b 45 f0             	cmp    -0x10(%ebp),%eax
+  20037d:	7e d5                	jle    200354 <drawCirc+0x71>
+
+
+static inline void drawCirc(int x, int y, int r, uint8_t color){
+	int i, j;
+	hash += 329*x+157*y+713*r;
+	for(i=-r; i<=r; i++){
+  20037f:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
+  200383:	8b 45 f8             	mov    -0x8(%ebp),%eax
+  200386:	3b 45 10             	cmp    0x10(%ebp),%eax
+  200389:	7e 9c                	jle    200327 <drawCirc+0x44>
+		for(j=-delta; j<=delta; j++){
+			//printk("(%d, %d)", x+i, y+j);
+			drawPoint(x+i, y+j, color);
+		}
+	}
+}
+  20038b:	8b 5d fc             	mov    -0x4(%ebp),%ebx
+  20038e:	c9                   	leave  
+  20038f:	c3                   	ret    
+
+00200390 <drawText1>:
+
+static inline void drawText1(){
+  200390:	55                   	push   %ebp
+  200391:	89 e5                	mov    %esp,%ebp
+  200393:	83 ec 10             	sub    $0x10,%esp
+    int i=0, j=0;
+  200396:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
+  20039d:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+    for(j=0;j<20;j++){
+  2003a4:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+  2003ab:	eb 53                	jmp    200400 <drawText1+0x70>
+        for(i=0;i<52;i++){
+  2003ad:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
+  2003b4:	eb 40                	jmp    2003f6 <drawText1+0x66>
+            if(text1[j*52+i])drawRect(50+i*4, 20+j*5, 4, 5, 14);
+  2003b6:	8b 45 f8             	mov    -0x8(%ebp),%eax
+  2003b9:	6b d0 34             	imul   $0x34,%eax,%edx
+  2003bc:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  2003bf:	01 d0                	add    %edx,%eax
+  2003c1:	0f b6 80 40 1b 20 00 	movzbl 0x201b40(%eax),%eax
+  2003c8:	84 c0                	test   %al,%al
+  2003ca:	74 26                	je     2003f2 <drawText1+0x62>
+  2003cc:	8b 55 f8             	mov    -0x8(%ebp),%edx
+  2003cf:	89 d0                	mov    %edx,%eax
+  2003d1:	c1 e0 02             	shl    $0x2,%eax
+  2003d4:	01 d0                	add    %edx,%eax
+  2003d6:	8d 50 14             	lea    0x14(%eax),%edx
+  2003d9:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  2003dc:	c1 e0 02             	shl    $0x2,%eax
+  2003df:	83 c0 32             	add    $0x32,%eax
+  2003e2:	6a 0e                	push   $0xe
+  2003e4:	6a 05                	push   $0x5
+  2003e6:	6a 04                	push   $0x4
+  2003e8:	52                   	push   %edx
+  2003e9:	50                   	push   %eax
+  2003ea:	e8 5d fe ff ff       	call   20024c <drawRect>
+  2003ef:	83 c4 14             	add    $0x14,%esp
 }
 
 static inline void drawText1(){
     int i=0, j=0;
     for(j=0;j<20;j++){
         for(i=0;i<52;i++){
-  2004ab:	81 ff 06 01 00 00    	cmp    $0x106,%edi
-  2004b1:	75 c4                	jne    200477 <dreamOf100HZ+0x43>
-  2004b3:	83 44 24 14 34       	addl   $0x34,0x14(%esp)
-  2004b8:	81 44 24 18 1d 01 00 	addl   $0x11d,0x18(%esp)
-  2004bf:	00 
-  2004c0:	83 44 24 08 05       	addl   $0x5,0x8(%esp)
-  2004c5:	8b 7c 24 08          	mov    0x8(%esp),%edi
+  2003f2:	83 45 fc 01          	addl   $0x1,-0x4(%ebp)
+  2003f6:	83 7d fc 33          	cmpl   $0x33,-0x4(%ebp)
+  2003fa:	7e ba                	jle    2003b6 <drawText1+0x26>
 	}
 }
 
 static inline void drawText1(){
     int i=0, j=0;
     for(j=0;j<20;j++){
-  2004c9:	83 ff 78             	cmp    $0x78,%edi
-  2004cc:	74 1a                	je     2004e8 <dreamOf100HZ+0xb4>
-  2004ce:	8b 7c 24 18          	mov    0x18(%esp),%edi
-  2004d2:	89 7c 24 0c          	mov    %edi,0xc(%esp)
-  2004d6:	8b 6c 24 14          	mov    0x14(%esp),%ebp
-  2004da:	bf 36 00 00 00       	mov    $0x36,%edi
-  2004df:	8b 74 24 08          	mov    0x8(%esp),%esi
-  2004e3:	83 c6 05             	add    $0x5,%esi
-  2004e6:	eb 8f                	jmp    200477 <dreamOf100HZ+0x43>
-  2004e8:	8b 54 24 10          	mov    0x10(%esp),%edx
-  2004ec:	89 15 e4 29 20 00    	mov    %edx,0x2029e4
-        i++;
+  2003fc:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
+  200400:	83 7d f8 13          	cmpl   $0x13,-0x8(%ebp)
+  200404:	7e a7                	jle    2003ad <drawText1+0x1d>
+        for(i=0;i<52;i++){
+            if(text1[j*52+i])drawRect(50+i*4, 20+j*5, 4, 5, 14);
+        }
     }
 }
+  200406:	c9                   	leave  
+  200407:	c3                   	ret    
 
-static inline void drawStage(){
-	if(lhash == hash)return;
-  2004f2:	39 15 e0 29 20 00    	cmp    %edx,0x2029e0
-  2004f8:	74 0d                	je     200507 <dreamOf100HZ+0xd3>
-
-static inline void sys_clear_vram(){
-	asm volatile("int $0x80": : "a"(SYS_CLEAR_VRAM)); //SYSCALL HERE!
-}
-static inline void sys_flush_vcache(){
-	asm volatile("int $0x80": : "a"(SYS_FLUSH_VCACHE)); //SYSCALL HERE!
-  2004fa:	b8 4e 04 00 00       	mov    $0x44e,%eax
-  2004ff:	cd 80                	int    $0x80
-	//clear_vram();
-	sys_flush_vcache();
-	lhash = hash;
-  200501:	89 15 e0 29 20 00    	mov    %edx,0x2029e0
-		drawText1();
-		//drawNumber(timestamp, 0, 0, 2, 15);
-		drawStage();
-
-		int i=0;
-		x = 30;
-  200507:	c7 05 68 2e 20 00 1e 	movl   $0x1e,0x202e68
-  20050e:	00 00 00 
-		y = 30;
-  200511:	c7 05 64 2e 20 00 1e 	movl   $0x1e,0x202e64
-  200518:	00 00 00 
-		size = 4;
-  20051b:	c7 05 60 2e 20 00 04 	movl   $0x4,0x202e60
-  200522:	00 00 00 
-		score = 0;
-  200525:	c7 05 70 2e 20 00 00 	movl   $0x0,0x202e70
-  20052c:	00 00 00 
-		monsters[i].status = MONSTER_ALIVE;
-  20052f:	c7 05 14 2a 20 00 00 	movl   $0x0,0x202a14
-  200536:	00 00 00 
-		monsters[i].size = 1 + (KISS()%size);
-  200539:	e8 c2 fa ff ff       	call   200000 <UKISS>
-  20053e:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  200544:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  20054a:	01 d0                	add    %edx,%eax
-  20054c:	ba 00 00 00 00       	mov    $0x0,%edx
-  200551:	f7 35 60 2e 20 00    	divl   0x202e60
-  200557:	8d 42 01             	lea    0x1(%edx),%eax
-  20055a:	a3 00 2a 20 00       	mov    %eax,0x202a00
-		monsters[i].x = KISS()%VWIDTH;
-  20055f:	e8 9c fa ff ff       	call   200000 <UKISS>
-  200564:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  20056a:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  200570:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  200573:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
-  200578:	89 c8                	mov    %ecx,%eax
-  20057a:	f7 e2                	mul    %edx
-  20057c:	89 d0                	mov    %edx,%eax
-  20057e:	c1 e8 08             	shr    $0x8,%eax
-  200581:	8d 04 80             	lea    (%eax,%eax,4),%eax
-  200584:	c1 e0 06             	shl    $0x6,%eax
-  200587:	29 c1                	sub    %eax,%ecx
-  200589:	89 0d 04 2a 20 00    	mov    %ecx,0x202a04
-		monsters[i].y = KISS()%VHEIGHT;
-  20058f:	e8 6c fa ff ff       	call   200000 <UKISS>
-  200594:	8b 0d 68 2e 20 00    	mov    0x202e68,%ecx
-  20059a:	03 0d 64 2e 20 00    	add    0x202e64,%ecx
-  2005a0:	01 c1                	add    %eax,%ecx
-  2005a2:	ba 1f 85 eb 51       	mov    $0x51eb851f,%edx
-  2005a7:	89 c8                	mov    %ecx,%eax
-  2005a9:	f7 e2                	mul    %edx
-  2005ab:	c1 ea 06             	shr    $0x6,%edx
-  2005ae:	69 d2 c8 00 00 00    	imul   $0xc8,%edx,%edx
-  2005b4:	29 d1                	sub    %edx,%ecx
-  2005b6:	89 0d 08 2a 20 00    	mov    %ecx,0x202a08
-		monsters[i].sx = -1 + KISS()%3;
-  2005bc:	e8 3f fa ff ff       	call   200000 <UKISS>
-  2005c1:	8b 0d 68 2e 20 00    	mov    0x202e68,%ecx
-  2005c7:	03 0d 64 2e 20 00    	add    0x202e64,%ecx
-  2005cd:	01 c1                	add    %eax,%ecx
-  2005cf:	bb ab aa aa aa       	mov    $0xaaaaaaab,%ebx
-  2005d4:	89 c8                	mov    %ecx,%eax
-  2005d6:	f7 e3                	mul    %ebx
-  2005d8:	89 d0                	mov    %edx,%eax
-  2005da:	d1 e8                	shr    %eax
-  2005dc:	8d 04 40             	lea    (%eax,%eax,2),%eax
-  2005df:	29 c1                	sub    %eax,%ecx
-  2005e1:	89 c8                	mov    %ecx,%eax
-  2005e3:	83 e8 01             	sub    $0x1,%eax
-  2005e6:	a3 0c 2a 20 00       	mov    %eax,0x202a0c
-		monsters[i].sy = -1 + KISS()%3;
-  2005eb:	e8 10 fa ff ff       	call   200000 <UKISS>
-  2005f0:	8b 0d 68 2e 20 00    	mov    0x202e68,%ecx
-  2005f6:	03 0d 64 2e 20 00    	add    0x202e64,%ecx
-  2005fc:	01 c1                	add    %eax,%ecx
-  2005fe:	89 c8                	mov    %ecx,%eax
-  200600:	f7 e3                	mul    %ebx
-  200602:	89 d0                	mov    %edx,%eax
-  200604:	d1 e8                	shr    %eax
-  200606:	8d 04 40             	lea    (%eax,%eax,2),%eax
-  200609:	29 c1                	sub    %eax,%ecx
-  20060b:	89 c8                	mov    %ecx,%eax
-  20060d:	83 e8 01             	sub    $0x1,%eax
-  200610:	a3 10 2a 20 00       	mov    %eax,0x202a10
-  200615:	be 30 2a 20 00       	mov    $0x202a30,%esi
-		i++;
-		REP_MONSTER(){
-			monsters[i].status = MONSTER_SLEEP;
-			monsters[i].count = 0;
-			if(KISS()%MONSTER_SIZE < size+3){
-  20061a:	bd cd cc cc cc       	mov    $0xcccccccd,%ebp
-				monsters[i].status = MONSTER_ALIVE;
-				monsters[i].size = 1 + 2*(KISS()%size);
-				monsters[i].x = KISS()%VWIDTH;
-				monsters[i].y = KISS()%VHEIGHT;
-  20061f:	bb 1f 85 eb 51       	mov    $0x51eb851f,%ebx
-		monsters[i].y = KISS()%VHEIGHT;
-		monsters[i].sx = -1 + KISS()%3;
-		monsters[i].sy = -1 + KISS()%3;
-		i++;
-		REP_MONSTER(){
-			monsters[i].status = MONSTER_SLEEP;
-  200624:	c7 06 04 00 00 00    	movl   $0x4,(%esi)
-			monsters[i].count = 0;
-  20062a:	c7 46 04 00 00 00 00 	movl   $0x0,0x4(%esi)
-			if(KISS()%MONSTER_SIZE < size+3){
-  200631:	e8 ca f9 ff ff       	call   200000 <UKISS>
-  200636:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  20063c:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  200642:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  200645:	89 c8                	mov    %ecx,%eax
-  200647:	f7 e5                	mul    %ebp
-  200649:	89 d0                	mov    %edx,%eax
-  20064b:	c1 e8 04             	shr    $0x4,%eax
-  20064e:	8d 04 80             	lea    (%eax,%eax,4),%eax
-  200651:	c1 e0 02             	shl    $0x2,%eax
-  200654:	29 c1                	sub    %eax,%ecx
-  200656:	a1 60 2e 20 00       	mov    0x202e60,%eax
-  20065b:	83 c0 03             	add    $0x3,%eax
-  20065e:	39 c1                	cmp    %eax,%ecx
-  200660:	0f 83 d2 00 00 00    	jae    200738 <dreamOf100HZ+0x304>
-				monsters[i].status = MONSTER_ALIVE;
-  200666:	c7 06 00 00 00 00    	movl   $0x0,(%esi)
-				monsters[i].size = 1 + 2*(KISS()%size);
-  20066c:	e8 8f f9 ff ff       	call   200000 <UKISS>
-  200671:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  200677:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  20067d:	01 d0                	add    %edx,%eax
-  20067f:	ba 00 00 00 00       	mov    $0x0,%edx
-  200684:	f7 35 60 2e 20 00    	divl   0x202e60
-  20068a:	8d 44 12 01          	lea    0x1(%edx,%edx,1),%eax
-  20068e:	89 46 ec             	mov    %eax,-0x14(%esi)
-				monsters[i].x = KISS()%VWIDTH;
-  200691:	e8 6a f9 ff ff       	call   200000 <UKISS>
-  200696:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  20069c:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  2006a2:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  2006a5:	89 c8                	mov    %ecx,%eax
-  2006a7:	f7 e5                	mul    %ebp
-  2006a9:	89 d0                	mov    %edx,%eax
-  2006ab:	c1 e8 08             	shr    $0x8,%eax
-  2006ae:	8d 04 80             	lea    (%eax,%eax,4),%eax
-  2006b1:	c1 e0 06             	shl    $0x6,%eax
-  2006b4:	29 c1                	sub    %eax,%ecx
-  2006b6:	89 4e f0             	mov    %ecx,-0x10(%esi)
-				monsters[i].y = KISS()%VHEIGHT;
-  2006b9:	e8 42 f9 ff ff       	call   200000 <UKISS>
-  2006be:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  2006c4:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  2006ca:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  2006cd:	89 c8                	mov    %ecx,%eax
-  2006cf:	f7 e3                	mul    %ebx
-  2006d1:	89 d0                	mov    %edx,%eax
-  2006d3:	c1 e8 06             	shr    $0x6,%eax
-  2006d6:	69 c0 c8 00 00 00    	imul   $0xc8,%eax,%eax
-  2006dc:	29 c1                	sub    %eax,%ecx
-  2006de:	89 4e f4             	mov    %ecx,-0xc(%esi)
-				monsters[i].sx = -1 + KISS()%3;
-  2006e1:	e8 1a f9 ff ff       	call   200000 <UKISS>
-  2006e6:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  2006ec:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  2006f2:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  2006f5:	bf ab aa aa aa       	mov    $0xaaaaaaab,%edi
-  2006fa:	89 c8                	mov    %ecx,%eax
-  2006fc:	f7 e7                	mul    %edi
-  2006fe:	89 d0                	mov    %edx,%eax
-  200700:	d1 e8                	shr    %eax
-  200702:	8d 04 40             	lea    (%eax,%eax,2),%eax
-  200705:	29 c1                	sub    %eax,%ecx
-  200707:	89 c8                	mov    %ecx,%eax
-  200709:	83 e8 01             	sub    $0x1,%eax
-  20070c:	89 46 f8             	mov    %eax,-0x8(%esi)
-				monsters[i].sy = -1 + KISS()%3;
-  20070f:	e8 ec f8 ff ff       	call   200000 <UKISS>
-  200714:	8b 15 68 2e 20 00    	mov    0x202e68,%edx
-  20071a:	03 15 64 2e 20 00    	add    0x202e64,%edx
-  200720:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
-  200723:	89 c8                	mov    %ecx,%eax
-  200725:	f7 e7                	mul    %edi
-  200727:	89 d0                	mov    %edx,%eax
-  200729:	d1 e8                	shr    %eax
-  20072b:	8d 04 40             	lea    (%eax,%eax,2),%eax
-  20072e:	29 c1                	sub    %eax,%ecx
-  200730:	89 c8                	mov    %ecx,%eax
-  200732:	83 e8 01             	sub    $0x1,%eax
-  200735:	89 46 fc             	mov    %eax,-0x4(%esi)
-  200738:	83 c6 1c             	add    $0x1c,%esi
-		monsters[i].x = KISS()%VWIDTH;
-		monsters[i].y = KISS()%VHEIGHT;
-		monsters[i].sx = -1 + KISS()%3;
-		monsters[i].sy = -1 + KISS()%3;
-		i++;
-		REP_MONSTER(){
-  20073b:	81 fe 44 2c 20 00    	cmp    $0x202c44,%esi
-  200741:	0f 85 dd fe ff ff    	jne    200624 <dreamOf100HZ+0x1f0>
-				monsters[i].y = KISS()%VHEIGHT;
-				monsters[i].sx = -1 + KISS()%3;
-				monsters[i].sy = -1 + KISS()%3;
-			}
-		}
-		printf("Press Q to start\n");
-  200747:	83 ec 0c             	sub    $0xc,%esp
-  20074a:	68 80 0e 20 00       	push   $0x200e80
-  20074f:	e8 fe 06 00 00       	call   200e52 <printf>
-		gameStatus = GAME_READY;
-  200754:	c7 05 6c 2e 20 00 01 	movl   $0x1,0x202e6c
-  20075b:	00 00 00 
-  20075e:	83 c4 10             	add    $0x10,%esp
-  200761:	eb 05                	jmp    200768 <dreamOf100HZ+0x334>
-	}
-	if(gameStatus == GAME_READY){
-  200763:	83 f8 01             	cmp    $0x1,%eax
-  200766:	75 1a                	jne    200782 <dreamOf100HZ+0x34e>
-}
-static inline void sys_add_timer(void (*ptr)(void)){
-	asm volatile("int $0x80": : "a"(SYS_ADD_TIMER), "b"(ptr));
-}
-static inline char sys_key_down(char s){
-	char r_eax = 0;
-  200768:	c6 44 24 25 00       	movb   $0x0,0x25(%esp)
-	asm volatile("int $0x80": : "a"(SYS_GET_KEY), "b"(s)); //SYSCALL HERE!
-  20076d:	bb 71 00 00 00       	mov    $0x71,%ebx
-  200772:	b8 b0 04 00 00       	mov    $0x4b0,%eax
-  200777:	cd 80                	int    $0x80
-	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
-  200779:	89 44 24 25          	mov    %eax,0x25(%esp)
-  20077d:	e9 cc 03 00 00       	jmp    200b4e <dreamOf100HZ+0x71a>
-			printf("Press W, A, S, D to move\n");
-			gameStatus = GAME_ING;
-		}
-	}
-
-	if(gameStatus == GAME_ING){
-  200782:	83 f8 02             	cmp    $0x2,%eax
-  200785:	0f 85 c3 03 00 00    	jne    200b4e <dreamOf100HZ+0x71a>
-}
-static inline void sys_add_timer(void (*ptr)(void)){
-	asm volatile("int $0x80": : "a"(SYS_ADD_TIMER), "b"(ptr));
-}
-static inline char sys_key_down(char s){
-	char r_eax = 0;
-  20078b:	c6 44 24 25 00       	movb   $0x0,0x25(%esp)
-	asm volatile("int $0x80": : "a"(SYS_GET_KEY), "b"(s)); //SYSCALL HERE!
-  200790:	bb 61 00 00 00       	mov    $0x61,%ebx
-  200795:	66 b8 b0 04          	mov    $0x4b0,%ax
-  200799:	cd 80                	int    $0x80
-	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
-  20079b:	89 44 24 25          	mov    %eax,0x25(%esp)
-static inline void sys_add_timer(void (*ptr)(void)){
-	asm volatile("int $0x80": : "a"(SYS_ADD_TIMER), "b"(ptr));
-}
-static inline char sys_key_down(char s){
-	char r_eax = 0;
-	asm volatile("int $0x80": : "a"(SYS_GET_KEY), "b"(s)); //SYSCALL HERE!
-  20079f:	bb 64 00 00 00       	mov    $0x64,%ebx
-  2007a4:	cd 80                	int    $0x80
-	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
-  2007a6:	89 44 24 25          	mov    %eax,0x25(%esp)
-static inline void sys_add_timer(void (*ptr)(void)){
-	asm volatile("int $0x80": : "a"(SYS_ADD_TIMER), "b"(ptr));
-}
-static inline char sys_key_down(char s){
-	char r_eax = 0;
-	asm volatile("int $0x80": : "a"(SYS_GET_KEY), "b"(s)); //SYSCALL HERE!
-  2007aa:	bb 77 00 00 00       	mov    $0x77,%ebx
-  2007af:	cd 80                	int    $0x80
-	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
-  2007b1:	89 44 24 25          	mov    %eax,0x25(%esp)
-static inline void sys_add_timer(void (*ptr)(void)){
-	asm volatile("int $0x80": : "a"(SYS_ADD_TIMER), "b"(ptr));
-}
-static inline char sys_key_down(char s){
-	char r_eax = 0;
-	asm volatile("int $0x80": : "a"(SYS_GET_KEY), "b"(s)); //SYSCALL HERE!
-  2007b5:	bb 73 00 00 00       	mov    $0x73,%ebx
-  2007ba:	cd 80                	int    $0x80
-	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
-  2007bc:	89 44 24 25          	mov    %eax,0x25(%esp)
-			if(key('d'))x++;
-			if(key('w'))y--;
-			if(key('s'))y++;
-		//}
-
-		if(x < 0) x++;
-  2007c0:	a1 68 2e 20 00       	mov    0x202e68,%eax
-  2007c5:	85 c0                	test   %eax,%eax
-  2007c7:	79 08                	jns    2007d1 <dreamOf100HZ+0x39d>
-  2007c9:	83 c0 01             	add    $0x1,%eax
-  2007cc:	a3 68 2e 20 00       	mov    %eax,0x202e68
-		if(x > VWIDTH) x--;
-  2007d1:	a1 68 2e 20 00       	mov    0x202e68,%eax
-  2007d6:	3d 40 01 00 00       	cmp    $0x140,%eax
-  2007db:	7e 08                	jle    2007e5 <dreamOf100HZ+0x3b1>
-  2007dd:	83 e8 01             	sub    $0x1,%eax
-  2007e0:	a3 68 2e 20 00       	mov    %eax,0x202e68
-		if(y < 0) y++;
-  2007e5:	a1 64 2e 20 00       	mov    0x202e64,%eax
-  2007ea:	85 c0                	test   %eax,%eax
-  2007ec:	79 08                	jns    2007f6 <dreamOf100HZ+0x3c2>
-  2007ee:	83 c0 01             	add    $0x1,%eax
-  2007f1:	a3 64 2e 20 00       	mov    %eax,0x202e64
-		if(y > VHEIGHT) y--;
-  2007f6:	a1 64 2e 20 00       	mov    0x202e64,%eax
-  2007fb:	3d c8 00 00 00       	cmp    $0xc8,%eax
-  200800:	7e 08                	jle    20080a <dreamOf100HZ+0x3d6>
-  200802:	83 e8 01             	sub    $0x1,%eax
-  200805:	a3 64 2e 20 00       	mov    %eax,0x202e64
-static inline void sys_printch(char c){
-	asm volatile("int $0x80": : "a"(SYS_PRINT_CHAR), "b"(c)); //SYSCALL HERE!
-}
-
-static inline void sys_init_vcache(){
-	asm volatile("int $0x80": : "a"(SYS_INIT_CACHE)); //SYSCALL HERE!
-  20080a:	b8 4c 04 00 00       	mov    $0x44c,%eax
-  20080f:	cd 80                	int    $0x80
-		//}
-		//else{
-		clearStage();
-		drawCirc(x, y, size, 3);
-  200811:	a1 60 2e 20 00       	mov    0x202e60,%eax
-  200816:	89 c7                	mov    %eax,%edi
-  200818:	89 44 24 0c          	mov    %eax,0xc(%esp)
-  20081c:	8b 2d 64 2e 20 00    	mov    0x202e64,%ebp
-  200822:	a1 68 2e 20 00       	mov    0x202e68,%eax
-  200827:	89 44 24 10          	mov    %eax,0x10(%esp)
-}
-
-
-static inline void drawCirc(int x, int y, int r, uint8_t color){
-	int i, j;
-	hash += 329*x+157*y+713*r;
-  20082b:	69 d0 49 01 00 00    	imul   $0x149,%eax,%edx
-  200831:	69 c5 9d 00 00 00    	imul   $0x9d,%ebp,%eax
-  200837:	01 c2                	add    %eax,%edx
-  200839:	69 c7 c9 02 00 00    	imul   $0x2c9,%edi,%eax
-  20083f:	01 d0                	add    %edx,%eax
-  200841:	a3 e4 29 20 00       	mov    %eax,0x2029e4
-	for(i=-r; i<=r; i++){
-  200846:	89 fa                	mov    %edi,%edx
-  200848:	89 f8                	mov    %edi,%eax
-  20084a:	f7 d8                	neg    %eax
-  20084c:	89 44 24 08          	mov    %eax,0x8(%esp)
-  200850:	39 c2                	cmp    %eax,%edx
-  200852:	0f 8c b9 00 00 00    	jl     200911 <dreamOf100HZ+0x4dd>
-		int delta = isqrt(r*r-i*i)+1;
-  200858:	89 d7                	mov    %edx,%edi
-  20085a:	0f af fa             	imul   %edx,%edi
-  20085d:	89 7c 24 14          	mov    %edi,0x14(%esp)
-}
-static inline void sys_flush_vcache(){
-	asm volatile("int $0x80": : "a"(SYS_FLUSH_VCACHE)); //SYSCALL HERE!
-}
-static inline void sys_set_pixel(int x, int y, int color){
-	asm volatile("int $0x80": : "a"(SYS_SET_PIXEL), "b"(x), "c"(y), "d"(color)); //SYSCALL HERE!
-  200861:	b8 4f 04 00 00       	mov    $0x44f,%eax
-  200866:	8b 7c 24 08          	mov    0x8(%esp),%edi
-  20086a:	89 fa                	mov    %edi,%edx
-  20086c:	0f af d7             	imul   %edi,%edx
-  20086f:	8b 4c 24 14          	mov    0x14(%esp),%ecx
-  200873:	29 d1                	sub    %edx,%ecx
-};
-const char* nums[10]={
-    num0, num1, num2, num3, num4, num5, num6, num7, num8, num9
-};
-static inline int isqrt(uint32_t x) {
-    if(memoriza[x] > 0) return memoriza[x];
-  200875:	8b 3c 8d 80 20 20 00 	mov    0x202080(,%ecx,4),%edi
-  20087c:	85 ff                	test   %edi,%edi
-  20087e:	75 5a                	jne    2008da <dreamOf100HZ+0x4a6>
-    const uint16_t *p = squares;
-  200880:	ba 80 15 20 00       	mov    $0x201580,%edx
-    //if (p[128] <= x) p += 128;
-    //if (p[ 64] <= x) p +=  64;
-    if (p[ 32] <= x) p +=  32;
-  200885:	81 f9 ff 03 00 00    	cmp    $0x3ff,%ecx
-  20088b:	76 05                	jbe    200892 <dreamOf100HZ+0x45e>
-  20088d:	ba c0 15 20 00       	mov    $0x2015c0,%edx
-    if (p[ 16] <= x) p +=  16;
-  200892:	0f b7 5a 20          	movzwl 0x20(%edx),%ebx
-  200896:	39 d9                	cmp    %ebx,%ecx
-  200898:	72 03                	jb     20089d <dreamOf100HZ+0x469>
-  20089a:	83 c2 20             	add    $0x20,%edx
-    if (p[  8] <= x) p +=   8;
-  20089d:	0f b7 5a 10          	movzwl 0x10(%edx),%ebx
-  2008a1:	39 d9                	cmp    %ebx,%ecx
-  2008a3:	72 03                	jb     2008a8 <dreamOf100HZ+0x474>
-  2008a5:	83 c2 10             	add    $0x10,%edx
-    if (p[  4] <= x) p +=   4;
-  2008a8:	0f b7 5a 08          	movzwl 0x8(%edx),%ebx
-  2008ac:	39 d9                	cmp    %ebx,%ecx
-  2008ae:	72 03                	jb     2008b3 <dreamOf100HZ+0x47f>
-  2008b0:	83 c2 08             	add    $0x8,%edx
-    if (p[  2] <= x) p +=   2;
-  2008b3:	0f b7 5a 04          	movzwl 0x4(%edx),%ebx
-  2008b7:	39 d9                	cmp    %ebx,%ecx
-  2008b9:	72 03                	jb     2008be <dreamOf100HZ+0x48a>
-  2008bb:	83 c2 04             	add    $0x4,%edx
-    if (p[  1] <= x) p +=   1;
-  2008be:	0f b7 5a 02          	movzwl 0x2(%edx),%ebx
-  2008c2:	39 d9                	cmp    %ebx,%ecx
-  2008c4:	72 03                	jb     2008c9 <dreamOf100HZ+0x495>
-  2008c6:	83 c2 02             	add    $0x2,%edx
-    memoriza[x] = p - squares;
-  2008c9:	81 ea 80 15 20 00    	sub    $0x201580,%edx
-  2008cf:	d1 fa                	sar    %edx
-  2008d1:	89 d7                	mov    %edx,%edi
-  2008d3:	89 14 8d 80 20 20 00 	mov    %edx,0x202080(,%ecx,4)
-
-static inline void drawCirc(int x, int y, int r, uint8_t color){
-	int i, j;
-	hash += 329*x+157*y+713*r;
-	for(i=-r; i<=r; i++){
-		int delta = isqrt(r*r-i*i)+1;
-  2008da:	83 c7 01             	add    $0x1,%edi
-		//printk("%d\n", delta);
-		for(j=-delta; j<=delta; j++){
-  2008dd:	89 fe                	mov    %edi,%esi
-  2008df:	f7 de                	neg    %esi
-  2008e1:	39 f7                	cmp    %esi,%edi
-  2008e3:	7c 19                	jl     2008fe <dreamOf100HZ+0x4ca>
-  2008e5:	8b 4c 24 08          	mov    0x8(%esp),%ecx
-  2008e9:	03 4c 24 10          	add    0x10(%esp),%ecx
-  2008ed:	8d 1c 2e             	lea    (%esi,%ebp,1),%ebx
-  2008f0:	ba 03 00 00 00       	mov    $0x3,%edx
-  2008f5:	cd 80                	int    $0x80
-  2008f7:	83 c6 01             	add    $0x1,%esi
-  2008fa:	39 f7                	cmp    %esi,%edi
-  2008fc:	7d ef                	jge    2008ed <dreamOf100HZ+0x4b9>
-
-
-static inline void drawCirc(int x, int y, int r, uint8_t color){
-	int i, j;
-	hash += 329*x+157*y+713*r;
-	for(i=-r; i<=r; i++){
-  2008fe:	83 44 24 08 01       	addl   $0x1,0x8(%esp)
-  200903:	8b 54 24 08          	mov    0x8(%esp),%edx
-  200907:	39 54 24 0c          	cmp    %edx,0xc(%esp)
-  20090b:	0f 8d 55 ff ff ff    	jge    200866 <dreamOf100HZ+0x432>
-		
-
-		drawMonster();
-  200911:	e8 0b f8 ff ff       	call   200121 <drawMonster>
-		drawCirc(x, y, size, 3);
-  200916:	a1 60 2e 20 00       	mov    0x202e60,%eax
-  20091b:	89 c7                	mov    %eax,%edi
-  20091d:	89 44 24 0c          	mov    %eax,0xc(%esp)
-  200921:	8b 2d 64 2e 20 00    	mov    0x202e64,%ebp
-  200927:	a1 68 2e 20 00       	mov    0x202e68,%eax
-  20092c:	89 44 24 10          	mov    %eax,0x10(%esp)
-}
-
-
-static inline void drawCirc(int x, int y, int r, uint8_t color){
-	int i, j;
-	hash += 329*x+157*y+713*r;
-  200930:	69 d0 49 01 00 00    	imul   $0x149,%eax,%edx
-  200936:	69 c5 9d 00 00 00    	imul   $0x9d,%ebp,%eax
-  20093c:	01 c2                	add    %eax,%edx
-  20093e:	69 c7 c9 02 00 00    	imul   $0x2c9,%edi,%eax
-  200944:	01 d0                	add    %edx,%eax
-  200946:	01 05 e4 29 20 00    	add    %eax,0x2029e4
-	for(i=-r; i<=r; i++){
-  20094c:	89 fa                	mov    %edi,%edx
-  20094e:	89 f8                	mov    %edi,%eax
-  200950:	f7 d8                	neg    %eax
-  200952:	89 44 24 08          	mov    %eax,0x8(%esp)
-  200956:	39 c2                	cmp    %eax,%edx
-  200958:	0f 8c b9 00 00 00    	jl     200a17 <dreamOf100HZ+0x5e3>
-		int delta = isqrt(r*r-i*i)+1;
-  20095e:	89 d7                	mov    %edx,%edi
-  200960:	0f af fa             	imul   %edx,%edi
-  200963:	89 7c 24 14          	mov    %edi,0x14(%esp)
-  200967:	b8 4f 04 00 00       	mov    $0x44f,%eax
-  20096c:	8b 7c 24 08          	mov    0x8(%esp),%edi
-  200970:	89 fa                	mov    %edi,%edx
-  200972:	0f af d7             	imul   %edi,%edx
-  200975:	8b 4c 24 14          	mov    0x14(%esp),%ecx
-  200979:	29 d1                	sub    %edx,%ecx
-};
-const char* nums[10]={
-    num0, num1, num2, num3, num4, num5, num6, num7, num8, num9
-};
-static inline int isqrt(uint32_t x) {
-    if(memoriza[x] > 0) return memoriza[x];
-  20097b:	8b 3c 8d 80 20 20 00 	mov    0x202080(,%ecx,4),%edi
-  200982:	85 ff                	test   %edi,%edi
-  200984:	75 5a                	jne    2009e0 <dreamOf100HZ+0x5ac>
-    const uint16_t *p = squares;
-  200986:	ba 80 15 20 00       	mov    $0x201580,%edx
-    //if (p[128] <= x) p += 128;
-    //if (p[ 64] <= x) p +=  64;
-    if (p[ 32] <= x) p +=  32;
-  20098b:	81 f9 ff 03 00 00    	cmp    $0x3ff,%ecx
-  200991:	76 05                	jbe    200998 <dreamOf100HZ+0x564>
-  200993:	ba c0 15 20 00       	mov    $0x2015c0,%edx
-    if (p[ 16] <= x) p +=  16;
-  200998:	0f b7 5a 20          	movzwl 0x20(%edx),%ebx
-  20099c:	39 d9                	cmp    %ebx,%ecx
-  20099e:	72 03                	jb     2009a3 <dreamOf100HZ+0x56f>
-  2009a0:	83 c2 20             	add    $0x20,%edx
-    if (p[  8] <= x) p +=   8;
-  2009a3:	0f b7 5a 10          	movzwl 0x10(%edx),%ebx
-  2009a7:	39 d9                	cmp    %ebx,%ecx
-  2009a9:	72 03                	jb     2009ae <dreamOf100HZ+0x57a>
-  2009ab:	83 c2 10             	add    $0x10,%edx
-    if (p[  4] <= x) p +=   4;
-  2009ae:	0f b7 5a 08          	movzwl 0x8(%edx),%ebx
-  2009b2:	39 d9                	cmp    %ebx,%ecx
-  2009b4:	72 03                	jb     2009b9 <dreamOf100HZ+0x585>
-  2009b6:	83 c2 08             	add    $0x8,%edx
-    if (p[  2] <= x) p +=   2;
-  2009b9:	0f b7 5a 04          	movzwl 0x4(%edx),%ebx
-  2009bd:	39 d9                	cmp    %ebx,%ecx
-  2009bf:	72 03                	jb     2009c4 <dreamOf100HZ+0x590>
-  2009c1:	83 c2 04             	add    $0x4,%edx
-    if (p[  1] <= x) p +=   1;
-  2009c4:	0f b7 5a 02          	movzwl 0x2(%edx),%ebx
-  2009c8:	39 d9                	cmp    %ebx,%ecx
-  2009ca:	72 03                	jb     2009cf <dreamOf100HZ+0x59b>
-  2009cc:	83 c2 02             	add    $0x2,%edx
-    memoriza[x] = p - squares;
-  2009cf:	81 ea 80 15 20 00    	sub    $0x201580,%edx
-  2009d5:	d1 fa                	sar    %edx
-  2009d7:	89 d7                	mov    %edx,%edi
-  2009d9:	89 14 8d 80 20 20 00 	mov    %edx,0x202080(,%ecx,4)
-
-static inline void drawCirc(int x, int y, int r, uint8_t color){
-	int i, j;
-	hash += 329*x+157*y+713*r;
-	for(i=-r; i<=r; i++){
-		int delta = isqrt(r*r-i*i)+1;
-  2009e0:	83 c7 01             	add    $0x1,%edi
-		//printk("%d\n", delta);
-		for(j=-delta; j<=delta; j++){
-  2009e3:	89 fe                	mov    %edi,%esi
-  2009e5:	f7 de                	neg    %esi
-  2009e7:	39 f7                	cmp    %esi,%edi
-  2009e9:	7c 19                	jl     200a04 <dreamOf100HZ+0x5d0>
-  2009eb:	8b 4c 24 08          	mov    0x8(%esp),%ecx
-  2009ef:	03 4c 24 10          	add    0x10(%esp),%ecx
-  2009f3:	8d 1c 2e             	lea    (%esi,%ebp,1),%ebx
-  2009f6:	ba 03 00 00 00       	mov    $0x3,%edx
-  2009fb:	cd 80                	int    $0x80
-  2009fd:	83 c6 01             	add    $0x1,%esi
-  200a00:	39 f7                	cmp    %esi,%edi
-  200a02:	7d ef                	jge    2009f3 <dreamOf100HZ+0x5bf>
-
-
-static inline void drawCirc(int x, int y, int r, uint8_t color){
-	int i, j;
-	hash += 329*x+157*y+713*r;
-	for(i=-r; i<=r; i++){
-  200a04:	83 44 24 08 01       	addl   $0x1,0x8(%esp)
-  200a09:	8b 54 24 08          	mov    0x8(%esp),%edx
-  200a0d:	39 54 24 0c          	cmp    %edx,0xc(%esp)
-  200a11:	0f 8d 55 ff ff ff    	jge    20096c <dreamOf100HZ+0x538>
-		drawNumber(score, 0, 180, 1, 7);
-  200a17:	8b 0d 70 2e 20 00    	mov    0x202e70,%ecx
-}
+00200408 <drawNumber>:
 
 static inline void drawNumber(int num, int x, int y, int size, uint8_t color){
+  200408:	55                   	push   %ebp
+  200409:	89 e5                	mov    %esp,%ebp
+  20040b:	53                   	push   %ebx
+  20040c:	83 ec 24             	sub    $0x24,%esp
+  20040f:	8b 45 18             	mov    0x18(%ebp),%eax
+  200412:	88 45 d8             	mov    %al,-0x28(%ebp)
     char temp[11];
     int di=0;
+  200415:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
     if(num == 0){
-  200a1d:	85 c9                	test   %ecx,%ecx
-  200a1f:	74 13                	je     200a34 <dreamOf100HZ+0x600>
+  20041c:	83 7d 08 00          	cmpl   $0x0,0x8(%ebp)
+  200420:	75 0d                	jne    20042f <drawNumber+0x27>
         temp[0] = '0';
+  200422:	c6 45 dd 30          	movb   $0x30,-0x23(%ebp)
         di = 0;
+  200426:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+  20042d:	eb 5f                	jmp    20048e <drawNumber+0x86>
 
     }else{    
         while(num>=1){
-  200a21:	bb 00 00 00 00       	mov    $0x0,%ebx
+  20042f:	eb 53                	jmp    200484 <drawNumber+0x7c>
             temp[di] = '0'+(num%10);
-  200a26:	be 67 66 66 66       	mov    $0x66666667,%esi
-    if(num == 0){
-        temp[0] = '0';
-        di = 0;
-
-    }else{    
-        while(num>=1){
-  200a2b:	85 c9                	test   %ecx,%ecx
-  200a2d:	7f 17                	jg     200a46 <dreamOf100HZ+0x612>
-  200a2f:	e9 f1 00 00 00       	jmp    200b25 <dreamOf100HZ+0x6f1>
-
-static inline void drawNumber(int num, int x, int y, int size, uint8_t color){
-    char temp[11];
-    int di=0;
-    if(num == 0){
-        temp[0] = '0';
-  200a34:	c6 44 24 25 30       	movb   $0x30,0x25(%esp)
-        di = 0;
-  200a39:	c7 44 24 14 00 00 00 	movl   $0x0,0x14(%esp)
-  200a40:	00 
-  200a41:	e9 8d 00 00 00       	jmp    200ad3 <dreamOf100HZ+0x69f>
-
-    }else{    
-        while(num>=1){
-            temp[di] = '0'+(num%10);
-  200a46:	89 c8                	mov    %ecx,%eax
-  200a48:	f7 ee                	imul   %esi
-  200a4a:	c1 fa 02             	sar    $0x2,%edx
-  200a4d:	89 c8                	mov    %ecx,%eax
-  200a4f:	c1 f8 1f             	sar    $0x1f,%eax
-  200a52:	29 c2                	sub    %eax,%edx
-  200a54:	8d 04 92             	lea    (%edx,%edx,4),%eax
-  200a57:	01 c0                	add    %eax,%eax
-  200a59:	29 c1                	sub    %eax,%ecx
-  200a5b:	89 c8                	mov    %ecx,%eax
-  200a5d:	83 c0 30             	add    $0x30,%eax
-  200a60:	88 44 1c 25          	mov    %al,0x25(%esp,%ebx,1)
+  200431:	8b 4d 08             	mov    0x8(%ebp),%ecx
+  200434:	ba 67 66 66 66       	mov    $0x66666667,%edx
+  200439:	89 c8                	mov    %ecx,%eax
+  20043b:	f7 ea                	imul   %edx
+  20043d:	c1 fa 02             	sar    $0x2,%edx
+  200440:	89 c8                	mov    %ecx,%eax
+  200442:	c1 f8 1f             	sar    $0x1f,%eax
+  200445:	29 c2                	sub    %eax,%edx
+  200447:	89 d0                	mov    %edx,%eax
+  200449:	c1 e0 02             	shl    $0x2,%eax
+  20044c:	01 d0                	add    %edx,%eax
+  20044e:	01 c0                	add    %eax,%eax
+  200450:	29 c1                	sub    %eax,%ecx
+  200452:	89 ca                	mov    %ecx,%edx
+  200454:	89 d0                	mov    %edx,%eax
+  200456:	83 c0 30             	add    $0x30,%eax
+  200459:	89 c1                	mov    %eax,%ecx
+  20045b:	8d 55 dd             	lea    -0x23(%ebp),%edx
+  20045e:	8b 45 f8             	mov    -0x8(%ebp),%eax
+  200461:	01 d0                	add    %edx,%eax
+  200463:	88 08                	mov    %cl,(%eax)
             num/=10;
-  200a64:	89 d1                	mov    %edx,%ecx
+  200465:	8b 4d 08             	mov    0x8(%ebp),%ecx
+  200468:	ba 67 66 66 66       	mov    $0x66666667,%edx
+  20046d:	89 c8                	mov    %ecx,%eax
+  20046f:	f7 ea                	imul   %edx
+  200471:	c1 fa 02             	sar    $0x2,%edx
+  200474:	89 c8                	mov    %ecx,%eax
+  200476:	c1 f8 1f             	sar    $0x1f,%eax
+  200479:	29 c2                	sub    %eax,%edx
+  20047b:	89 d0                	mov    %edx,%eax
+  20047d:	89 45 08             	mov    %eax,0x8(%ebp)
             di++;
-  200a66:	83 c3 01             	add    $0x1,%ebx
+  200480:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
     if(num == 0){
         temp[0] = '0';
         di = 0;
 
     }else{    
         while(num>=1){
-  200a69:	85 d2                	test   %edx,%edx
-  200a6b:	7f d9                	jg     200a46 <dreamOf100HZ+0x612>
+  200484:	83 7d 08 00          	cmpl   $0x0,0x8(%ebp)
+  200488:	7f a7                	jg     200431 <drawNumber+0x29>
+            temp[di] = '0'+(num%10);
+            num/=10;
+            di++;
+        };
+        di--;
+  20048a:	83 6d f8 01          	subl   $0x1,-0x8(%ebp)
+    }
+    int i=0, xx=0, yy=0;
+  20048e:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+  200495:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
+  20049c:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+    for(;di>=0;di--){
+  2004a3:	e9 aa 00 00 00       	jmp    200552 <drawNumber+0x14a>
+        for(yy=0; yy<7; yy++){
+  2004a8:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+  2004af:	e9 8c 00 00 00       	jmp    200540 <drawNumber+0x138>
+            for(xx=0; xx<5; xx++){
+  2004b4:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
+  2004bb:	eb 79                	jmp    200536 <drawNumber+0x12e>
+                const char* num = nums[temp[di]-'0'];
+  2004bd:	8d 55 dd             	lea    -0x23(%ebp),%edx
+  2004c0:	8b 45 f8             	mov    -0x8(%ebp),%eax
+  2004c3:	01 d0                	add    %edx,%eax
+  2004c5:	0f b6 00             	movzbl (%eax),%eax
+  2004c8:	0f be c0             	movsbl %al,%eax
+  2004cb:	83 e8 30             	sub    $0x30,%eax
+  2004ce:	8b 04 85 20 30 20 00 	mov    0x203020(,%eax,4),%eax
+  2004d5:	89 45 e8             	mov    %eax,-0x18(%ebp)
+                if(num[yy*5+xx])drawRect(i*(size+10)+x+xx*size, y+yy*size, size, size, color);
+  2004d8:	8b 55 ec             	mov    -0x14(%ebp),%edx
+  2004db:	89 d0                	mov    %edx,%eax
+  2004dd:	c1 e0 02             	shl    $0x2,%eax
+  2004e0:	01 c2                	add    %eax,%edx
+  2004e2:	8b 45 f0             	mov    -0x10(%ebp),%eax
+  2004e5:	01 d0                	add    %edx,%eax
+  2004e7:	89 c2                	mov    %eax,%edx
+  2004e9:	8b 45 e8             	mov    -0x18(%ebp),%eax
+  2004ec:	01 d0                	add    %edx,%eax
+  2004ee:	0f b6 00             	movzbl (%eax),%eax
+  2004f1:	84 c0                	test   %al,%al
+  2004f3:	74 3d                	je     200532 <drawNumber+0x12a>
+  2004f5:	0f b6 45 d8          	movzbl -0x28(%ebp),%eax
+  2004f9:	8b 55 ec             	mov    -0x14(%ebp),%edx
+  2004fc:	89 d1                	mov    %edx,%ecx
+  2004fe:	0f af 4d 14          	imul   0x14(%ebp),%ecx
+  200502:	8b 55 10             	mov    0x10(%ebp),%edx
+  200505:	01 d1                	add    %edx,%ecx
+  200507:	8b 55 14             	mov    0x14(%ebp),%edx
+  20050a:	83 c2 0a             	add    $0xa,%edx
+  20050d:	89 d3                	mov    %edx,%ebx
+  20050f:	0f af 5d f4          	imul   -0xc(%ebp),%ebx
+  200513:	8b 55 0c             	mov    0xc(%ebp),%edx
+  200516:	01 d3                	add    %edx,%ebx
+  200518:	8b 55 f0             	mov    -0x10(%ebp),%edx
+  20051b:	0f af 55 14          	imul   0x14(%ebp),%edx
+  20051f:	01 da                	add    %ebx,%edx
+  200521:	50                   	push   %eax
+  200522:	ff 75 14             	pushl  0x14(%ebp)
+  200525:	ff 75 14             	pushl  0x14(%ebp)
+  200528:	51                   	push   %ecx
+  200529:	52                   	push   %edx
+  20052a:	e8 1d fd ff ff       	call   20024c <drawRect>
+  20052f:	83 c4 14             	add    $0x14,%esp
+        di--;
+    }
+    int i=0, xx=0, yy=0;
+    for(;di>=0;di--){
+        for(yy=0; yy<7; yy++){
+            for(xx=0; xx<5; xx++){
+  200532:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+  200536:	83 7d f0 04          	cmpl   $0x4,-0x10(%ebp)
+  20053a:	7e 81                	jle    2004bd <drawNumber+0xb5>
+        };
+        di--;
+    }
+    int i=0, xx=0, yy=0;
+    for(;di>=0;di--){
+        for(yy=0; yy<7; yy++){
+  20053c:	83 45 ec 01          	addl   $0x1,-0x14(%ebp)
+  200540:	83 7d ec 06          	cmpl   $0x6,-0x14(%ebp)
+  200544:	0f 8e 6a ff ff ff    	jle    2004b4 <drawNumber+0xac>
+            for(xx=0; xx<5; xx++){
+                const char* num = nums[temp[di]-'0'];
+                if(num[yy*5+xx])drawRect(i*(size+10)+x+xx*size, y+yy*size, size, size, color);
+            }
+        }
+        i++;
+  20054a:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
             di++;
         };
         di--;
     }
     int i=0, xx=0, yy=0;
     for(;di>=0;di--){
-  200a6d:	83 eb 01             	sub    $0x1,%ebx
-  200a70:	89 5c 24 14          	mov    %ebx,0x14(%esp)
-  200a74:	79 5d                	jns    200ad3 <dreamOf100HZ+0x69f>
-  200a76:	e9 aa 00 00 00       	jmp    200b25 <dreamOf100HZ+0x6f1>
-        for(yy=0; yy<7; yy++){
-            for(xx=0; xx<5; xx++){
-                const char* num = nums[temp[di]-'0'];
+  20054e:	83 6d f8 01          	subl   $0x1,-0x8(%ebp)
+  200552:	83 7d f8 00          	cmpl   $0x0,-0x8(%ebp)
+  200556:	0f 89 4c ff ff ff    	jns    2004a8 <drawNumber+0xa0>
                 if(num[yy*5+xx])drawRect(i*(size+10)+x+xx*size, y+yy*size, size, size, color);
-  200a7b:	80 3c 0f 00          	cmpb   $0x0,(%edi,%ecx,1)
-  200a7f:	74 08                	je     200a89 <dreamOf100HZ+0x655>
-}
-static inline void drawPoint(int x, int y, uint8_t color){
-	sys_set_pixel(y, x, color);
-}
-static inline void drawRect(int x, int y, int w, int h, uint8_t color){
-	hash += 29*x+57*y+13*color;
-  200a81:	01 35 e4 29 20 00    	add    %esi,0x2029e4
-  200a87:	cd 80                	int    $0x80
-  200a89:	83 c6 1d             	add    $0x1d,%esi
-  200a8c:	83 c1 01             	add    $0x1,%ecx
-        di--;
-    }
-    int i=0, xx=0, yy=0;
-    for(;di>=0;di--){
-        for(yy=0; yy<7; yy++){
-            for(xx=0; xx<5; xx++){
-  200a8f:	39 cd                	cmp    %ecx,%ebp
-  200a91:	75 e8                	jne    200a7b <dreamOf100HZ+0x647>
-  200a93:	83 44 24 08 39       	addl   $0x39,0x8(%esp)
-  200a98:	8b 54 24 08          	mov    0x8(%esp),%edx
-  200a9c:	83 c7 05             	add    $0x5,%edi
-  200a9f:	83 44 24 0c 01       	addl   $0x1,0xc(%esp)
-        };
-        di--;
-    }
-    int i=0, xx=0, yy=0;
-    for(;di>=0;di--){
-        for(yy=0; yy<7; yy++){
-  200aa4:	39 54 24 10          	cmp    %edx,0x10(%esp)
-  200aa8:	74 13                	je     200abd <dreamOf100HZ+0x689>
-            for(xx=0; xx<5; xx++){
-                const char* num = nums[temp[di]-'0'];
-                if(num[yy*5+xx])drawRect(i*(size+10)+x+xx*size, y+yy*size, size, size, color);
-  200aaa:	8b 5c 24 0c          	mov    0xc(%esp),%ebx
-  200aae:	8b 4c 24 18          	mov    0x18(%esp),%ecx
-  200ab2:	8b 74 24 08          	mov    0x8(%esp),%esi
-  200ab6:	ba 07 00 00 00       	mov    $0x7,%edx
-  200abb:	eb be                	jmp    200a7b <dreamOf100HZ+0x647>
-  200abd:	83 6c 24 1c 0b       	subl   $0xb,0x1c(%esp)
-  200ac2:	81 44 24 10 3f 01 00 	addl   $0x13f,0x10(%esp)
-  200ac9:	00 
-            di++;
-        };
-        di--;
-    }
-    int i=0, xx=0, yy=0;
-    for(;di>=0;di--){
-  200aca:	83 6c 24 14 01       	subl   $0x1,0x14(%esp)
-  200acf:	79 17                	jns    200ae8 <dreamOf100HZ+0x6b4>
-  200ad1:	eb 52                	jmp    200b25 <dreamOf100HZ+0x6f1>
-static inline void drawNumber(int num, int x, int y, int size, uint8_t color){
-    char temp[11];
-    int di=0;
-    if(num == 0){
-        temp[0] = '0';
-        di = 0;
-  200ad3:	c7 44 24 10 fe 29 00 	movl   $0x29fe,0x10(%esp)
-  200ada:	00 
-  200adb:	c7 44 24 1c 00 00 00 	movl   $0x0,0x1c(%esp)
-  200ae2:	00 
-  200ae3:	b8 4f 04 00 00       	mov    $0x44f,%eax
-  200ae8:	8b 54 24 10          	mov    0x10(%esp),%edx
-  200aec:	81 ea 8f 01 00 00    	sub    $0x18f,%edx
-  200af2:	89 54 24 08          	mov    %edx,0x8(%esp)
-    }
-    int i=0, xx=0, yy=0;
-    for(;di>=0;di--){
-        for(yy=0; yy<7; yy++){
-            for(xx=0; xx<5; xx++){
-                const char* num = nums[temp[di]-'0'];
-  200af6:	8b 54 24 14          	mov    0x14(%esp),%edx
-  200afa:	0f be 54 14 25       	movsbl 0x25(%esp,%edx,1),%edx
-  200aff:	8b 74 24 1c          	mov    0x1c(%esp),%esi
-  200b03:	89 f7                	mov    %esi,%edi
-  200b05:	03 3c 95 80 1f 20 00 	add    0x201f80(,%edx,4),%edi
-  200b0c:	c7 44 24 0c b4 00 00 	movl   $0xb4,0xc(%esp)
-  200b13:	00 
-  200b14:	89 f2                	mov    %esi,%edx
-  200b16:	f7 da                	neg    %edx
-  200b18:	89 54 24 18          	mov    %edx,0x18(%esp)
-  200b1c:	bd 05 00 00 00       	mov    $0x5,%ebp
-  200b21:	29 f5                	sub    %esi,%ebp
-  200b23:	eb 85                	jmp    200aaa <dreamOf100HZ+0x676>
+            }
+        }
         i++;
     }
 }
+  20055c:	8b 5d fc             	mov    -0x4(%ebp),%ebx
+  20055f:	c9                   	leave  
+  200560:	c3                   	ret    
+
+00200561 <drawStage>:
 
 static inline void drawStage(){
+  200561:	55                   	push   %ebp
+  200562:	89 e5                	mov    %esp,%ebp
 	if(lhash == hash)return;
-  200b25:	8b 15 e4 29 20 00    	mov    0x2029e4,%edx
-  200b2b:	3b 15 e0 29 20 00    	cmp    0x2029e0,%edx
-  200b31:	74 0d                	je     200b40 <dreamOf100HZ+0x70c>
-
-static inline void sys_clear_vram(){
-	asm volatile("int $0x80": : "a"(SYS_CLEAR_VRAM)); //SYSCALL HERE!
-}
-static inline void sys_flush_vcache(){
-	asm volatile("int $0x80": : "a"(SYS_FLUSH_VCACHE)); //SYSCALL HERE!
-  200b33:	b8 4e 04 00 00       	mov    $0x44e,%eax
-  200b38:	cd 80                	int    $0x80
+  200564:	8b 15 84 30 20 00    	mov    0x203084,%edx
+  20056a:	a1 80 30 20 00       	mov    0x203080,%eax
+  20056f:	39 c2                	cmp    %eax,%edx
+  200571:	75 02                	jne    200575 <drawStage+0x14>
+  200573:	eb 0f                	jmp    200584 <drawStage+0x23>
 	//clear_vram();
 	sys_flush_vcache();
+  200575:	e8 65 fb ff ff       	call   2000df <sys_flush_vcache>
 	lhash = hash;
-  200b3a:	89 15 e0 29 20 00    	mov    %edx,0x2029e0
-		drawStage();
-		
-		
-		createMonster();
-  200b40:	e8 fa f7 ff ff       	call   20033f <createMonster>
-		while(hitMonster());
-  200b45:	e8 27 f5 ff ff       	call   200071 <hitMonster>
-  200b4a:	85 c0                	test   %eax,%eax
-  200b4c:	75 f7                	jne    200b45 <dreamOf100HZ+0x711>
-		//}
-	}
-	if(gameStatus == GAME_END){
-  200b4e:	83 3d 6c 2e 20 00 03 	cmpl   $0x3,0x202e6c
-  200b55:	75 55                	jne    200bac <dreamOf100HZ+0x778>
-		printf("You're dead\n");
-  200b57:	83 ec 0c             	sub    $0xc,%esp
-  200b5a:	68 92 0e 20 00       	push   $0x200e92
-  200b5f:	e8 ee 02 00 00       	call   200e52 <printf>
-		printf("Score: %d\n", score);
-  200b64:	83 c4 08             	add    $0x8,%esp
-  200b67:	ff 35 70 2e 20 00    	pushl  0x202e70
-  200b6d:	68 9f 0e 20 00       	push   $0x200e9f
-  200b72:	e8 db 02 00 00       	call   200e52 <printf>
-    return p - squares;
+  20057a:	a1 80 30 20 00       	mov    0x203080,%eax
+  20057f:	a3 84 30 20 00       	mov    %eax,0x203084
 }
+  200584:	5d                   	pop    %ebp
+  200585:	c3                   	ret    
 
+00200586 <key>:
+static int curtime = 0;
 
-static inline void clearStage(){
-	hash = 0;
-  200b77:	c7 05 e4 29 20 00 00 	movl   $0x0,0x2029e4
-  200b7e:	00 00 00 
-static inline void sys_printch(char c){
-	asm volatile("int $0x80": : "a"(SYS_PRINT_CHAR), "b"(c)); //SYSCALL HERE!
+static int score;
+void dreamOf100HZ(int);
+
+static inline int8_t key(char s){
+  200586:	55                   	push   %ebp
+  200587:	89 e5                	mov    %esp,%ebp
+  200589:	83 ec 04             	sub    $0x4,%esp
+  20058c:	8b 45 08             	mov    0x8(%ebp),%eax
+  20058f:	88 45 fc             	mov    %al,-0x4(%ebp)
+	return sys_key_down(s);
+  200592:	0f be 45 fc          	movsbl -0x4(%ebp),%eax
+  200596:	50                   	push   %eax
+  200597:	e8 66 fb ff ff       	call   200102 <sys_key_down>
+  20059c:	83 c4 04             	add    $0x4,%esp
 }
+  20059f:	c9                   	leave  
+  2005a0:	c3                   	ret    
 
-static inline void sys_init_vcache(){
-	asm volatile("int $0x80": : "a"(SYS_INIT_CACHE)); //SYSCALL HERE!
-  200b81:	b8 4c 04 00 00       	mov    $0x44c,%eax
-  200b86:	cd 80                	int    $0x80
-        i++;
-    }
-}
-
-static inline void drawStage(){
-	if(lhash == hash)return;
-  200b88:	83 c4 10             	add    $0x10,%esp
-  200b8b:	83 3d e0 29 20 00 00 	cmpl   $0x0,0x2029e0
-  200b92:	74 0e                	je     200ba2 <dreamOf100HZ+0x76e>
-
-static inline void sys_clear_vram(){
-	asm volatile("int $0x80": : "a"(SYS_CLEAR_VRAM)); //SYSCALL HERE!
-}
-static inline void sys_flush_vcache(){
-	asm volatile("int $0x80": : "a"(SYS_FLUSH_VCACHE)); //SYSCALL HERE!
-  200b94:	b0 4e                	mov    $0x4e,%al
-  200b96:	cd 80                	int    $0x80
-	//clear_vram();
-	sys_flush_vcache();
-	lhash = hash;
-  200b98:	c7 05 e0 29 20 00 00 	movl   $0x0,0x2029e0
-  200b9f:	00 00 00 
-		clearStage();
-		drawStage();
-		gameStatus = GAME_START;
-  200ba2:	c7 05 6c 2e 20 00 00 	movl   $0x0,0x202e6c
-  200ba9:	00 00 00 
-	}
-  200bac:	83 c4 3c             	add    $0x3c,%esp
-  200baf:	5b                   	pop    %ebx
-  200bb0:	5e                   	pop    %esi
-  200bb1:	5f                   	pop    %edi
-  200bb2:	5d                   	pop    %ebp
-  200bb3:	c3                   	ret    
-
-00200bb4 <main>:
-	sys_add_timer(ptr);
-};
+002005a1 <main>:
 
 
 
 int main(){
-  200bb4:	8d 4c 24 04          	lea    0x4(%esp),%ecx
-  200bb8:	83 e4 f0             	and    $0xfffffff0,%esp
-  200bbb:	ff 71 fc             	pushl  -0x4(%ecx)
-  200bbe:	55                   	push   %ebp
-  200bbf:	89 e5                	mov    %esp,%ebp
-  200bc1:	53                   	push   %ebx
-  200bc2:	51                   	push   %ecx
-  200bc3:	83 ec 10             	sub    $0x10,%esp
-	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
-	return r_eax;
-}
-static inline uint32_t sys_get_tick(){
-	uint32_t r_eax = 0;
-	asm volatile("int $0x80": : "a"(SYS_GET_TICK)); //SYSCALL HERE!
-  200bc6:	bb 15 05 00 00       	mov    $0x515,%ebx
-	asm volatile("int $0x80": : "a"(SYS_GET_KEY), "b"(s)); //SYSCALL HERE!
-	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
-	return r_eax;
-}
-static inline uint32_t sys_get_tick(){
-	uint32_t r_eax = 0;
-  200bcb:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
-	asm volatile("int $0x80": : "a"(SYS_GET_TICK)); //SYSCALL HERE!
-  200bd2:	89 d8                	mov    %ebx,%eax
-  200bd4:	cd 80                	int    $0x80
-	asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
-  200bd6:	89 45 f4             	mov    %eax,-0xc(%ebp)
+  2005a1:	8d 4c 24 04          	lea    0x4(%esp),%ecx
+  2005a5:	83 e4 f0             	and    $0xfffffff0,%esp
+  2005a8:	ff 71 fc             	pushl  -0x4(%ecx)
+  2005ab:	55                   	push   %ebp
+  2005ac:	89 e5                	mov    %esp,%ebp
+  2005ae:	51                   	push   %ecx
+  2005af:	83 ec 04             	sub    $0x4,%esp
 	//initVCache();
 	//printk("5\n");
 	//clear_key();
 	//printk("6\n");
 	while(1){
 		timestamp = sys_get_tick();
-  200bd9:	c7 05 20 20 20 00 00 	movl   $0x0,0x202020
-  200be0:	00 00 00 
+  2005b2:	e8 76 fb ff ff       	call   20012d <sys_get_tick>
+  2005b7:	a3 48 30 20 00       	mov    %eax,0x203048
 		//wait_for_interrupt();
 		//disable_interrupt();
 		while(curtime<timestamp){
-  200be3:	83 3d 74 2e 20 00 00 	cmpl   $0x0,0x202e74
-  200bea:	79 df                	jns    200bcb <main+0x17>
-  200bec:	b9 00 00 00 00       	mov    $0x0,%ecx
+  2005bc:	eb 1e                	jmp    2005dc <main+0x3b>
 			
 			#ifdef QUICK
 			dreamOf100HZ(timestamp);
-  200bf1:	83 ec 0c             	sub    $0xc,%esp
-  200bf4:	51                   	push   %ecx
-  200bf5:	e8 3a f8 ff ff       	call   200434 <dreamOf100HZ>
+  2005be:	a1 48 30 20 00       	mov    0x203048,%eax
+  2005c3:	83 ec 0c             	sub    $0xc,%esp
+  2005c6:	50                   	push   %eax
+  2005c7:	e8 8c 07 00 00       	call   200d58 <dreamOf100HZ>
+  2005cc:	83 c4 10             	add    $0x10,%esp
 			#else
 			if(timestamp%4==0)
 				dreamOf100HZ(timestamp>>2);
 			#endif
 			curtime++;
-  200bfa:	a1 74 2e 20 00       	mov    0x202e74,%eax
-  200bff:	8d 50 01             	lea    0x1(%eax),%edx
-  200c02:	89 15 74 2e 20 00    	mov    %edx,0x202e74
+  2005cf:	a1 20 3a 20 00       	mov    0x203a20,%eax
+  2005d4:	83 c0 01             	add    $0x1,%eax
+  2005d7:	a3 20 3a 20 00       	mov    %eax,0x203a20
 	//printk("6\n");
 	while(1){
 		timestamp = sys_get_tick();
 		//wait_for_interrupt();
 		//disable_interrupt();
 		while(curtime<timestamp){
-  200c08:	8b 0d 20 20 20 00    	mov    0x202020,%ecx
-  200c0e:	83 c4 10             	add    $0x10,%esp
-  200c11:	39 d1                	cmp    %edx,%ecx
-  200c13:	7f dc                	jg     200bf1 <main+0x3d>
-  200c15:	eb b4                	jmp    200bcb <main+0x17>
+  2005dc:	8b 15 20 3a 20 00    	mov    0x203a20,%edx
+  2005e2:	a1 48 30 20 00       	mov    0x203048,%eax
+  2005e7:	39 c2                	cmp    %eax,%edx
+  2005e9:	7c d3                	jl     2005be <main+0x1d>
+		}
+		
 
-00200c17 <sys_printch>:
+		//enable_interrupt();
+		
+	}
+  2005eb:	eb c5                	jmp    2005b2 <main+0x11>
+
+002005ed <hitMonster>:
+domain int x, y, size, score = 0;
+
+domain MONSTER monsters[MONSTER_SIZE+20];
+
+
+int hitMonster(){
+  2005ed:	55                   	push   %ebp
+  2005ee:	89 e5                	mov    %esp,%ebp
+  2005f0:	83 ec 10             	sub    $0x10,%esp
+	int i=0;
+  2005f3:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
+	REP_MONSTER(){
+  2005fa:	e9 9c 01 00 00       	jmp    20079b <hitMonster+0x1ae>
+		int dx = x-mon.x; 
+  2005ff:	8b 15 2c 3a 20 00    	mov    0x203a2c,%edx
+  200605:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  200608:	c1 e0 02             	shl    $0x2,%eax
+  20060b:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+  200612:	29 c1                	sub    %eax,%ecx
+  200614:	89 c8                	mov    %ecx,%eax
+  200616:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20061b:	8b 40 04             	mov    0x4(%eax),%eax
+  20061e:	29 c2                	sub    %eax,%edx
+  200620:	89 d0                	mov    %edx,%eax
+  200622:	89 45 f8             	mov    %eax,-0x8(%ebp)
+		int dy = y-mon.y;
+  200625:	8b 15 30 3a 20 00    	mov    0x203a30,%edx
+  20062b:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  20062e:	c1 e0 02             	shl    $0x2,%eax
+  200631:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+  200638:	29 c1                	sub    %eax,%ecx
+  20063a:	89 c8                	mov    %ecx,%eax
+  20063c:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200641:	8b 40 08             	mov    0x8(%eax),%eax
+  200644:	29 c2                	sub    %eax,%edx
+  200646:	89 d0                	mov    %edx,%eax
+  200648:	89 45 f4             	mov    %eax,-0xc(%ebp)
+		//printk("%d %d", dx, dy);
+		if(mon.status == MONSTER_ALIVE && dx <= mon.size && dy <= mon.size && dx >= -mon.size && dy >= -mon.size){
+  20064b:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  20064e:	89 c2                	mov    %eax,%edx
+  200650:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  200657:	89 c2                	mov    %eax,%edx
+  200659:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200660:	29 d0                	sub    %edx,%eax
+  200662:	83 c0 10             	add    $0x10,%eax
+  200665:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20066a:	8b 40 04             	mov    0x4(%eax),%eax
+  20066d:	85 c0                	test   %eax,%eax
+  20066f:	0f 85 22 01 00 00    	jne    200797 <hitMonster+0x1aa>
+  200675:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  200678:	c1 e0 02             	shl    $0x2,%eax
+  20067b:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200682:	29 c2                	sub    %eax,%edx
+  200684:	89 d0                	mov    %edx,%eax
+  200686:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20068b:	8b 00                	mov    (%eax),%eax
+  20068d:	3b 45 f8             	cmp    -0x8(%ebp),%eax
+  200690:	0f 8c 01 01 00 00    	jl     200797 <hitMonster+0x1aa>
+  200696:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  200699:	c1 e0 02             	shl    $0x2,%eax
+  20069c:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  2006a3:	29 c2                	sub    %eax,%edx
+  2006a5:	89 d0                	mov    %edx,%eax
+  2006a7:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2006ac:	8b 00                	mov    (%eax),%eax
+  2006ae:	3b 45 f4             	cmp    -0xc(%ebp),%eax
+  2006b1:	0f 8c e0 00 00 00    	jl     200797 <hitMonster+0x1aa>
+  2006b7:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  2006ba:	c1 e0 02             	shl    $0x2,%eax
+  2006bd:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  2006c4:	29 c2                	sub    %eax,%edx
+  2006c6:	89 d0                	mov    %edx,%eax
+  2006c8:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2006cd:	8b 00                	mov    (%eax),%eax
+  2006cf:	f7 d8                	neg    %eax
+  2006d1:	3b 45 f8             	cmp    -0x8(%ebp),%eax
+  2006d4:	0f 8f bd 00 00 00    	jg     200797 <hitMonster+0x1aa>
+  2006da:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  2006dd:	c1 e0 02             	shl    $0x2,%eax
+  2006e0:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  2006e7:	29 c2                	sub    %eax,%edx
+  2006e9:	89 d0                	mov    %edx,%eax
+  2006eb:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2006f0:	8b 00                	mov    (%eax),%eax
+  2006f2:	f7 d8                	neg    %eax
+  2006f4:	3b 45 f4             	cmp    -0xc(%ebp),%eax
+  2006f7:	0f 8f 9a 00 00 00    	jg     200797 <hitMonster+0x1aa>
+			if(mon.size <= size){
+  2006fd:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  200700:	c1 e0 02             	shl    $0x2,%eax
+  200703:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  20070a:	29 c2                	sub    %eax,%edx
+  20070c:	89 d0                	mov    %edx,%eax
+  20070e:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200713:	8b 10                	mov    (%eax),%edx
+  200715:	a1 34 3a 20 00       	mov    0x203a34,%eax
+  20071a:	39 c2                	cmp    %eax,%edx
+  20071c:	7f 68                	jg     200786 <hitMonster+0x199>
+				mon.status = MONSTER_DEAD;
+  20071e:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  200721:	89 c2                	mov    %eax,%edx
+  200723:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  20072a:	89 c2                	mov    %eax,%edx
+  20072c:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200733:	29 d0                	sub    %edx,%eax
+  200735:	83 c0 10             	add    $0x10,%eax
+  200738:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20073d:	c7 40 04 01 00 00 00 	movl   $0x1,0x4(%eax)
+				if(size<13)size++;
+  200744:	a1 34 3a 20 00       	mov    0x203a34,%eax
+  200749:	83 f8 0c             	cmp    $0xc,%eax
+  20074c:	7f 0d                	jg     20075b <hitMonster+0x16e>
+  20074e:	a1 34 3a 20 00       	mov    0x203a34,%eax
+  200753:	83 c0 01             	add    $0x1,%eax
+  200756:	a3 34 3a 20 00       	mov    %eax,0x203a34
+				score += mon.size;
+  20075b:	8b 45 fc             	mov    -0x4(%ebp),%eax
+  20075e:	c1 e0 02             	shl    $0x2,%eax
+  200761:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200768:	29 c2                	sub    %eax,%edx
+  20076a:	89 d0                	mov    %edx,%eax
+  20076c:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200771:	8b 10                	mov    (%eax),%edx
+  200773:	a1 24 3a 20 00       	mov    0x203a24,%eax
+  200778:	01 d0                	add    %edx,%eax
+  20077a:	a3 24 3a 20 00       	mov    %eax,0x203a24
+			}else{
+				gameStatus = GAME_END;
+				return 0;
+			}
+			return 1;
+  20077f:	b8 01 00 00 00       	mov    $0x1,%eax
+  200784:	eb 24                	jmp    2007aa <hitMonster+0x1bd>
+			if(mon.size <= size){
+				mon.status = MONSTER_DEAD;
+				if(size<13)size++;
+				score += mon.size;
+			}else{
+				gameStatus = GAME_END;
+  200786:	c7 05 28 3a 20 00 03 	movl   $0x3,0x203a28
+  20078d:	00 00 00 
+				return 0;
+  200790:	b8 00 00 00 00       	mov    $0x0,%eax
+  200795:	eb 13                	jmp    2007aa <hitMonster+0x1bd>
+domain MONSTER monsters[MONSTER_SIZE+20];
+
+
+int hitMonster(){
+	int i=0;
+	REP_MONSTER(){
+  200797:	83 45 fc 01          	addl   $0x1,-0x4(%ebp)
+  20079b:	83 7d fc 13          	cmpl   $0x13,-0x4(%ebp)
+  20079f:	0f 8e 5a fe ff ff    	jle    2005ff <hitMonster+0x12>
+				return 0;
+			}
+			return 1;
+		}
+	}
+	return 0;
+  2007a5:	b8 00 00 00 00       	mov    $0x0,%eax
+}
+  2007aa:	c9                   	leave  
+  2007ab:	c3                   	ret    
+
+002007ac <drawMonster>:
+
+void drawMonster(){
+  2007ac:	55                   	push   %ebp
+  2007ad:	89 e5                	mov    %esp,%ebp
+  2007af:	56                   	push   %esi
+  2007b0:	53                   	push   %ebx
+  2007b1:	83 ec 10             	sub    $0x10,%esp
+	int i=0;
+  2007b4:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+	REP_MONSTER(){
+  2007bb:	e9 89 03 00 00       	jmp    200b49 <drawMonster+0x39d>
+		if(mon.status == MONSTER_ALIVE){
+  2007c0:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2007c3:	89 c2                	mov    %eax,%edx
+  2007c5:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  2007cc:	89 c2                	mov    %eax,%edx
+  2007ce:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  2007d5:	29 d0                	sub    %edx,%eax
+  2007d7:	83 c0 10             	add    $0x10,%eax
+  2007da:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2007df:	8b 40 04             	mov    0x4(%eax),%eax
+  2007e2:	85 c0                	test   %eax,%eax
+  2007e4:	0f 85 5b 03 00 00    	jne    200b45 <drawMonster+0x399>
+			mon.x += mon.sx;
+  2007ea:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2007ed:	c1 e0 02             	shl    $0x2,%eax
+  2007f0:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  2007f7:	29 c2                	sub    %eax,%edx
+  2007f9:	89 d0                	mov    %edx,%eax
+  2007fb:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200800:	8b 50 04             	mov    0x4(%eax),%edx
+  200803:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200806:	c1 e0 02             	shl    $0x2,%eax
+  200809:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+  200810:	29 c1                	sub    %eax,%ecx
+  200812:	89 c8                	mov    %ecx,%eax
+  200814:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200819:	8b 40 0c             	mov    0xc(%eax),%eax
+  20081c:	01 c2                	add    %eax,%edx
+  20081e:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200821:	c1 e0 02             	shl    $0x2,%eax
+  200824:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+  20082b:	29 c1                	sub    %eax,%ecx
+  20082d:	89 c8                	mov    %ecx,%eax
+  20082f:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200834:	89 50 04             	mov    %edx,0x4(%eax)
+			mon.y += mon.sy;
+  200837:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  20083a:	c1 e0 02             	shl    $0x2,%eax
+  20083d:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200844:	29 c2                	sub    %eax,%edx
+  200846:	89 d0                	mov    %edx,%eax
+  200848:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20084d:	8b 48 08             	mov    0x8(%eax),%ecx
+  200850:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200853:	89 c2                	mov    %eax,%edx
+  200855:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  20085c:	89 c2                	mov    %eax,%edx
+  20085e:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200865:	29 d0                	sub    %edx,%eax
+  200867:	83 c0 10             	add    $0x10,%eax
+  20086a:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20086f:	8b 00                	mov    (%eax),%eax
+  200871:	8d 14 01             	lea    (%ecx,%eax,1),%edx
+  200874:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200877:	c1 e0 02             	shl    $0x2,%eax
+  20087a:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+  200881:	29 c1                	sub    %eax,%ecx
+  200883:	89 c8                	mov    %ecx,%eax
+  200885:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20088a:	89 50 08             	mov    %edx,0x8(%eax)
+
+			if(mon.x < 10) mon.x++;
+  20088d:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200890:	c1 e0 02             	shl    $0x2,%eax
+  200893:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  20089a:	29 c2                	sub    %eax,%edx
+  20089c:	89 d0                	mov    %edx,%eax
+  20089e:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2008a3:	8b 40 04             	mov    0x4(%eax),%eax
+  2008a6:	83 f8 09             	cmp    $0x9,%eax
+  2008a9:	7f 35                	jg     2008e0 <drawMonster+0x134>
+  2008ab:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2008ae:	c1 e0 02             	shl    $0x2,%eax
+  2008b1:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  2008b8:	29 c2                	sub    %eax,%edx
+  2008ba:	89 d0                	mov    %edx,%eax
+  2008bc:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2008c1:	8b 40 04             	mov    0x4(%eax),%eax
+  2008c4:	8d 50 01             	lea    0x1(%eax),%edx
+  2008c7:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2008ca:	c1 e0 02             	shl    $0x2,%eax
+  2008cd:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+  2008d4:	29 c1                	sub    %eax,%ecx
+  2008d6:	89 c8                	mov    %ecx,%eax
+  2008d8:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2008dd:	89 50 04             	mov    %edx,0x4(%eax)
+			if(mon.x > VWIDTH-10) mon.x--;
+  2008e0:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2008e3:	c1 e0 02             	shl    $0x2,%eax
+  2008e6:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  2008ed:	29 c2                	sub    %eax,%edx
+  2008ef:	89 d0                	mov    %edx,%eax
+  2008f1:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2008f6:	8b 40 04             	mov    0x4(%eax),%eax
+  2008f9:	3d 36 01 00 00       	cmp    $0x136,%eax
+  2008fe:	7e 35                	jle    200935 <drawMonster+0x189>
+  200900:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200903:	c1 e0 02             	shl    $0x2,%eax
+  200906:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  20090d:	29 c2                	sub    %eax,%edx
+  20090f:	89 d0                	mov    %edx,%eax
+  200911:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200916:	8b 40 04             	mov    0x4(%eax),%eax
+  200919:	8d 50 ff             	lea    -0x1(%eax),%edx
+  20091c:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  20091f:	c1 e0 02             	shl    $0x2,%eax
+  200922:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+  200929:	29 c1                	sub    %eax,%ecx
+  20092b:	89 c8                	mov    %ecx,%eax
+  20092d:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200932:	89 50 04             	mov    %edx,0x4(%eax)
+			if(mon.y < 10) mon.y++;
+  200935:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200938:	c1 e0 02             	shl    $0x2,%eax
+  20093b:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200942:	29 c2                	sub    %eax,%edx
+  200944:	89 d0                	mov    %edx,%eax
+  200946:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20094b:	8b 40 08             	mov    0x8(%eax),%eax
+  20094e:	83 f8 09             	cmp    $0x9,%eax
+  200951:	7f 35                	jg     200988 <drawMonster+0x1dc>
+  200953:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200956:	c1 e0 02             	shl    $0x2,%eax
+  200959:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200960:	29 c2                	sub    %eax,%edx
+  200962:	89 d0                	mov    %edx,%eax
+  200964:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200969:	8b 40 08             	mov    0x8(%eax),%eax
+  20096c:	8d 50 01             	lea    0x1(%eax),%edx
+  20096f:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200972:	c1 e0 02             	shl    $0x2,%eax
+  200975:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+  20097c:	29 c1                	sub    %eax,%ecx
+  20097e:	89 c8                	mov    %ecx,%eax
+  200980:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200985:	89 50 08             	mov    %edx,0x8(%eax)
+			if(mon.y > VHEIGHT-10) mon.y--;
+  200988:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  20098b:	c1 e0 02             	shl    $0x2,%eax
+  20098e:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200995:	29 c2                	sub    %eax,%edx
+  200997:	89 d0                	mov    %edx,%eax
+  200999:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20099e:	8b 40 08             	mov    0x8(%eax),%eax
+  2009a1:	3d be 00 00 00       	cmp    $0xbe,%eax
+  2009a6:	7e 35                	jle    2009dd <drawMonster+0x231>
+  2009a8:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2009ab:	c1 e0 02             	shl    $0x2,%eax
+  2009ae:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  2009b5:	29 c2                	sub    %eax,%edx
+  2009b7:	89 d0                	mov    %edx,%eax
+  2009b9:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2009be:	8b 40 08             	mov    0x8(%eax),%eax
+  2009c1:	8d 50 ff             	lea    -0x1(%eax),%edx
+  2009c4:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2009c7:	c1 e0 02             	shl    $0x2,%eax
+  2009ca:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+  2009d1:	29 c1                	sub    %eax,%ecx
+  2009d3:	89 c8                	mov    %ecx,%eax
+  2009d5:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2009da:	89 50 08             	mov    %edx,0x8(%eax)
+			int color = size>=mon.size?15:5;
+  2009dd:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2009e0:	c1 e0 02             	shl    $0x2,%eax
+  2009e3:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  2009ea:	29 c2                	sub    %eax,%edx
+  2009ec:	89 d0                	mov    %edx,%eax
+  2009ee:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2009f3:	8b 10                	mov    (%eax),%edx
+  2009f5:	a1 34 3a 20 00       	mov    0x203a34,%eax
+  2009fa:	39 c2                	cmp    %eax,%edx
+  2009fc:	7f 07                	jg     200a05 <drawMonster+0x259>
+  2009fe:	b8 0f 00 00 00       	mov    $0xf,%eax
+  200a03:	eb 05                	jmp    200a0a <drawMonster+0x25e>
+  200a05:	b8 05 00 00 00       	mov    $0x5,%eax
+  200a0a:	89 45 f0             	mov    %eax,-0x10(%ebp)
+			drawCirc(mon.x, mon.y, mon.size, color);
+  200a0d:	8b 45 f0             	mov    -0x10(%ebp),%eax
+  200a10:	0f b6 d8             	movzbl %al,%ebx
+  200a13:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200a16:	c1 e0 02             	shl    $0x2,%eax
+  200a19:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200a20:	29 c2                	sub    %eax,%edx
+  200a22:	89 d0                	mov    %edx,%eax
+  200a24:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200a29:	8b 08                	mov    (%eax),%ecx
+  200a2b:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200a2e:	c1 e0 02             	shl    $0x2,%eax
+  200a31:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200a38:	29 c2                	sub    %eax,%edx
+  200a3a:	89 d0                	mov    %edx,%eax
+  200a3c:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200a41:	8b 50 08             	mov    0x8(%eax),%edx
+  200a44:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200a47:	c1 e0 02             	shl    $0x2,%eax
+  200a4a:	8d 34 c5 00 00 00 00 	lea    0x0(,%eax,8),%esi
+  200a51:	29 c6                	sub    %eax,%esi
+  200a53:	89 f0                	mov    %esi,%eax
+  200a55:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200a5a:	8b 40 04             	mov    0x4(%eax),%eax
+  200a5d:	53                   	push   %ebx
+  200a5e:	51                   	push   %ecx
+  200a5f:	52                   	push   %edx
+  200a60:	50                   	push   %eax
+  200a61:	e8 7d f8 ff ff       	call   2002e3 <drawCirc>
+  200a66:	83 c4 10             	add    $0x10,%esp
+			if(KISS()%60==0){
+  200a69:	e8 92 f5 ff ff       	call   200000 <UKISS>
+  200a6e:	89 c2                	mov    %eax,%edx
+  200a70:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200a75:	01 c2                	add    %eax,%edx
+  200a77:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200a7c:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200a7f:	ba 89 88 88 88       	mov    $0x88888889,%edx
+  200a84:	89 c8                	mov    %ecx,%eax
+  200a86:	f7 e2                	mul    %edx
+  200a88:	89 d0                	mov    %edx,%eax
+  200a8a:	c1 e8 05             	shr    $0x5,%eax
+  200a8d:	89 c2                	mov    %eax,%edx
+  200a8f:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  200a96:	89 c2                	mov    %eax,%edx
+  200a98:	89 d0                	mov    %edx,%eax
+  200a9a:	c1 e0 04             	shl    $0x4,%eax
+  200a9d:	29 d0                	sub    %edx,%eax
+  200a9f:	29 c1                	sub    %eax,%ecx
+  200aa1:	89 c8                	mov    %ecx,%eax
+  200aa3:	85 c0                	test   %eax,%eax
+  200aa5:	0f 85 9a 00 00 00    	jne    200b45 <drawMonster+0x399>
+				mon.sx = -1 + KISS()%3;
+  200aab:	e8 50 f5 ff ff       	call   200000 <UKISS>
+  200ab0:	89 c2                	mov    %eax,%edx
+  200ab2:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200ab7:	01 c2                	add    %eax,%edx
+  200ab9:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200abe:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200ac1:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+  200ac6:	89 c8                	mov    %ecx,%eax
+  200ac8:	f7 e2                	mul    %edx
+  200aca:	d1 ea                	shr    %edx
+  200acc:	89 d0                	mov    %edx,%eax
+  200ace:	01 c0                	add    %eax,%eax
+  200ad0:	01 d0                	add    %edx,%eax
+  200ad2:	29 c1                	sub    %eax,%ecx
+  200ad4:	89 ca                	mov    %ecx,%edx
+  200ad6:	8d 42 ff             	lea    -0x1(%edx),%eax
+  200ad9:	89 c1                	mov    %eax,%ecx
+  200adb:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200ade:	c1 e0 02             	shl    $0x2,%eax
+  200ae1:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200ae8:	29 c2                	sub    %eax,%edx
+  200aea:	89 d0                	mov    %edx,%eax
+  200aec:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200af1:	89 48 0c             	mov    %ecx,0xc(%eax)
+				mon.sy = -1 + KISS()%3;
+  200af4:	e8 07 f5 ff ff       	call   200000 <UKISS>
+  200af9:	89 c2                	mov    %eax,%edx
+  200afb:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200b00:	01 c2                	add    %eax,%edx
+  200b02:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200b07:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200b0a:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+  200b0f:	89 c8                	mov    %ecx,%eax
+  200b11:	f7 e2                	mul    %edx
+  200b13:	d1 ea                	shr    %edx
+  200b15:	89 d0                	mov    %edx,%eax
+  200b17:	01 c0                	add    %eax,%eax
+  200b19:	01 d0                	add    %edx,%eax
+  200b1b:	29 c1                	sub    %eax,%ecx
+  200b1d:	89 ca                	mov    %ecx,%edx
+  200b1f:	8d 42 ff             	lea    -0x1(%edx),%eax
+  200b22:	89 c1                	mov    %eax,%ecx
+  200b24:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200b27:	89 c2                	mov    %eax,%edx
+  200b29:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  200b30:	89 c2                	mov    %eax,%edx
+  200b32:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200b39:	29 d0                	sub    %edx,%eax
+  200b3b:	83 c0 10             	add    $0x10,%eax
+  200b3e:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200b43:	89 08                	mov    %ecx,(%eax)
+	return 0;
+}
+
+void drawMonster(){
+	int i=0;
+	REP_MONSTER(){
+  200b45:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+  200b49:	83 7d f4 13          	cmpl   $0x13,-0xc(%ebp)
+  200b4d:	0f 8e 6d fc ff ff    	jle    2007c0 <drawMonster+0x14>
+				mon.sx = -1 + KISS()%3;
+				mon.sy = -1 + KISS()%3;
+			}
+		}
+	}
+}
+  200b53:	8d 65 f8             	lea    -0x8(%ebp),%esp
+  200b56:	5b                   	pop    %ebx
+  200b57:	5e                   	pop    %esi
+  200b58:	5d                   	pop    %ebp
+  200b59:	c3                   	ret    
+
+00200b5a <createMonster>:
+void createMonster(){
+  200b5a:	55                   	push   %ebp
+  200b5b:	89 e5                	mov    %esp,%ebp
+  200b5d:	83 ec 18             	sub    $0x18,%esp
+	int i=0;
+  200b60:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+	REP_MONSTER(){
+  200b67:	e9 e0 01 00 00       	jmp    200d4c <createMonster+0x1f2>
+		if(mon.status == MONSTER_ALIVE) continue;
+  200b6c:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200b6f:	89 c2                	mov    %eax,%edx
+  200b71:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  200b78:	89 c2                	mov    %eax,%edx
+  200b7a:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200b81:	29 d0                	sub    %edx,%eax
+  200b83:	83 c0 10             	add    $0x10,%eax
+  200b86:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200b8b:	8b 40 04             	mov    0x4(%eax),%eax
+  200b8e:	85 c0                	test   %eax,%eax
+  200b90:	75 05                	jne    200b97 <createMonster+0x3d>
+  200b92:	e9 b1 01 00 00       	jmp    200d48 <createMonster+0x1ee>
+		if(KISS()%(250*MONSTER_SIZE) == 0){
+  200b97:	e8 64 f4 ff ff       	call   200000 <UKISS>
+  200b9c:	89 c2                	mov    %eax,%edx
+  200b9e:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200ba3:	01 c2                	add    %eax,%edx
+  200ba5:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200baa:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200bad:	ba 59 17 b7 d1       	mov    $0xd1b71759,%edx
+  200bb2:	89 c8                	mov    %ecx,%eax
+  200bb4:	f7 e2                	mul    %edx
+  200bb6:	89 d0                	mov    %edx,%eax
+  200bb8:	c1 e8 0c             	shr    $0xc,%eax
+  200bbb:	69 c0 88 13 00 00    	imul   $0x1388,%eax,%eax
+  200bc1:	29 c1                	sub    %eax,%ecx
+  200bc3:	89 c8                	mov    %ecx,%eax
+  200bc5:	85 c0                	test   %eax,%eax
+  200bc7:	0f 85 7b 01 00 00    	jne    200d48 <createMonster+0x1ee>
+			mon.status = MONSTER_ALIVE;
+  200bcd:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200bd0:	89 c2                	mov    %eax,%edx
+  200bd2:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  200bd9:	89 c2                	mov    %eax,%edx
+  200bdb:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200be2:	29 d0                	sub    %edx,%eax
+  200be4:	83 c0 10             	add    $0x10,%eax
+  200be7:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200bec:	c7 40 04 00 00 00 00 	movl   $0x0,0x4(%eax)
+			mon.size = 2 + 2*(KISS()%size);
+  200bf3:	e8 08 f4 ff ff       	call   200000 <UKISS>
+  200bf8:	89 c2                	mov    %eax,%edx
+  200bfa:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200bff:	01 c2                	add    %eax,%edx
+  200c01:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200c06:	01 d0                	add    %edx,%eax
+  200c08:	8b 15 34 3a 20 00    	mov    0x203a34,%edx
+  200c0e:	89 d1                	mov    %edx,%ecx
+  200c10:	ba 00 00 00 00       	mov    $0x0,%edx
+  200c15:	f7 f1                	div    %ecx
+  200c17:	89 d0                	mov    %edx,%eax
+  200c19:	83 c0 01             	add    $0x1,%eax
+  200c1c:	01 c0                	add    %eax,%eax
+  200c1e:	89 c1                	mov    %eax,%ecx
+  200c20:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200c23:	c1 e0 02             	shl    $0x2,%eax
+  200c26:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200c2d:	29 c2                	sub    %eax,%edx
+  200c2f:	89 d0                	mov    %edx,%eax
+  200c31:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200c36:	89 08                	mov    %ecx,(%eax)
+			mon.size = mon.size >14?14:mon.size; 
+  200c38:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200c3b:	c1 e0 02             	shl    $0x2,%eax
+  200c3e:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200c45:	29 c2                	sub    %eax,%edx
+  200c47:	89 d0                	mov    %edx,%eax
+  200c49:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200c4e:	8b 00                	mov    (%eax),%eax
+  200c50:	89 c2                	mov    %eax,%edx
+  200c52:	83 fa 0e             	cmp    $0xe,%edx
+  200c55:	7e 05                	jle    200c5c <createMonster+0x102>
+  200c57:	ba 0e 00 00 00       	mov    $0xe,%edx
+  200c5c:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200c5f:	c1 e0 02             	shl    $0x2,%eax
+  200c62:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+  200c69:	29 c1                	sub    %eax,%ecx
+  200c6b:	89 c8                	mov    %ecx,%eax
+  200c6d:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200c72:	89 10                	mov    %edx,(%eax)
+			mon.x = VWIDTH/2;
+  200c74:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200c77:	c1 e0 02             	shl    $0x2,%eax
+  200c7a:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200c81:	29 c2                	sub    %eax,%edx
+  200c83:	89 d0                	mov    %edx,%eax
+  200c85:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200c8a:	c7 40 04 a0 00 00 00 	movl   $0xa0,0x4(%eax)
+			mon.y = VHEIGHT/2;
+  200c91:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200c94:	c1 e0 02             	shl    $0x2,%eax
+  200c97:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200c9e:	29 c2                	sub    %eax,%edx
+  200ca0:	89 d0                	mov    %edx,%eax
+  200ca2:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200ca7:	c7 40 08 64 00 00 00 	movl   $0x64,0x8(%eax)
+			mon.sx = -1 + KISS()%3;
+  200cae:	e8 4d f3 ff ff       	call   200000 <UKISS>
+  200cb3:	89 c2                	mov    %eax,%edx
+  200cb5:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200cba:	01 c2                	add    %eax,%edx
+  200cbc:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200cc1:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200cc4:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+  200cc9:	89 c8                	mov    %ecx,%eax
+  200ccb:	f7 e2                	mul    %edx
+  200ccd:	d1 ea                	shr    %edx
+  200ccf:	89 d0                	mov    %edx,%eax
+  200cd1:	01 c0                	add    %eax,%eax
+  200cd3:	01 d0                	add    %edx,%eax
+  200cd5:	29 c1                	sub    %eax,%ecx
+  200cd7:	89 ca                	mov    %ecx,%edx
+  200cd9:	8d 42 ff             	lea    -0x1(%edx),%eax
+  200cdc:	89 c1                	mov    %eax,%ecx
+  200cde:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200ce1:	c1 e0 02             	shl    $0x2,%eax
+  200ce4:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200ceb:	29 c2                	sub    %eax,%edx
+  200ced:	89 d0                	mov    %edx,%eax
+  200cef:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200cf4:	89 48 0c             	mov    %ecx,0xc(%eax)
+			mon.sy = -1 + KISS()%3;
+  200cf7:	e8 04 f3 ff ff       	call   200000 <UKISS>
+  200cfc:	89 c2                	mov    %eax,%edx
+  200cfe:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200d03:	01 c2                	add    %eax,%edx
+  200d05:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200d0a:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200d0d:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+  200d12:	89 c8                	mov    %ecx,%eax
+  200d14:	f7 e2                	mul    %edx
+  200d16:	d1 ea                	shr    %edx
+  200d18:	89 d0                	mov    %edx,%eax
+  200d1a:	01 c0                	add    %eax,%eax
+  200d1c:	01 d0                	add    %edx,%eax
+  200d1e:	29 c1                	sub    %eax,%ecx
+  200d20:	89 ca                	mov    %ecx,%edx
+  200d22:	8d 42 ff             	lea    -0x1(%edx),%eax
+  200d25:	89 c1                	mov    %eax,%ecx
+  200d27:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200d2a:	89 c2                	mov    %eax,%edx
+  200d2c:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  200d33:	89 c2                	mov    %eax,%edx
+  200d35:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200d3c:	29 d0                	sub    %edx,%eax
+  200d3e:	83 c0 10             	add    $0x10,%eax
+  200d41:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200d46:	89 08                	mov    %ecx,(%eax)
+		}
+	}
+}
+void createMonster(){
+	int i=0;
+	REP_MONSTER(){
+  200d48:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+  200d4c:	83 7d f4 13          	cmpl   $0x13,-0xc(%ebp)
+  200d50:	0f 8e 16 fe ff ff    	jle    200b6c <createMonster+0x12>
+			mon.y = VHEIGHT/2;
+			mon.sx = -1 + KISS()%3;
+			mon.sy = -1 + KISS()%3;
+		}
+	}
+}
+  200d56:	c9                   	leave  
+  200d57:	c3                   	ret    
+
+00200d58 <dreamOf100HZ>:
+void dreamOf100HZ(int timestamp){
+  200d58:	55                   	push   %ebp
+  200d59:	89 e5                	mov    %esp,%ebp
+  200d5b:	83 ec 18             	sub    $0x18,%esp
+		//drawRect(60+x, 60+y, 40, 40, 3);
+		drawCirc(60+x, 60+y, 15, 3);
+		drawCirc(70+x, 60+y, 15, 6);
+		drawStage();
+	}*/
+	if(gameStatus == GAME_START){
+  200d5e:	a1 28 3a 20 00       	mov    0x203a28,%eax
+  200d63:	85 c0                	test   %eax,%eax
+  200d65:	0f 85 2b 04 00 00    	jne    201196 <dreamOf100HZ+0x43e>
+		clearStage();
+  200d6b:	e8 a7 f4 ff ff       	call   200217 <clearStage>
+		drawText1();
+  200d70:	e8 1b f6 ff ff       	call   200390 <drawText1>
+		//drawNumber(timestamp, 0, 0, 2, 15);
+		drawStage();
+  200d75:	e8 e7 f7 ff ff       	call   200561 <drawStage>
+
+		int i=0;
+  200d7a:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+		x = 30;
+  200d81:	c7 05 2c 3a 20 00 1e 	movl   $0x1e,0x203a2c
+  200d88:	00 00 00 
+		y = 30;
+  200d8b:	c7 05 30 3a 20 00 1e 	movl   $0x1e,0x203a30
+  200d92:	00 00 00 
+		size = 4;
+  200d95:	c7 05 34 3a 20 00 04 	movl   $0x4,0x203a34
+  200d9c:	00 00 00 
+		score = 0;
+  200d9f:	c7 05 24 3a 20 00 00 	movl   $0x0,0x203a24
+  200da6:	00 00 00 
+		monsters[i].status = MONSTER_ALIVE;
+  200da9:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200dac:	89 c2                	mov    %eax,%edx
+  200dae:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  200db5:	89 c2                	mov    %eax,%edx
+  200db7:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200dbe:	29 d0                	sub    %edx,%eax
+  200dc0:	83 c0 10             	add    $0x10,%eax
+  200dc3:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200dc8:	c7 40 04 00 00 00 00 	movl   $0x0,0x4(%eax)
+		monsters[i].size = 1 + (KISS()%size);
+  200dcf:	e8 2c f2 ff ff       	call   200000 <UKISS>
+  200dd4:	89 c2                	mov    %eax,%edx
+  200dd6:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200ddb:	01 c2                	add    %eax,%edx
+  200ddd:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200de2:	01 d0                	add    %edx,%eax
+  200de4:	8b 15 34 3a 20 00    	mov    0x203a34,%edx
+  200dea:	89 d1                	mov    %edx,%ecx
+  200dec:	ba 00 00 00 00       	mov    $0x0,%edx
+  200df1:	f7 f1                	div    %ecx
+  200df3:	89 d0                	mov    %edx,%eax
+  200df5:	83 c0 01             	add    $0x1,%eax
+  200df8:	89 c1                	mov    %eax,%ecx
+  200dfa:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200dfd:	c1 e0 02             	shl    $0x2,%eax
+  200e00:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200e07:	29 c2                	sub    %eax,%edx
+  200e09:	89 d0                	mov    %edx,%eax
+  200e0b:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200e10:	89 08                	mov    %ecx,(%eax)
+		monsters[i].x = KISS()%VWIDTH;
+  200e12:	e8 e9 f1 ff ff       	call   200000 <UKISS>
+  200e17:	89 c2                	mov    %eax,%edx
+  200e19:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200e1e:	01 c2                	add    %eax,%edx
+  200e20:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200e25:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200e28:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
+  200e2d:	89 c8                	mov    %ecx,%eax
+  200e2f:	f7 e2                	mul    %edx
+  200e31:	c1 ea 08             	shr    $0x8,%edx
+  200e34:	89 d0                	mov    %edx,%eax
+  200e36:	c1 e0 02             	shl    $0x2,%eax
+  200e39:	01 d0                	add    %edx,%eax
+  200e3b:	c1 e0 06             	shl    $0x6,%eax
+  200e3e:	29 c1                	sub    %eax,%ecx
+  200e40:	89 ca                	mov    %ecx,%edx
+  200e42:	89 d1                	mov    %edx,%ecx
+  200e44:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200e47:	c1 e0 02             	shl    $0x2,%eax
+  200e4a:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200e51:	29 c2                	sub    %eax,%edx
+  200e53:	89 d0                	mov    %edx,%eax
+  200e55:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200e5a:	89 48 04             	mov    %ecx,0x4(%eax)
+		monsters[i].y = KISS()%VHEIGHT;
+  200e5d:	e8 9e f1 ff ff       	call   200000 <UKISS>
+  200e62:	89 c2                	mov    %eax,%edx
+  200e64:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200e69:	01 c2                	add    %eax,%edx
+  200e6b:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200e70:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200e73:	ba 1f 85 eb 51       	mov    $0x51eb851f,%edx
+  200e78:	89 c8                	mov    %ecx,%eax
+  200e7a:	f7 e2                	mul    %edx
+  200e7c:	89 d0                	mov    %edx,%eax
+  200e7e:	c1 e8 06             	shr    $0x6,%eax
+  200e81:	69 c0 c8 00 00 00    	imul   $0xc8,%eax,%eax
+  200e87:	29 c1                	sub    %eax,%ecx
+  200e89:	89 c8                	mov    %ecx,%eax
+  200e8b:	89 c1                	mov    %eax,%ecx
+  200e8d:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200e90:	c1 e0 02             	shl    $0x2,%eax
+  200e93:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200e9a:	29 c2                	sub    %eax,%edx
+  200e9c:	89 d0                	mov    %edx,%eax
+  200e9e:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200ea3:	89 48 08             	mov    %ecx,0x8(%eax)
+		monsters[i].sx = -1 + KISS()%3;
+  200ea6:	e8 55 f1 ff ff       	call   200000 <UKISS>
+  200eab:	89 c2                	mov    %eax,%edx
+  200ead:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200eb2:	01 c2                	add    %eax,%edx
+  200eb4:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200eb9:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200ebc:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+  200ec1:	89 c8                	mov    %ecx,%eax
+  200ec3:	f7 e2                	mul    %edx
+  200ec5:	d1 ea                	shr    %edx
+  200ec7:	89 d0                	mov    %edx,%eax
+  200ec9:	01 c0                	add    %eax,%eax
+  200ecb:	01 d0                	add    %edx,%eax
+  200ecd:	29 c1                	sub    %eax,%ecx
+  200ecf:	89 ca                	mov    %ecx,%edx
+  200ed1:	8d 42 ff             	lea    -0x1(%edx),%eax
+  200ed4:	89 c1                	mov    %eax,%ecx
+  200ed6:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200ed9:	c1 e0 02             	shl    $0x2,%eax
+  200edc:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  200ee3:	29 c2                	sub    %eax,%edx
+  200ee5:	89 d0                	mov    %edx,%eax
+  200ee7:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200eec:	89 48 0c             	mov    %ecx,0xc(%eax)
+		monsters[i].sy = -1 + KISS()%3;
+  200eef:	e8 0c f1 ff ff       	call   200000 <UKISS>
+  200ef4:	89 c2                	mov    %eax,%edx
+  200ef6:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200efb:	01 c2                	add    %eax,%edx
+  200efd:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200f02:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200f05:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+  200f0a:	89 c8                	mov    %ecx,%eax
+  200f0c:	f7 e2                	mul    %edx
+  200f0e:	d1 ea                	shr    %edx
+  200f10:	89 d0                	mov    %edx,%eax
+  200f12:	01 c0                	add    %eax,%eax
+  200f14:	01 d0                	add    %edx,%eax
+  200f16:	29 c1                	sub    %eax,%ecx
+  200f18:	89 ca                	mov    %ecx,%edx
+  200f1a:	8d 42 ff             	lea    -0x1(%edx),%eax
+  200f1d:	89 c1                	mov    %eax,%ecx
+  200f1f:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200f22:	89 c2                	mov    %eax,%edx
+  200f24:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  200f2b:	89 c2                	mov    %eax,%edx
+  200f2d:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200f34:	29 d0                	sub    %edx,%eax
+  200f36:	83 c0 10             	add    $0x10,%eax
+  200f39:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200f3e:	89 08                	mov    %ecx,(%eax)
+		i++;
+  200f40:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+		REP_MONSTER(){
+  200f44:	e9 29 02 00 00       	jmp    201172 <dreamOf100HZ+0x41a>
+			monsters[i].status = MONSTER_SLEEP;
+  200f49:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200f4c:	89 c2                	mov    %eax,%edx
+  200f4e:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  200f55:	89 c2                	mov    %eax,%edx
+  200f57:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200f5e:	29 d0                	sub    %edx,%eax
+  200f60:	83 c0 10             	add    $0x10,%eax
+  200f63:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200f68:	c7 40 04 04 00 00 00 	movl   $0x4,0x4(%eax)
+			monsters[i].count = 0;
+  200f6f:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200f72:	89 c2                	mov    %eax,%edx
+  200f74:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  200f7b:	89 c2                	mov    %eax,%edx
+  200f7d:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200f84:	29 d0                	sub    %edx,%eax
+  200f86:	83 c0 10             	add    $0x10,%eax
+  200f89:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200f8e:	c7 40 08 00 00 00 00 	movl   $0x0,0x8(%eax)
+			if(KISS()%MONSTER_SIZE < size+3){
+  200f95:	e8 66 f0 ff ff       	call   200000 <UKISS>
+  200f9a:	89 c2                	mov    %eax,%edx
+  200f9c:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  200fa1:	01 c2                	add    %eax,%edx
+  200fa3:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  200fa8:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  200fab:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
+  200fb0:	89 c8                	mov    %ecx,%eax
+  200fb2:	f7 e2                	mul    %edx
+  200fb4:	c1 ea 04             	shr    $0x4,%edx
+  200fb7:	89 d0                	mov    %edx,%eax
+  200fb9:	c1 e0 02             	shl    $0x2,%eax
+  200fbc:	01 d0                	add    %edx,%eax
+  200fbe:	c1 e0 02             	shl    $0x2,%eax
+  200fc1:	29 c1                	sub    %eax,%ecx
+  200fc3:	89 ca                	mov    %ecx,%edx
+  200fc5:	a1 34 3a 20 00       	mov    0x203a34,%eax
+  200fca:	83 c0 03             	add    $0x3,%eax
+  200fcd:	39 c2                	cmp    %eax,%edx
+  200fcf:	0f 83 99 01 00 00    	jae    20116e <dreamOf100HZ+0x416>
+				monsters[i].status = MONSTER_ALIVE;
+  200fd5:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  200fd8:	89 c2                	mov    %eax,%edx
+  200fda:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  200fe1:	89 c2                	mov    %eax,%edx
+  200fe3:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  200fea:	29 d0                	sub    %edx,%eax
+  200fec:	83 c0 10             	add    $0x10,%eax
+  200fef:	05 40 3a 20 00       	add    $0x203a40,%eax
+  200ff4:	c7 40 04 00 00 00 00 	movl   $0x0,0x4(%eax)
+				monsters[i].size = 1 + 2*(KISS()%size);
+  200ffb:	e8 00 f0 ff ff       	call   200000 <UKISS>
+  201000:	89 c2                	mov    %eax,%edx
+  201002:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  201007:	01 c2                	add    %eax,%edx
+  201009:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  20100e:	01 d0                	add    %edx,%eax
+  201010:	8b 15 34 3a 20 00    	mov    0x203a34,%edx
+  201016:	89 d1                	mov    %edx,%ecx
+  201018:	ba 00 00 00 00       	mov    $0x0,%edx
+  20101d:	f7 f1                	div    %ecx
+  20101f:	89 d0                	mov    %edx,%eax
+  201021:	01 c0                	add    %eax,%eax
+  201023:	83 c0 01             	add    $0x1,%eax
+  201026:	89 c1                	mov    %eax,%ecx
+  201028:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  20102b:	c1 e0 02             	shl    $0x2,%eax
+  20102e:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  201035:	29 c2                	sub    %eax,%edx
+  201037:	89 d0                	mov    %edx,%eax
+  201039:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20103e:	89 08                	mov    %ecx,(%eax)
+				monsters[i].x = KISS()%VWIDTH;
+  201040:	e8 bb ef ff ff       	call   200000 <UKISS>
+  201045:	89 c2                	mov    %eax,%edx
+  201047:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  20104c:	01 c2                	add    %eax,%edx
+  20104e:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  201053:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  201056:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
+  20105b:	89 c8                	mov    %ecx,%eax
+  20105d:	f7 e2                	mul    %edx
+  20105f:	c1 ea 08             	shr    $0x8,%edx
+  201062:	89 d0                	mov    %edx,%eax
+  201064:	c1 e0 02             	shl    $0x2,%eax
+  201067:	01 d0                	add    %edx,%eax
+  201069:	c1 e0 06             	shl    $0x6,%eax
+  20106c:	29 c1                	sub    %eax,%ecx
+  20106e:	89 ca                	mov    %ecx,%edx
+  201070:	89 d1                	mov    %edx,%ecx
+  201072:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  201075:	c1 e0 02             	shl    $0x2,%eax
+  201078:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  20107f:	29 c2                	sub    %eax,%edx
+  201081:	89 d0                	mov    %edx,%eax
+  201083:	05 40 3a 20 00       	add    $0x203a40,%eax
+  201088:	89 48 04             	mov    %ecx,0x4(%eax)
+				monsters[i].y = KISS()%VHEIGHT;
+  20108b:	e8 70 ef ff ff       	call   200000 <UKISS>
+  201090:	89 c2                	mov    %eax,%edx
+  201092:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  201097:	01 c2                	add    %eax,%edx
+  201099:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  20109e:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  2010a1:	ba 1f 85 eb 51       	mov    $0x51eb851f,%edx
+  2010a6:	89 c8                	mov    %ecx,%eax
+  2010a8:	f7 e2                	mul    %edx
+  2010aa:	89 d0                	mov    %edx,%eax
+  2010ac:	c1 e8 06             	shr    $0x6,%eax
+  2010af:	69 c0 c8 00 00 00    	imul   $0xc8,%eax,%eax
+  2010b5:	29 c1                	sub    %eax,%ecx
+  2010b7:	89 c8                	mov    %ecx,%eax
+  2010b9:	89 c1                	mov    %eax,%ecx
+  2010bb:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2010be:	c1 e0 02             	shl    $0x2,%eax
+  2010c1:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  2010c8:	29 c2                	sub    %eax,%edx
+  2010ca:	89 d0                	mov    %edx,%eax
+  2010cc:	05 40 3a 20 00       	add    $0x203a40,%eax
+  2010d1:	89 48 08             	mov    %ecx,0x8(%eax)
+				monsters[i].sx = -1 + KISS()%3;
+  2010d4:	e8 27 ef ff ff       	call   200000 <UKISS>
+  2010d9:	89 c2                	mov    %eax,%edx
+  2010db:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  2010e0:	01 c2                	add    %eax,%edx
+  2010e2:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  2010e7:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  2010ea:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+  2010ef:	89 c8                	mov    %ecx,%eax
+  2010f1:	f7 e2                	mul    %edx
+  2010f3:	d1 ea                	shr    %edx
+  2010f5:	89 d0                	mov    %edx,%eax
+  2010f7:	01 c0                	add    %eax,%eax
+  2010f9:	01 d0                	add    %edx,%eax
+  2010fb:	29 c1                	sub    %eax,%ecx
+  2010fd:	89 ca                	mov    %ecx,%edx
+  2010ff:	8d 42 ff             	lea    -0x1(%edx),%eax
+  201102:	89 c1                	mov    %eax,%ecx
+  201104:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  201107:	c1 e0 02             	shl    $0x2,%eax
+  20110a:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+  201111:	29 c2                	sub    %eax,%edx
+  201113:	89 d0                	mov    %edx,%eax
+  201115:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20111a:	89 48 0c             	mov    %ecx,0xc(%eax)
+				monsters[i].sy = -1 + KISS()%3;
+  20111d:	e8 de ee ff ff       	call   200000 <UKISS>
+  201122:	89 c2                	mov    %eax,%edx
+  201124:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  201129:	01 c2                	add    %eax,%edx
+  20112b:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  201130:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+  201133:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+  201138:	89 c8                	mov    %ecx,%eax
+  20113a:	f7 e2                	mul    %edx
+  20113c:	d1 ea                	shr    %edx
+  20113e:	89 d0                	mov    %edx,%eax
+  201140:	01 c0                	add    %eax,%eax
+  201142:	01 d0                	add    %edx,%eax
+  201144:	29 c1                	sub    %eax,%ecx
+  201146:	89 ca                	mov    %ecx,%edx
+  201148:	8d 42 ff             	lea    -0x1(%edx),%eax
+  20114b:	89 c1                	mov    %eax,%ecx
+  20114d:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  201150:	89 c2                	mov    %eax,%edx
+  201152:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+  201159:	89 c2                	mov    %eax,%edx
+  20115b:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+  201162:	29 d0                	sub    %edx,%eax
+  201164:	83 c0 10             	add    $0x10,%eax
+  201167:	05 40 3a 20 00       	add    $0x203a40,%eax
+  20116c:	89 08                	mov    %ecx,(%eax)
+		monsters[i].x = KISS()%VWIDTH;
+		monsters[i].y = KISS()%VHEIGHT;
+		monsters[i].sx = -1 + KISS()%3;
+		monsters[i].sy = -1 + KISS()%3;
+		i++;
+		REP_MONSTER(){
+  20116e:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+  201172:	83 7d f4 13          	cmpl   $0x13,-0xc(%ebp)
+  201176:	0f 8e cd fd ff ff    	jle    200f49 <dreamOf100HZ+0x1f1>
+				monsters[i].y = KISS()%VHEIGHT;
+				monsters[i].sx = -1 + KISS()%3;
+				monsters[i].sy = -1 + KISS()%3;
+			}
+		}
+		printf("Press Q to start\n");
+  20117c:	83 ec 0c             	sub    $0xc,%esp
+  20117f:	68 c3 21 20 00       	push   $0x2021c3
+  201184:	e8 7e 07 00 00       	call   201907 <printf>
+  201189:	83 c4 10             	add    $0x10,%esp
+		gameStatus = GAME_READY;
+  20118c:	c7 05 28 3a 20 00 01 	movl   $0x1,0x203a28
+  201193:	00 00 00 
+	}
+	if(gameStatus == GAME_READY){
+  201196:	a1 28 3a 20 00       	mov    0x203a28,%eax
+  20119b:	83 f8 01             	cmp    $0x1,%eax
+  20119e:	75 2b                	jne    2011cb <dreamOf100HZ+0x473>
+		//printf("%d\n", key('q'));
+		if(key('q') ){
+  2011a0:	83 ec 0c             	sub    $0xc,%esp
+  2011a3:	6a 71                	push   $0x71
+  2011a5:	e8 dc f3 ff ff       	call   200586 <key>
+  2011aa:	83 c4 10             	add    $0x10,%esp
+  2011ad:	84 c0                	test   %al,%al
+  2011af:	74 1a                	je     2011cb <dreamOf100HZ+0x473>
+			printf("Press W, A, S, D to move\n");
+  2011b1:	83 ec 0c             	sub    $0xc,%esp
+  2011b4:	68 d5 21 20 00       	push   $0x2021d5
+  2011b9:	e8 49 07 00 00       	call   201907 <printf>
+  2011be:	83 c4 10             	add    $0x10,%esp
+			gameStatus = GAME_ING;
+  2011c1:	c7 05 28 3a 20 00 02 	movl   $0x2,0x203a28
+  2011c8:	00 00 00 
+		}
+	}
+
+	if(gameStatus == GAME_ING){
+  2011cb:	a1 28 3a 20 00       	mov    0x203a28,%eax
+  2011d0:	83 f8 02             	cmp    $0x2,%eax
+  2011d3:	0f 85 4c 01 00 00    	jne    201325 <dreamOf100HZ+0x5cd>
+
+
+
+		//if(x>0 && x<VWIDTH && y>0 && y<VHEIGHT){
+		//if(timestamp % 3){
+			if(key('a'))x--;
+  2011d9:	83 ec 0c             	sub    $0xc,%esp
+  2011dc:	6a 61                	push   $0x61
+  2011de:	e8 a3 f3 ff ff       	call   200586 <key>
+  2011e3:	83 c4 10             	add    $0x10,%esp
+  2011e6:	84 c0                	test   %al,%al
+  2011e8:	74 0d                	je     2011f7 <dreamOf100HZ+0x49f>
+  2011ea:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  2011ef:	83 e8 01             	sub    $0x1,%eax
+  2011f2:	a3 2c 3a 20 00       	mov    %eax,0x203a2c
+			if(key('d'))x++;
+  2011f7:	83 ec 0c             	sub    $0xc,%esp
+  2011fa:	6a 64                	push   $0x64
+  2011fc:	e8 85 f3 ff ff       	call   200586 <key>
+  201201:	83 c4 10             	add    $0x10,%esp
+  201204:	84 c0                	test   %al,%al
+  201206:	74 0d                	je     201215 <dreamOf100HZ+0x4bd>
+  201208:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  20120d:	83 c0 01             	add    $0x1,%eax
+  201210:	a3 2c 3a 20 00       	mov    %eax,0x203a2c
+			if(key('w'))y--;
+  201215:	83 ec 0c             	sub    $0xc,%esp
+  201218:	6a 77                	push   $0x77
+  20121a:	e8 67 f3 ff ff       	call   200586 <key>
+  20121f:	83 c4 10             	add    $0x10,%esp
+  201222:	84 c0                	test   %al,%al
+  201224:	74 0d                	je     201233 <dreamOf100HZ+0x4db>
+  201226:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  20122b:	83 e8 01             	sub    $0x1,%eax
+  20122e:	a3 30 3a 20 00       	mov    %eax,0x203a30
+			if(key('s'))y++;
+  201233:	83 ec 0c             	sub    $0xc,%esp
+  201236:	6a 73                	push   $0x73
+  201238:	e8 49 f3 ff ff       	call   200586 <key>
+  20123d:	83 c4 10             	add    $0x10,%esp
+  201240:	84 c0                	test   %al,%al
+  201242:	74 0d                	je     201251 <dreamOf100HZ+0x4f9>
+  201244:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  201249:	83 c0 01             	add    $0x1,%eax
+  20124c:	a3 30 3a 20 00       	mov    %eax,0x203a30
+		//}
+
+		if(x < 0) x++;
+  201251:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  201256:	85 c0                	test   %eax,%eax
+  201258:	79 0d                	jns    201267 <dreamOf100HZ+0x50f>
+  20125a:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  20125f:	83 c0 01             	add    $0x1,%eax
+  201262:	a3 2c 3a 20 00       	mov    %eax,0x203a2c
+		if(x > VWIDTH) x--;
+  201267:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  20126c:	3d 40 01 00 00       	cmp    $0x140,%eax
+  201271:	7e 0d                	jle    201280 <dreamOf100HZ+0x528>
+  201273:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  201278:	83 e8 01             	sub    $0x1,%eax
+  20127b:	a3 2c 3a 20 00       	mov    %eax,0x203a2c
+		if(y < 0) y++;
+  201280:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  201285:	85 c0                	test   %eax,%eax
+  201287:	79 0d                	jns    201296 <dreamOf100HZ+0x53e>
+  201289:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  20128e:	83 c0 01             	add    $0x1,%eax
+  201291:	a3 30 3a 20 00       	mov    %eax,0x203a30
+		if(y > VHEIGHT) y--;
+  201296:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  20129b:	3d c8 00 00 00       	cmp    $0xc8,%eax
+  2012a0:	7e 0d                	jle    2012af <dreamOf100HZ+0x557>
+  2012a2:	a1 30 3a 20 00       	mov    0x203a30,%eax
+  2012a7:	83 e8 01             	sub    $0x1,%eax
+  2012aa:	a3 30 3a 20 00       	mov    %eax,0x203a30
+		//}
+		//else{
+		clearStage();
+  2012af:	e8 63 ef ff ff       	call   200217 <clearStage>
+		drawCirc(x, y, size, 3);
+  2012b4:	8b 0d 34 3a 20 00    	mov    0x203a34,%ecx
+  2012ba:	8b 15 30 3a 20 00    	mov    0x203a30,%edx
+  2012c0:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  2012c5:	6a 03                	push   $0x3
+  2012c7:	51                   	push   %ecx
+  2012c8:	52                   	push   %edx
+  2012c9:	50                   	push   %eax
+  2012ca:	e8 14 f0 ff ff       	call   2002e3 <drawCirc>
+  2012cf:	83 c4 10             	add    $0x10,%esp
+		
+
+		drawMonster();
+  2012d2:	e8 d5 f4 ff ff       	call   2007ac <drawMonster>
+		drawCirc(x, y, size, 3);
+  2012d7:	8b 0d 34 3a 20 00    	mov    0x203a34,%ecx
+  2012dd:	8b 15 30 3a 20 00    	mov    0x203a30,%edx
+  2012e3:	a1 2c 3a 20 00       	mov    0x203a2c,%eax
+  2012e8:	6a 03                	push   $0x3
+  2012ea:	51                   	push   %ecx
+  2012eb:	52                   	push   %edx
+  2012ec:	50                   	push   %eax
+  2012ed:	e8 f1 ef ff ff       	call   2002e3 <drawCirc>
+  2012f2:	83 c4 10             	add    $0x10,%esp
+		drawNumber(score, 0, 180, 1, 7);
+  2012f5:	a1 24 3a 20 00       	mov    0x203a24,%eax
+  2012fa:	83 ec 0c             	sub    $0xc,%esp
+  2012fd:	6a 07                	push   $0x7
+  2012ff:	6a 01                	push   $0x1
+  201301:	68 b4 00 00 00       	push   $0xb4
+  201306:	6a 00                	push   $0x0
+  201308:	50                   	push   %eax
+  201309:	e8 fa f0 ff ff       	call   200408 <drawNumber>
+  20130e:	83 c4 20             	add    $0x20,%esp
+		drawStage();
+  201311:	e8 4b f2 ff ff       	call   200561 <drawStage>
+		
+		
+		createMonster();
+  201316:	e8 3f f8 ff ff       	call   200b5a <createMonster>
+		while(hitMonster());
+  20131b:	90                   	nop
+  20131c:	e8 cc f2 ff ff       	call   2005ed <hitMonster>
+  201321:	85 c0                	test   %eax,%eax
+  201323:	75 f7                	jne    20131c <dreamOf100HZ+0x5c4>
+		//}
+	}
+	if(gameStatus == GAME_END){
+  201325:	a1 28 3a 20 00       	mov    0x203a28,%eax
+  20132a:	83 f8 03             	cmp    $0x3,%eax
+  20132d:	75 3a                	jne    201369 <dreamOf100HZ+0x611>
+		printf("You're dead\n");
+  20132f:	83 ec 0c             	sub    $0xc,%esp
+  201332:	68 ef 21 20 00       	push   $0x2021ef
+  201337:	e8 cb 05 00 00       	call   201907 <printf>
+  20133c:	83 c4 10             	add    $0x10,%esp
+		printf("Score: %d\n", score);
+  20133f:	a1 24 3a 20 00       	mov    0x203a24,%eax
+  201344:	83 ec 08             	sub    $0x8,%esp
+  201347:	50                   	push   %eax
+  201348:	68 fc 21 20 00       	push   $0x2021fc
+  20134d:	e8 b5 05 00 00       	call   201907 <printf>
+  201352:	83 c4 10             	add    $0x10,%esp
+		clearStage();
+  201355:	e8 bd ee ff ff       	call   200217 <clearStage>
+		drawStage();
+  20135a:	e8 02 f2 ff ff       	call   200561 <drawStage>
+		gameStatus = GAME_START;
+  20135f:	c7 05 28 3a 20 00 00 	movl   $0x0,0x203a28
+  201366:	00 00 00 
+	}
+  201369:	c9                   	leave  
+  20136a:	c3                   	ret    
+
+0020136b <sys_printch>:
 	void (*ptr)(void);
 	int used;
 
 }timer_handler;
 
 static inline void sys_printch(char c){
-  200c17:	53                   	push   %ebx
+  20136b:	55                   	push   %ebp
+  20136c:	89 e5                	mov    %esp,%ebp
+  20136e:	53                   	push   %ebx
+  20136f:	83 ec 04             	sub    $0x4,%esp
+  201372:	8b 45 08             	mov    0x8(%ebp),%eax
+  201375:	88 45 f8             	mov    %al,-0x8(%ebp)
 	asm volatile("int $0x80": : "a"(SYS_PRINT_CHAR), "b"(c)); //SYSCALL HERE!
-  200c18:	b8 e8 03 00 00       	mov    $0x3e8,%eax
-  200c1d:	0f b6 5c 24 08       	movzbl 0x8(%esp),%ebx
-  200c22:	cd 80                	int    $0x80
+  201378:	b8 e8 03 00 00       	mov    $0x3e8,%eax
+  20137d:	0f b6 55 f8          	movzbl -0x8(%ebp),%edx
+  201381:	89 d3                	mov    %edx,%ebx
+  201383:	cd 80                	int    $0x80
 }
-  200c24:	5b                   	pop    %ebx
-  200c25:	c3                   	ret    
+  201385:	83 c4 04             	add    $0x4,%esp
+  201388:	5b                   	pop    %ebx
+  201389:	5d                   	pop    %ebp
+  20138a:	c3                   	ret    
 
-00200c26 <printp>:
+0020138b <printp>:
 enum{
 	NONE,
 	READ
 };
 #define cur (*str)
 void printp(void (*printer)(char), const char *ctl){
-  200c26:	56                   	push   %esi
-  200c27:	53                   	push   %ebx
-  200c28:	83 ec 04             	sub    $0x4,%esp
-  200c2b:	8b 74 24 10          	mov    0x10(%esp),%esi
-  200c2f:	8b 5c 24 14          	mov    0x14(%esp),%ebx
+  20138b:	55                   	push   %ebp
+  20138c:	89 e5                	mov    %esp,%ebp
+  20138e:	83 ec 18             	sub    $0x18,%esp
 	const char *str = ctl;
+  201391:	8b 45 0c             	mov    0xc(%ebp),%eax
+  201394:	89 45 f4             	mov    %eax,-0xc(%ebp)
 	for(;cur!='\0';str++){
-  200c33:	0f b6 03             	movzbl (%ebx),%eax
-  200c36:	84 c0                	test   %al,%al
-  200c38:	74 16                	je     200c50 <printp+0x2a>
+  201397:	eb 19                	jmp    2013b2 <printp+0x27>
 		printer(cur);
-  200c3a:	83 ec 0c             	sub    $0xc,%esp
-  200c3d:	0f be c0             	movsbl %al,%eax
-  200c40:	50                   	push   %eax
-  200c41:	ff d6                	call   *%esi
+  201399:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  20139c:	0f b6 00             	movzbl (%eax),%eax
+  20139f:	0f be c0             	movsbl %al,%eax
+  2013a2:	83 ec 0c             	sub    $0xc,%esp
+  2013a5:	50                   	push   %eax
+  2013a6:	8b 45 08             	mov    0x8(%ebp),%eax
+  2013a9:	ff d0                	call   *%eax
+  2013ab:	83 c4 10             	add    $0x10,%esp
 	READ
 };
 #define cur (*str)
 void printp(void (*printer)(char), const char *ctl){
 	const char *str = ctl;
 	for(;cur!='\0';str++){
-  200c43:	83 c3 01             	add    $0x1,%ebx
-  200c46:	0f b6 03             	movzbl (%ebx),%eax
-  200c49:	83 c4 10             	add    $0x10,%esp
-  200c4c:	84 c0                	test   %al,%al
-  200c4e:	75 ea                	jne    200c3a <printp+0x14>
+  2013ae:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+  2013b2:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2013b5:	0f b6 00             	movzbl (%eax),%eax
+  2013b8:	84 c0                	test   %al,%al
+  2013ba:	75 dd                	jne    201399 <printp+0xe>
 		printer(cur);
 	}
 }
-  200c50:	83 c4 04             	add    $0x4,%esp
-  200c53:	5b                   	pop    %ebx
-  200c54:	5e                   	pop    %esi
-  200c55:	c3                   	ret    
+  2013bc:	c9                   	leave  
+  2013bd:	c3                   	ret    
 
-00200c56 <vfprintf>:
+002013be <vfprintf>:
 void vfprintf(void (*printer)(char), const char *ctl, void **args) {
-  200c56:	55                   	push   %ebp
-  200c57:	57                   	push   %edi
-  200c58:	56                   	push   %esi
-  200c59:	53                   	push   %ebx
-  200c5a:	83 ec 7c             	sub    $0x7c,%esp
-  200c5d:	8b b4 24 90 00 00 00 	mov    0x90(%esp),%esi
-  200c64:	8b ac 24 94 00 00 00 	mov    0x94(%esp),%ebp
+  2013be:	55                   	push   %ebp
+  2013bf:	89 e5                	mov    %esp,%ebp
+  2013c1:	81 ec 98 00 00 00    	sub    $0x98,%esp
 	const char *str = ctl;
+  2013c7:	8b 45 0c             	mov    0xc(%ebp),%eax
+  2013ca:	89 45 f4             	mov    %eax,-0xc(%ebp)
 	int32_t i = 0;
+  2013cd:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
 	int32_t type = NONE;
+  2013d4:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 	void** pointer = args;
+  2013db:	8b 45 10             	mov    0x10(%ebp),%eax
+  2013de:	89 45 e8             	mov    %eax,-0x18(%ebp)
 	//char last='\0';
 	for(;*str != '\0'; str ++){
-  200c6b:	0f b6 45 00          	movzbl 0x0(%ebp),%eax
-  200c6f:	84 c0                	test   %al,%al
-  200c71:	0f 84 d3 01 00 00    	je     200e4a <vfprintf+0x1f4>
-  200c77:	bb 00 00 00 00       	mov    $0x0,%ebx
-  200c7c:	8d 7c 24 0b          	lea    0xb(%esp),%edi
+  2013e1:	e9 71 02 00 00       	jmp    201657 <vfprintf+0x299>
 		if(cur == '%'){
-  200c80:	3c 25                	cmp    $0x25,%al
-  200c82:	0f 84 ae 01 00 00    	je     200e36 <vfprintf+0x1e0>
+  2013e6:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2013e9:	0f b6 00             	movzbl (%eax),%eax
+  2013ec:	3c 25                	cmp    $0x25,%al
+  2013ee:	75 0c                	jne    2013fc <vfprintf+0x3e>
 			type = READ;
+  2013f0:	c7 45 ec 01 00 00 00 	movl   $0x1,-0x14(%ebp)
 			continue;
+  2013f7:	e9 57 02 00 00       	jmp    201653 <vfprintf+0x295>
 		}
 		if(type == READ){
-  200c88:	83 fb 01             	cmp    $0x1,%ebx
-  200c8b:	0f 85 93 01 00 00    	jne    200e24 <vfprintf+0x1ce>
+  2013fc:	83 7d ec 01          	cmpl   $0x1,-0x14(%ebp)
+  201400:	0f 85 32 02 00 00    	jne    201638 <vfprintf+0x27a>
 			if(cur == 's'){
-  200c91:	3c 73                	cmp    $0x73,%al
-  200c93:	75 2e                	jne    200cc3 <vfprintf+0x6d>
+  201406:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  201409:	0f b6 00             	movzbl (%eax),%eax
+  20140c:	3c 73                	cmp    $0x73,%al
+  20140e:	75 35                	jne    201445 <vfprintf+0x87>
 				char* p= XGET(pointer, char*);
-  200c95:	8b 84 24 98 00 00 00 	mov    0x98(%esp),%eax
-  200c9c:	8b 18                	mov    (%eax),%ebx
+  201410:	8b 45 e8             	mov    -0x18(%ebp),%eax
+  201413:	8b 00                	mov    (%eax),%eax
+  201415:	89 45 e4             	mov    %eax,-0x1c(%ebp)
 				for(; *p != '\0';p++){
-  200c9e:	0f b6 03             	movzbl (%ebx),%eax
-  200ca1:	84 c0                	test   %al,%al
-  200ca3:	74 16                	je     200cbb <vfprintf+0x65>
+  201418:	eb 19                	jmp    201433 <vfprintf+0x75>
 					printer(*p);
-  200ca5:	83 ec 0c             	sub    $0xc,%esp
-  200ca8:	0f be c0             	movsbl %al,%eax
-  200cab:	50                   	push   %eax
-  200cac:	ff d6                	call   *%esi
+  20141a:	8b 45 e4             	mov    -0x1c(%ebp),%eax
+  20141d:	0f b6 00             	movzbl (%eax),%eax
+  201420:	0f be c0             	movsbl %al,%eax
+  201423:	83 ec 0c             	sub    $0xc,%esp
+  201426:	50                   	push   %eax
+  201427:	8b 45 08             	mov    0x8(%ebp),%eax
+  20142a:	ff d0                	call   *%eax
+  20142c:	83 c4 10             	add    $0x10,%esp
 			continue;
 		}
 		if(type == READ){
 			if(cur == 's'){
 				char* p= XGET(pointer, char*);
 				for(; *p != '\0';p++){
-  200cae:	83 c3 01             	add    $0x1,%ebx
-  200cb1:	0f b6 03             	movzbl (%ebx),%eax
-  200cb4:	83 c4 10             	add    $0x10,%esp
-  200cb7:	84 c0                	test   %al,%al
-  200cb9:	75 ea                	jne    200ca5 <vfprintf+0x4f>
+  20142f:	83 45 e4 01          	addl   $0x1,-0x1c(%ebp)
+  201433:	8b 45 e4             	mov    -0x1c(%ebp),%eax
+  201436:	0f b6 00             	movzbl (%eax),%eax
+  201439:	84 c0                	test   %al,%al
+  20143b:	75 dd                	jne    20141a <vfprintf+0x5c>
 					printer(*p);
 				}
 				XNEXT(pointer);
-  200cbb:	83 84 24 98 00 00 00 	addl   $0x4,0x98(%esp)
-  200cc2:	04 
+  20143d:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
+  201441:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
 			if(cur == 'x'){
-  200cc3:	80 7d 00 78          	cmpb   $0x78,0x0(%ebp)
-  200cc7:	75 72                	jne    200d3b <vfprintf+0xe5>
+  201445:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  201448:	0f b6 00             	movzbl (%eax),%eax
+  20144b:	3c 78                	cmp    $0x78,%al
+  20144d:	0f 85 9f 00 00 00    	jne    2014f2 <vfprintf+0x134>
 				uint32_t x = XGET(pointer, int);
-  200cc9:	8b 84 24 98 00 00 00 	mov    0x98(%esp),%eax
-  200cd0:	8b 10                	mov    (%eax),%edx
-  200cd2:	b9 00 00 00 00       	mov    $0x0,%ecx
+  201453:	8b 45 e8             	mov    -0x18(%ebp),%eax
+  201456:	8b 00                	mov    (%eax),%eax
+  201458:	89 45 e0             	mov    %eax,-0x20(%ebp)
 				if(x==0){
-  200cd7:	85 d2                	test   %edx,%edx
-  200cd9:	75 1c                	jne    200cf7 <vfprintf+0xa1>
+  20145b:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
+  20145f:	75 1d                	jne    20147e <vfprintf+0xc0>
 					printer('0');
-  200cdb:	83 ec 0c             	sub    $0xc,%esp
-  200cde:	6a 30                	push   $0x30
-  200ce0:	ff d6                	call   *%esi
+  201461:	83 ec 0c             	sub    $0xc,%esp
+  201464:	6a 30                	push   $0x30
+  201466:	8b 45 08             	mov    0x8(%ebp),%eax
+  201469:	ff d0                	call   *%eax
+  20146b:	83 c4 10             	add    $0x10,%esp
 					XNEXT(pointer);
-  200ce2:	83 84 24 a8 00 00 00 	addl   $0x4,0xa8(%esp)
-  200ce9:	04 
+  20146e:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 					type = NONE;
-					continue;
-  200cea:	83 c4 10             	add    $0x10,%esp
-			if(cur == 'x'){
-				uint32_t x = XGET(pointer, int);
-				if(x==0){
-					printer('0');
-					XNEXT(pointer);
-					type = NONE;
-  200ced:	bb 00 00 00 00       	mov    $0x0,%ebx
-  200cf2:	e9 44 01 00 00       	jmp    200e3b <vfprintf+0x1e5>
+  201472:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+  201479:	e9 d5 01 00 00       	jmp    201653 <vfprintf+0x295>
 					continue;
 				}
 				char digits[100];
 				int di=0;
+  20147e:	c7 45 dc 00 00 00 00 	movl   $0x0,-0x24(%ebp)
 				while(x>=1){
+  201485:	eb 30                	jmp    2014b7 <vfprintf+0xf9>
 					int d=(x%16);
-  200cf7:	89 d0                	mov    %edx,%eax
-  200cf9:	83 e0 0f             	and    $0xf,%eax
+  201487:	8b 45 e0             	mov    -0x20(%ebp),%eax
+  20148a:	83 e0 0f             	and    $0xf,%eax
+  20148d:	89 45 d8             	mov    %eax,-0x28(%ebp)
 					if(d>=10){
-  200cfc:	83 f8 09             	cmp    $0x9,%eax
-  200cff:	7e 03                	jle    200d04 <vfprintf+0xae>
+  201490:	83 7d d8 09          	cmpl   $0x9,-0x28(%ebp)
+  201494:	7e 04                	jle    20149a <vfprintf+0xdc>
 						d+='a'-'0'-10;
-  200d01:	83 c0 27             	add    $0x27,%eax
+  201496:	83 45 d8 27          	addl   $0x27,-0x28(%ebp)
 					}
 					digits[di] = '0'+d;
-  200d04:	83 c0 30             	add    $0x30,%eax
-  200d07:	88 44 0c 0c          	mov    %al,0xc(%esp,%ecx,1)
+  20149a:	8b 45 d8             	mov    -0x28(%ebp),%eax
+  20149d:	83 c0 30             	add    $0x30,%eax
+  2014a0:	89 c1                	mov    %eax,%ecx
+  2014a2:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
+  2014a8:	8b 45 dc             	mov    -0x24(%ebp),%eax
+  2014ab:	01 d0                	add    %edx,%eax
+  2014ad:	88 08                	mov    %cl,(%eax)
 					x>>=4;
-  200d0b:	c1 ea 04             	shr    $0x4,%edx
+  2014af:	c1 6d e0 04          	shrl   $0x4,-0x20(%ebp)
 					di ++;
-  200d0e:	83 c1 01             	add    $0x1,%ecx
+  2014b3:	83 45 dc 01          	addl   $0x1,-0x24(%ebp)
 					type = NONE;
 					continue;
 				}
 				char digits[100];
 				int di=0;
 				while(x>=1){
-  200d11:	85 d2                	test   %edx,%edx
-  200d13:	75 e2                	jne    200cf7 <vfprintf+0xa1>
+  2014b7:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
+  2014bb:	75 ca                	jne    201487 <vfprintf+0xc9>
+					}
 					digits[di] = '0'+d;
 					x>>=4;
 					di ++;
 				};
 				di--;
+  2014bd:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
 				for(;di>=0;di--){
-  200d15:	89 c8                	mov    %ecx,%eax
-  200d17:	83 e8 01             	sub    $0x1,%eax
-  200d1a:	78 17                	js     200d33 <vfprintf+0xdd>
-  200d1c:	8d 5c 0c 0b          	lea    0xb(%esp,%ecx,1),%ebx
+  2014c1:	eb 21                	jmp    2014e4 <vfprintf+0x126>
 					printer(digits[di]);
-  200d20:	83 ec 0c             	sub    $0xc,%esp
-  200d23:	0f be 03             	movsbl (%ebx),%eax
-  200d26:	50                   	push   %eax
-  200d27:	ff d6                	call   *%esi
-  200d29:	83 eb 01             	sub    $0x1,%ebx
+  2014c3:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
+  2014c9:	8b 45 dc             	mov    -0x24(%ebp),%eax
+  2014cc:	01 d0                	add    %edx,%eax
+  2014ce:	0f b6 00             	movzbl (%eax),%eax
+  2014d1:	0f be c0             	movsbl %al,%eax
+  2014d4:	83 ec 0c             	sub    $0xc,%esp
+  2014d7:	50                   	push   %eax
+  2014d8:	8b 45 08             	mov    0x8(%ebp),%eax
+  2014db:	ff d0                	call   *%eax
+  2014dd:	83 c4 10             	add    $0x10,%esp
 					digits[di] = '0'+d;
 					x>>=4;
 					di ++;
 				};
 				di--;
 				for(;di>=0;di--){
-  200d2c:	83 c4 10             	add    $0x10,%esp
-  200d2f:	39 fb                	cmp    %edi,%ebx
-  200d31:	75 ed                	jne    200d20 <vfprintf+0xca>
+  2014e0:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
+  2014e4:	83 7d dc 00          	cmpl   $0x0,-0x24(%ebp)
+  2014e8:	79 d9                	jns    2014c3 <vfprintf+0x105>
 					printer(digits[di]);
 				}
 				XNEXT(pointer);
-  200d33:	83 84 24 98 00 00 00 	addl   $0x4,0x98(%esp)
-  200d3a:	04 
+  2014ea:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
+  2014ee:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
 			if(cur == 'd'){
-  200d3b:	80 7d 00 64          	cmpb   $0x64,0x0(%ebp)
-  200d3f:	0f 85 b7 00 00 00    	jne    200dfc <vfprintf+0x1a6>
+  2014f2:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2014f5:	0f b6 00             	movzbl (%eax),%eax
+  2014f8:	3c 64                	cmp    $0x64,%al
+  2014fa:	0f 85 08 01 00 00    	jne    201608 <vfprintf+0x24a>
 				int x = XGET(pointer, int);
-  200d45:	8b 84 24 98 00 00 00 	mov    0x98(%esp),%eax
-  200d4c:	8b 18                	mov    (%eax),%ebx
+  201500:	8b 45 e8             	mov    -0x18(%ebp),%eax
+  201503:	8b 00                	mov    (%eax),%eax
+  201505:	89 45 d4             	mov    %eax,-0x2c(%ebp)
 				if(x==-2147483648){
-  200d4e:	81 fb 00 00 00 80    	cmp    $0x80000000,%ebx
-  200d54:	75 1e                	jne    200d74 <vfprintf+0x11e>
+  201508:	81 7d d4 00 00 00 80 	cmpl   $0x80000000,-0x2c(%ebp)
+  20150f:	75 23                	jne    201534 <vfprintf+0x176>
 					printp(printer, "-2147483648");
-  200d56:	83 ec 08             	sub    $0x8,%esp
-  200d59:	68 80 17 20 00       	push   $0x201780
-  200d5e:	56                   	push   %esi
-  200d5f:	e8 c2 fe ff ff       	call   200c26 <printp>
+  201511:	83 ec 08             	sub    $0x8,%esp
+  201514:	68 07 22 20 00       	push   $0x202207
+  201519:	ff 75 08             	pushl  0x8(%ebp)
+  20151c:	e8 6a fe ff ff       	call   20138b <printp>
+  201521:	83 c4 10             	add    $0x10,%esp
 					XNEXT(pointer);
-  200d64:	83 84 24 a8 00 00 00 	addl   $0x4,0xa8(%esp)
-  200d6b:	04 
+  201524:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 					type = NONE;
+  201528:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 					continue;
-  200d6c:	83 c4 10             	add    $0x10,%esp
-  200d6f:	e9 81 00 00 00       	jmp    200df5 <vfprintf+0x19f>
+  20152f:	e9 1f 01 00 00       	jmp    201653 <vfprintf+0x295>
 				}
 				if(x==0){
-  200d74:	85 db                	test   %ebx,%ebx
-  200d76:	75 14                	jne    200d8c <vfprintf+0x136>
+  201534:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+  201538:	75 1e                	jne    201558 <vfprintf+0x19a>
 					printer('0');
-  200d78:	83 ec 0c             	sub    $0xc,%esp
-  200d7b:	6a 30                	push   $0x30
-  200d7d:	ff d6                	call   *%esi
+  20153a:	83 ec 0c             	sub    $0xc,%esp
+  20153d:	6a 30                	push   $0x30
+  20153f:	8b 45 08             	mov    0x8(%ebp),%eax
+  201542:	ff d0                	call   *%eax
+  201544:	83 c4 10             	add    $0x10,%esp
 					XNEXT(pointer);
-  200d7f:	83 84 24 a8 00 00 00 	addl   $0x4,0xa8(%esp)
-  200d86:	04 
+  201547:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 					type = NONE;
+  20154b:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 					continue;
-  200d87:	83 c4 10             	add    $0x10,%esp
-  200d8a:	eb 69                	jmp    200df5 <vfprintf+0x19f>
+  201552:	90                   	nop
+  201553:	e9 fb 00 00 00       	jmp    201653 <vfprintf+0x295>
 				}
 				if(x<0){
-  200d8c:	85 db                	test   %ebx,%ebx
-  200d8e:	79 0c                	jns    200d9c <vfprintf+0x146>
+  201558:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+  20155c:	79 10                	jns    20156e <vfprintf+0x1b0>
 					printer('-');
-  200d90:	83 ec 0c             	sub    $0xc,%esp
-  200d93:	6a 2d                	push   $0x2d
-  200d95:	ff d6                	call   *%esi
+  20155e:	83 ec 0c             	sub    $0xc,%esp
+  201561:	6a 2d                	push   $0x2d
+  201563:	8b 45 08             	mov    0x8(%ebp),%eax
+  201566:	ff d0                	call   *%eax
+  201568:	83 c4 10             	add    $0x10,%esp
 					x=-x;
-  200d97:	f7 db                	neg    %ebx
-  200d99:	83 c4 10             	add    $0x10,%esp
+  20156b:	f7 5d d4             	negl   -0x2c(%ebp)
 				}
 				char digits[100];
 				int di=0;
+  20156e:	c7 45 d0 00 00 00 00 	movl   $0x0,-0x30(%ebp)
 				while(x>=1){
-  200d9c:	85 db                	test   %ebx,%ebx
-  200d9e:	7e 4b                	jle    200deb <vfprintf+0x195>
-  200da0:	b9 00 00 00 00       	mov    $0x0,%ecx
+  201575:	eb 56                	jmp    2015cd <vfprintf+0x20f>
 					digits[di] = '0'+(x%10);
-  200da5:	b8 67 66 66 66       	mov    $0x66666667,%eax
-  200daa:	f7 eb                	imul   %ebx
-  200dac:	c1 fa 02             	sar    $0x2,%edx
-  200daf:	89 d8                	mov    %ebx,%eax
-  200db1:	c1 f8 1f             	sar    $0x1f,%eax
-  200db4:	29 c2                	sub    %eax,%edx
-  200db6:	8d 04 92             	lea    (%edx,%edx,4),%eax
-  200db9:	01 c0                	add    %eax,%eax
-  200dbb:	29 c3                	sub    %eax,%ebx
-  200dbd:	83 c3 30             	add    $0x30,%ebx
-  200dc0:	88 5c 0c 0c          	mov    %bl,0xc(%esp,%ecx,1)
+  201577:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
+  20157a:	ba 67 66 66 66       	mov    $0x66666667,%edx
+  20157f:	89 c8                	mov    %ecx,%eax
+  201581:	f7 ea                	imul   %edx
+  201583:	c1 fa 02             	sar    $0x2,%edx
+  201586:	89 c8                	mov    %ecx,%eax
+  201588:	c1 f8 1f             	sar    $0x1f,%eax
+  20158b:	29 c2                	sub    %eax,%edx
+  20158d:	89 d0                	mov    %edx,%eax
+  20158f:	c1 e0 02             	shl    $0x2,%eax
+  201592:	01 d0                	add    %edx,%eax
+  201594:	01 c0                	add    %eax,%eax
+  201596:	29 c1                	sub    %eax,%ecx
+  201598:	89 ca                	mov    %ecx,%edx
+  20159a:	89 d0                	mov    %edx,%eax
+  20159c:	83 c0 30             	add    $0x30,%eax
+  20159f:	89 c1                	mov    %eax,%ecx
+  2015a1:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
+  2015a7:	8b 45 d0             	mov    -0x30(%ebp),%eax
+  2015aa:	01 d0                	add    %edx,%eax
+  2015ac:	88 08                	mov    %cl,(%eax)
 					x/=10;
-  200dc4:	89 d3                	mov    %edx,%ebx
+  2015ae:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
+  2015b1:	ba 67 66 66 66       	mov    $0x66666667,%edx
+  2015b6:	89 c8                	mov    %ecx,%eax
+  2015b8:	f7 ea                	imul   %edx
+  2015ba:	c1 fa 02             	sar    $0x2,%edx
+  2015bd:	89 c8                	mov    %ecx,%eax
+  2015bf:	c1 f8 1f             	sar    $0x1f,%eax
+  2015c2:	29 c2                	sub    %eax,%edx
+  2015c4:	89 d0                	mov    %edx,%eax
+  2015c6:	89 45 d4             	mov    %eax,-0x2c(%ebp)
 					di++;
-  200dc6:	83 c1 01             	add    $0x1,%ecx
+  2015c9:	83 45 d0 01          	addl   $0x1,-0x30(%ebp)
 					printer('-');
 					x=-x;
 				}
 				char digits[100];
 				int di=0;
 				while(x>=1){
-  200dc9:	85 d2                	test   %edx,%edx
-  200dcb:	7f d8                	jg     200da5 <vfprintf+0x14f>
+  2015cd:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+  2015d1:	7f a4                	jg     201577 <vfprintf+0x1b9>
+					digits[di] = '0'+(x%10);
+					x/=10;
+					di++;
+				};
+				di--;
+  2015d3:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
+				for(;di>=0;di--){
+  2015d7:	eb 21                	jmp    2015fa <vfprintf+0x23c>
+					printer(digits[di]);
+  2015d9:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
+  2015df:	8b 45 d0             	mov    -0x30(%ebp),%eax
+  2015e2:	01 d0                	add    %edx,%eax
+  2015e4:	0f b6 00             	movzbl (%eax),%eax
+  2015e7:	0f be c0             	movsbl %al,%eax
+  2015ea:	83 ec 0c             	sub    $0xc,%esp
+  2015ed:	50                   	push   %eax
+  2015ee:	8b 45 08             	mov    0x8(%ebp),%eax
+  2015f1:	ff d0                	call   *%eax
+  2015f3:	83 c4 10             	add    $0x10,%esp
 					digits[di] = '0'+(x%10);
 					x/=10;
 					di++;
 				};
 				di--;
 				for(;di>=0;di--){
-  200dcd:	89 c8                	mov    %ecx,%eax
-  200dcf:	83 e8 01             	sub    $0x1,%eax
-  200dd2:	78 17                	js     200deb <vfprintf+0x195>
-  200dd4:	8d 5c 0c 0b          	lea    0xb(%esp,%ecx,1),%ebx
-					printer(digits[di]);
-  200dd8:	83 ec 0c             	sub    $0xc,%esp
-  200ddb:	0f be 03             	movsbl (%ebx),%eax
-  200dde:	50                   	push   %eax
-  200ddf:	ff d6                	call   *%esi
-  200de1:	83 eb 01             	sub    $0x1,%ebx
-					digits[di] = '0'+(x%10);
-					x/=10;
-					di++;
-				};
-				di--;
-				for(;di>=0;di--){
-  200de4:	83 c4 10             	add    $0x10,%esp
-  200de7:	39 fb                	cmp    %edi,%ebx
-  200de9:	75 ed                	jne    200dd8 <vfprintf+0x182>
+  2015f6:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
+  2015fa:	83 7d d0 00          	cmpl   $0x0,-0x30(%ebp)
+  2015fe:	79 d9                	jns    2015d9 <vfprintf+0x21b>
 					printer(digits[di]);
 				}
 				XNEXT(pointer);
-  200deb:	83 84 24 98 00 00 00 	addl   $0x4,0x98(%esp)
-  200df2:	04 
-  200df3:	eb 07                	jmp    200dfc <vfprintf+0x1a6>
-				int x = XGET(pointer, int);
-				if(x==-2147483648){
-					printp(printer, "-2147483648");
-					XNEXT(pointer);
-					type = NONE;
-					continue;
-  200df5:	bb 00 00 00 00       	mov    $0x0,%ebx
-  200dfa:	eb 3f                	jmp    200e3b <vfprintf+0x1e5>
-				//printer(*pointer);
-				printer(XGET(pointer, char));
-				XNEXT(pointer);
+  201600:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
-			}
-			type = NONE;
-  200dfc:	bb 00 00 00 00       	mov    $0x0,%ebx
-					printer(digits[di]);
-				}
-				XNEXT(pointer);
-				i++;
+  201604:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
 			if(cur == 'c'){
-  200e01:	80 7d 00 63          	cmpb   $0x63,0x0(%ebp)
-  200e05:	75 34                	jne    200e3b <vfprintf+0x1e5>
+  201608:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  20160b:	0f b6 00             	movzbl (%eax),%eax
+  20160e:	3c 63                	cmp    $0x63,%al
+  201610:	75 1d                	jne    20162f <vfprintf+0x271>
 				//char* pointer = (char*)args;
 				//printer(*pointer);
 				printer(XGET(pointer, char));
-  200e07:	83 ec 0c             	sub    $0xc,%esp
-  200e0a:	8b 84 24 a4 00 00 00 	mov    0xa4(%esp),%eax
-  200e11:	0f be 00             	movsbl (%eax),%eax
-  200e14:	50                   	push   %eax
-  200e15:	ff d6                	call   *%esi
+  201612:	8b 45 e8             	mov    -0x18(%ebp),%eax
+  201615:	0f b6 00             	movzbl (%eax),%eax
+  201618:	0f be c0             	movsbl %al,%eax
+  20161b:	83 ec 0c             	sub    $0xc,%esp
+  20161e:	50                   	push   %eax
+  20161f:	8b 45 08             	mov    0x8(%ebp),%eax
+  201622:	ff d0                	call   *%eax
+  201624:	83 c4 10             	add    $0x10,%esp
 				XNEXT(pointer);
-  200e17:	83 84 24 a8 00 00 00 	addl   $0x4,0xa8(%esp)
-  200e1e:	04 
-  200e1f:	83 c4 10             	add    $0x10,%esp
-  200e22:	eb 17                	jmp    200e3b <vfprintf+0x1e5>
+  201627:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
+  20162b:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
 			type = NONE;
+  20162f:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 			continue;
+  201636:	eb 1b                	jmp    201653 <vfprintf+0x295>
 		}
 		if(type == NONE){
-  200e24:	85 db                	test   %ebx,%ebx
-  200e26:	75 13                	jne    200e3b <vfprintf+0x1e5>
+  201638:	83 7d ec 00          	cmpl   $0x0,-0x14(%ebp)
+  20163c:	75 15                	jne    201653 <vfprintf+0x295>
 			printer(cur);
-  200e28:	83 ec 0c             	sub    $0xc,%esp
-  200e2b:	0f be c0             	movsbl %al,%eax
-  200e2e:	50                   	push   %eax
-  200e2f:	ff d6                	call   *%esi
-  200e31:	83 c4 10             	add    $0x10,%esp
-  200e34:	eb 05                	jmp    200e3b <vfprintf+0x1e5>
-	int32_t type = NONE;
-	void** pointer = args;
-	//char last='\0';
-	for(;*str != '\0'; str ++){
-		if(cur == '%'){
-			type = READ;
-  200e36:	bb 01 00 00 00       	mov    $0x1,%ebx
+  20163e:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  201641:	0f b6 00             	movzbl (%eax),%eax
+  201644:	0f be c0             	movsbl %al,%eax
+  201647:	83 ec 0c             	sub    $0xc,%esp
+  20164a:	50                   	push   %eax
+  20164b:	8b 45 08             	mov    0x8(%ebp),%eax
+  20164e:	ff d0                	call   *%eax
+  201650:	83 c4 10             	add    $0x10,%esp
 	const char *str = ctl;
 	int32_t i = 0;
 	int32_t type = NONE;
 	void** pointer = args;
 	//char last='\0';
 	for(;*str != '\0'; str ++){
-  200e3b:	83 c5 01             	add    $0x1,%ebp
-  200e3e:	0f b6 45 00          	movzbl 0x0(%ebp),%eax
-  200e42:	84 c0                	test   %al,%al
-  200e44:	0f 85 36 fe ff ff    	jne    200c80 <vfprintf+0x2a>
+  201653:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+  201657:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  20165a:	0f b6 00             	movzbl (%eax),%eax
+  20165d:	84 c0                	test   %al,%al
+  20165f:	0f 85 81 fd ff ff    	jne    2013e6 <vfprintf+0x28>
 		if(type == NONE){
 			printer(cur);
 		}
 		//last = cur;
 	}
 }
-  200e4a:	83 c4 7c             	add    $0x7c,%esp
-  200e4d:	5b                   	pop    %ebx
-  200e4e:	5e                   	pop    %esi
-  200e4f:	5f                   	pop    %edi
-  200e50:	5d                   	pop    %ebp
-  200e51:	c3                   	ret    
+  201665:	c9                   	leave  
+  201666:	c3                   	ret    
 
-00200e52 <printf>:
+00201667 <vfprintfs>:
+
+void vfprintfs(void (*printer)(char), const char *ctl, void **args) {
+  201667:	55                   	push   %ebp
+  201668:	89 e5                	mov    %esp,%ebp
+  20166a:	81 ec 98 00 00 00    	sub    $0x98,%esp
+	const char *str = ctl;
+  201670:	8b 45 0c             	mov    0xc(%ebp),%eax
+  201673:	89 45 f4             	mov    %eax,-0xc(%ebp)
+	int32_t i = 0;
+  201676:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
+	int32_t type = NONE;
+  20167d:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+	void** pointer = args;
+  201684:	8b 45 10             	mov    0x10(%ebp),%eax
+  201687:	89 45 e8             	mov    %eax,-0x18(%ebp)
+	//char last='\0';
+	for(;*str != '\0'; str ++){
+  20168a:	e9 68 02 00 00       	jmp    2018f7 <vfprintfs+0x290>
+		if(cur == '%'){
+  20168f:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  201692:	0f b6 00             	movzbl (%eax),%eax
+  201695:	3c 25                	cmp    $0x25,%al
+  201697:	75 0c                	jne    2016a5 <vfprintfs+0x3e>
+			type = READ;
+  201699:	c7 45 ec 01 00 00 00 	movl   $0x1,-0x14(%ebp)
+			continue;
+  2016a0:	e9 4e 02 00 00       	jmp    2018f3 <vfprintfs+0x28c>
+		}
+		if(type == READ){
+  2016a5:	83 7d ec 01          	cmpl   $0x1,-0x14(%ebp)
+  2016a9:	0f 85 29 02 00 00    	jne    2018d8 <vfprintfs+0x271>
+			if(cur == 's'){
+  2016af:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2016b2:	0f b6 00             	movzbl (%eax),%eax
+  2016b5:	3c 73                	cmp    $0x73,%al
+  2016b7:	75 32                	jne    2016eb <vfprintfs+0x84>
+				char* p= XGET(pointer, char*);
+  2016b9:	8b 45 e8             	mov    -0x18(%ebp),%eax
+  2016bc:	8b 00                	mov    (%eax),%eax
+  2016be:	89 45 e4             	mov    %eax,-0x1c(%ebp)
+				for(; *p != '\0';p++){
+  2016c1:	eb 16                	jmp    2016d9 <vfprintfs+0x72>
+					sys_printch(*p);
+  2016c3:	8b 45 e4             	mov    -0x1c(%ebp),%eax
+  2016c6:	0f b6 00             	movzbl (%eax),%eax
+  2016c9:	0f be c0             	movsbl %al,%eax
+  2016cc:	50                   	push   %eax
+  2016cd:	e8 99 fc ff ff       	call   20136b <sys_printch>
+  2016d2:	83 c4 04             	add    $0x4,%esp
+			continue;
+		}
+		if(type == READ){
+			if(cur == 's'){
+				char* p= XGET(pointer, char*);
+				for(; *p != '\0';p++){
+  2016d5:	83 45 e4 01          	addl   $0x1,-0x1c(%ebp)
+  2016d9:	8b 45 e4             	mov    -0x1c(%ebp),%eax
+  2016dc:	0f b6 00             	movzbl (%eax),%eax
+  2016df:	84 c0                	test   %al,%al
+  2016e1:	75 e0                	jne    2016c3 <vfprintfs+0x5c>
+					sys_printch(*p);
+				}
+				XNEXT(pointer);
+  2016e3:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+				i++;
+  2016e7:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+			}
+			if(cur == 'x'){
+  2016eb:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2016ee:	0f b6 00             	movzbl (%eax),%eax
+  2016f1:	3c 78                	cmp    $0x78,%al
+  2016f3:	0f 85 99 00 00 00    	jne    201792 <vfprintfs+0x12b>
+				uint32_t x = XGET(pointer, int);
+  2016f9:	8b 45 e8             	mov    -0x18(%ebp),%eax
+  2016fc:	8b 00                	mov    (%eax),%eax
+  2016fe:	89 45 e0             	mov    %eax,-0x20(%ebp)
+				if(x==0){
+  201701:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
+  201705:	75 1a                	jne    201721 <vfprintfs+0xba>
+					sys_printch('0');
+  201707:	6a 30                	push   $0x30
+  201709:	e8 5d fc ff ff       	call   20136b <sys_printch>
+  20170e:	83 c4 04             	add    $0x4,%esp
+					XNEXT(pointer);
+  201711:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+					type = NONE;
+  201715:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+  20171c:	e9 d2 01 00 00       	jmp    2018f3 <vfprintfs+0x28c>
+					continue;
+				}
+				char digits[100];
+				int di=0;
+  201721:	c7 45 dc 00 00 00 00 	movl   $0x0,-0x24(%ebp)
+				while(x>=1){
+  201728:	eb 30                	jmp    20175a <vfprintfs+0xf3>
+					int d=(x%16);
+  20172a:	8b 45 e0             	mov    -0x20(%ebp),%eax
+  20172d:	83 e0 0f             	and    $0xf,%eax
+  201730:	89 45 d8             	mov    %eax,-0x28(%ebp)
+					if(d>=10){
+  201733:	83 7d d8 09          	cmpl   $0x9,-0x28(%ebp)
+  201737:	7e 04                	jle    20173d <vfprintfs+0xd6>
+						d+='a'-'0'-10;
+  201739:	83 45 d8 27          	addl   $0x27,-0x28(%ebp)
+					}
+					digits[di] = '0'+d;
+  20173d:	8b 45 d8             	mov    -0x28(%ebp),%eax
+  201740:	83 c0 30             	add    $0x30,%eax
+  201743:	89 c1                	mov    %eax,%ecx
+  201745:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
+  20174b:	8b 45 dc             	mov    -0x24(%ebp),%eax
+  20174e:	01 d0                	add    %edx,%eax
+  201750:	88 08                	mov    %cl,(%eax)
+					x>>=4;
+  201752:	c1 6d e0 04          	shrl   $0x4,-0x20(%ebp)
+					di ++;
+  201756:	83 45 dc 01          	addl   $0x1,-0x24(%ebp)
+					type = NONE;
+					continue;
+				}
+				char digits[100];
+				int di=0;
+				while(x>=1){
+  20175a:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
+  20175e:	75 ca                	jne    20172a <vfprintfs+0xc3>
+					}
+					digits[di] = '0'+d;
+					x>>=4;
+					di ++;
+				};
+				di--;
+  201760:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
+				for(;di>=0;di--){
+  201764:	eb 1e                	jmp    201784 <vfprintfs+0x11d>
+					sys_printch(digits[di]);
+  201766:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
+  20176c:	8b 45 dc             	mov    -0x24(%ebp),%eax
+  20176f:	01 d0                	add    %edx,%eax
+  201771:	0f b6 00             	movzbl (%eax),%eax
+  201774:	0f be c0             	movsbl %al,%eax
+  201777:	50                   	push   %eax
+  201778:	e8 ee fb ff ff       	call   20136b <sys_printch>
+  20177d:	83 c4 04             	add    $0x4,%esp
+					digits[di] = '0'+d;
+					x>>=4;
+					di ++;
+				};
+				di--;
+				for(;di>=0;di--){
+  201780:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
+  201784:	83 7d dc 00          	cmpl   $0x0,-0x24(%ebp)
+  201788:	79 dc                	jns    201766 <vfprintfs+0xff>
+					sys_printch(digits[di]);
+				}
+				XNEXT(pointer);
+  20178a:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+				i++;
+  20178e:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+			}
+			if(cur == 'd'){
+  201792:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  201795:	0f b6 00             	movzbl (%eax),%eax
+  201798:	3c 64                	cmp    $0x64,%al
+  20179a:	0f 85 08 01 00 00    	jne    2018a8 <vfprintfs+0x241>
+				int x = XGET(pointer, int);
+  2017a0:	8b 45 e8             	mov    -0x18(%ebp),%eax
+  2017a3:	8b 00                	mov    (%eax),%eax
+  2017a5:	89 45 d4             	mov    %eax,-0x2c(%ebp)
+				if(x==-2147483648){
+  2017a8:	81 7d d4 00 00 00 80 	cmpl   $0x80000000,-0x2c(%ebp)
+  2017af:	75 23                	jne    2017d4 <vfprintfs+0x16d>
+					printp(printer, "-2147483648");
+  2017b1:	83 ec 08             	sub    $0x8,%esp
+  2017b4:	68 07 22 20 00       	push   $0x202207
+  2017b9:	ff 75 08             	pushl  0x8(%ebp)
+  2017bc:	e8 ca fb ff ff       	call   20138b <printp>
+  2017c1:	83 c4 10             	add    $0x10,%esp
+					XNEXT(pointer);
+  2017c4:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+					type = NONE;
+  2017c8:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+					continue;
+  2017cf:	e9 1f 01 00 00       	jmp    2018f3 <vfprintfs+0x28c>
+				}
+				if(x==0){
+  2017d4:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+  2017d8:	75 1e                	jne    2017f8 <vfprintfs+0x191>
+					sys_printch('0');
+  2017da:	83 ec 0c             	sub    $0xc,%esp
+  2017dd:	6a 30                	push   $0x30
+  2017df:	e8 87 fb ff ff       	call   20136b <sys_printch>
+  2017e4:	83 c4 10             	add    $0x10,%esp
+					XNEXT(pointer);
+  2017e7:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+					type = NONE;
+  2017eb:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+					continue;
+  2017f2:	90                   	nop
+  2017f3:	e9 fb 00 00 00       	jmp    2018f3 <vfprintfs+0x28c>
+				}
+				if(x<0){
+  2017f8:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+  2017fc:	79 10                	jns    20180e <vfprintfs+0x1a7>
+					sys_printch('-');
+  2017fe:	83 ec 0c             	sub    $0xc,%esp
+  201801:	6a 2d                	push   $0x2d
+  201803:	e8 63 fb ff ff       	call   20136b <sys_printch>
+  201808:	83 c4 10             	add    $0x10,%esp
+					x=-x;
+  20180b:	f7 5d d4             	negl   -0x2c(%ebp)
+				}
+				char digits[100];
+				int di=0;
+  20180e:	c7 45 d0 00 00 00 00 	movl   $0x0,-0x30(%ebp)
+				while(x>=1){
+  201815:	eb 56                	jmp    20186d <vfprintfs+0x206>
+					digits[di] = '0'+(x%10);
+  201817:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
+  20181a:	ba 67 66 66 66       	mov    $0x66666667,%edx
+  20181f:	89 c8                	mov    %ecx,%eax
+  201821:	f7 ea                	imul   %edx
+  201823:	c1 fa 02             	sar    $0x2,%edx
+  201826:	89 c8                	mov    %ecx,%eax
+  201828:	c1 f8 1f             	sar    $0x1f,%eax
+  20182b:	29 c2                	sub    %eax,%edx
+  20182d:	89 d0                	mov    %edx,%eax
+  20182f:	c1 e0 02             	shl    $0x2,%eax
+  201832:	01 d0                	add    %edx,%eax
+  201834:	01 c0                	add    %eax,%eax
+  201836:	29 c1                	sub    %eax,%ecx
+  201838:	89 ca                	mov    %ecx,%edx
+  20183a:	89 d0                	mov    %edx,%eax
+  20183c:	83 c0 30             	add    $0x30,%eax
+  20183f:	89 c1                	mov    %eax,%ecx
+  201841:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
+  201847:	8b 45 d0             	mov    -0x30(%ebp),%eax
+  20184a:	01 d0                	add    %edx,%eax
+  20184c:	88 08                	mov    %cl,(%eax)
+					x/=10;
+  20184e:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
+  201851:	ba 67 66 66 66       	mov    $0x66666667,%edx
+  201856:	89 c8                	mov    %ecx,%eax
+  201858:	f7 ea                	imul   %edx
+  20185a:	c1 fa 02             	sar    $0x2,%edx
+  20185d:	89 c8                	mov    %ecx,%eax
+  20185f:	c1 f8 1f             	sar    $0x1f,%eax
+  201862:	29 c2                	sub    %eax,%edx
+  201864:	89 d0                	mov    %edx,%eax
+  201866:	89 45 d4             	mov    %eax,-0x2c(%ebp)
+					di++;
+  201869:	83 45 d0 01          	addl   $0x1,-0x30(%ebp)
+					sys_printch('-');
+					x=-x;
+				}
+				char digits[100];
+				int di=0;
+				while(x>=1){
+  20186d:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+  201871:	7f a4                	jg     201817 <vfprintfs+0x1b0>
+					digits[di] = '0'+(x%10);
+					x/=10;
+					di++;
+				};
+				di--;
+  201873:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
+				for(;di>=0;di--){
+  201877:	eb 21                	jmp    20189a <vfprintfs+0x233>
+					sys_printch(digits[di]);
+  201879:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
+  20187f:	8b 45 d0             	mov    -0x30(%ebp),%eax
+  201882:	01 d0                	add    %edx,%eax
+  201884:	0f b6 00             	movzbl (%eax),%eax
+  201887:	0f be c0             	movsbl %al,%eax
+  20188a:	83 ec 0c             	sub    $0xc,%esp
+  20188d:	50                   	push   %eax
+  20188e:	e8 d8 fa ff ff       	call   20136b <sys_printch>
+  201893:	83 c4 10             	add    $0x10,%esp
+					digits[di] = '0'+(x%10);
+					x/=10;
+					di++;
+				};
+				di--;
+				for(;di>=0;di--){
+  201896:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
+  20189a:	83 7d d0 00          	cmpl   $0x0,-0x30(%ebp)
+  20189e:	79 d9                	jns    201879 <vfprintfs+0x212>
+					sys_printch(digits[di]);
+				}
+				XNEXT(pointer);
+  2018a0:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+				i++;
+  2018a4:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+			}
+			if(cur == 'c'){
+  2018a8:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2018ab:	0f b6 00             	movzbl (%eax),%eax
+  2018ae:	3c 63                	cmp    $0x63,%al
+  2018b0:	75 1d                	jne    2018cf <vfprintfs+0x268>
+				//char* pointer = (char*)args;
+				//printer(*pointer);
+				sys_printch(XGET(pointer, char));
+  2018b2:	8b 45 e8             	mov    -0x18(%ebp),%eax
+  2018b5:	0f b6 00             	movzbl (%eax),%eax
+  2018b8:	0f be c0             	movsbl %al,%eax
+  2018bb:	83 ec 0c             	sub    $0xc,%esp
+  2018be:	50                   	push   %eax
+  2018bf:	e8 a7 fa ff ff       	call   20136b <sys_printch>
+  2018c4:	83 c4 10             	add    $0x10,%esp
+				XNEXT(pointer);
+  2018c7:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+				i++;
+  2018cb:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+			}
+			type = NONE;
+  2018cf:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+			continue;
+  2018d6:	eb 1b                	jmp    2018f3 <vfprintfs+0x28c>
+		}
+		if(type == NONE){
+  2018d8:	83 7d ec 00          	cmpl   $0x0,-0x14(%ebp)
+  2018dc:	75 15                	jne    2018f3 <vfprintfs+0x28c>
+			sys_printch(cur);
+  2018de:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2018e1:	0f b6 00             	movzbl (%eax),%eax
+  2018e4:	0f be c0             	movsbl %al,%eax
+  2018e7:	83 ec 0c             	sub    $0xc,%esp
+  2018ea:	50                   	push   %eax
+  2018eb:	e8 7b fa ff ff       	call   20136b <sys_printch>
+  2018f0:	83 c4 10             	add    $0x10,%esp
+	const char *str = ctl;
+	int32_t i = 0;
+	int32_t type = NONE;
+	void** pointer = args;
+	//char last='\0';
+	for(;*str != '\0'; str ++){
+  2018f3:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+  2018f7:	8b 45 f4             	mov    -0xc(%ebp),%eax
+  2018fa:	0f b6 00             	movzbl (%eax),%eax
+  2018fd:	84 c0                	test   %al,%al
+  2018ff:	0f 85 8a fd ff ff    	jne    20168f <vfprintfs+0x28>
+		if(type == NONE){
+			sys_printch(cur);
+		}
+		//last = cur;
+	}
+}
+  201905:	c9                   	leave  
+  201906:	c3                   	ret    
+
+00201907 <printf>:
 
 void __attribute__((__noinline__)) 
 printf(const char *ctl, ...) {
-  200e52:	83 ec 10             	sub    $0x10,%esp
+  201907:	55                   	push   %ebp
+  201908:	89 e5                	mov    %esp,%ebp
+  20190a:	83 ec 18             	sub    $0x18,%esp
 	void **args = (void **)&ctl + 1;
-	vfprintf(sys_printch, ctl, args);
-  200e55:	8d 44 24 18          	lea    0x18(%esp),%eax
-  200e59:	50                   	push   %eax
-  200e5a:	ff 74 24 18          	pushl  0x18(%esp)
-  200e5e:	68 17 0c 20 00       	push   $0x200c17
-  200e63:	e8 ee fd ff ff       	call   200c56 <vfprintf>
+  20190d:	8d 45 0c             	lea    0xc(%ebp),%eax
+  201910:	89 45 f4             	mov    %eax,-0xc(%ebp)
+	vfprintfs(sys_printch, ctl, args);
+  201913:	8b 45 08             	mov    0x8(%ebp),%eax
+  201916:	83 ec 04             	sub    $0x4,%esp
+  201919:	ff 75 f4             	pushl  -0xc(%ebp)
+  20191c:	50                   	push   %eax
+  20191d:	68 6b 13 20 00       	push   $0x20136b
+  201922:	e8 40 fd ff ff       	call   201667 <vfprintfs>
+  201927:	83 c4 10             	add    $0x10,%esp
 }
-  200e68:	83 c4 1c             	add    $0x1c,%esp
-  200e6b:	c3                   	ret    
+  20192a:	c9                   	leave  
+  20192b:	c3                   	ret    

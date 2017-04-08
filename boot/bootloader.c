@@ -3,9 +3,10 @@
 #include "inc/disk.h"
 #include "inc/types.h"
 
-#define elf		((struct ELFHeader *) 0x8001)
+#define elf		((struct ELFHeader *) 0x8000)
 
 void readseg(unsigned char *, int, int);
+//void init_page(void);
 
 int bootmain(){
 	struct ProgramHeader *ph, *eph;
@@ -23,6 +24,8 @@ int bootmain(){
 		readseg(pa, ph->filesz, ph->off); 
 		for (i = pa + ph->filesz; i < pa + ph->memsz; *i ++ = 0);
 	}
+
+	//init_page();
 
 	((void(*)(void))elf->entry)();
 	bad:
