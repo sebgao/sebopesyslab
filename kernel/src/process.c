@@ -32,6 +32,8 @@ void init_pcb(PCB *p, uint32_t ustack, uint32_t entry)
 	tf->ds = GD_UD | 3;
 	tf->es = GD_UD | 3;
 	tf->ss = GD_UD | 3;
+	tf->fs = GD_UD | 3;
+	tf->gs = GD_UD | 3;
 	tf->esp = ustack;
 	tf->cs = GD_UT | 3;
 	tf->eflags = 0x2 | FL_IF;

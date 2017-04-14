@@ -13,8 +13,7 @@
 
 static int timestamp = 1;
 static int curtime = 0;
-
-static int score;
+static int score = 0;
 void dreamOf100HZ(int);
 
 static inline int8_t key(char s){
@@ -98,7 +97,7 @@ extern uint32_t UKISS();
 
 
 domain GAME_STATUS gameStatus = GAME_START;
-domain int x, y, size, score = 0;
+domain int x, y, size;
 
 domain MONSTER monsters[MONSTER_SIZE+20];
 
@@ -159,6 +158,7 @@ void createMonster(){
 		}
 	}
 }
+
 void dreamOf100HZ(int timestamp){
 	/*if(timestamp%6 == 1){
 		if(key('a'))x--;
@@ -175,6 +175,8 @@ void dreamOf100HZ(int timestamp){
 		drawStage();
 	}*/
 	if(gameStatus == GAME_START){
+		//printf("%x\n", st);
+		//printf("Score: %d\n", curtime);
 		clearStage();
 		drawText1();
 		//drawNumber(timestamp, 0, 0, 2, 15);

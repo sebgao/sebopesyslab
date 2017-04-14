@@ -77,18 +77,21 @@ int main(){
     for (i = pa + ph->filesz; i < pa + ph->memsz; *i ++ = 0);
   }
   entry = elf->entry;
-  mm_alloc(pcb->pgdir, USTACKTOP - USTACKSIZE, USTACKSIZE);  
+  //mm_alloc(pcb->pgdir, USTACKTOP - USTACKSIZE, USTACKSIZE);  
   printk("%s\n", "Here we go!");
 
   //lcr3(PADDR(kern_pgdir));
-
-  init_pcb(pcb, entry+4096, entry);
-  printk("%x\n", *((uint32_t*)entry));
+ // printk("hello: %x %x %x\n", entry, USTACKTOP-entry, USTACKTOP);
+  //init_pcb(pcb, entry+4096, entry);
+  //printf("%x\n", USTACKTOP-USTACKSIZE);
+  mm_alloc(pcb->pgdir, USTACKTOP-USTACKSIZE, USTACKSIZE);
+  init_pcb(pcb, USTACKTOP-8, entry);
+  //printk("%x\n", *((uint32_t*)entry));
   //lcr3(PADDR(pcb->pgdir));
 
   switch_pcb(pcb);
   
-  printk("e\n");
+  //printk("e\n");
 
 	return 1;
 };

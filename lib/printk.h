@@ -8,6 +8,7 @@
 #include "syscall.h"
 
 void __attribute__((__noinline__))  printf(const char *ctl, ...);
+void vfprintf(void (*printer)(char), const char *ctl, void **args);
 //void __attribute__((__noinline__))  printk(const char *ctl, ...);
 
 #endif

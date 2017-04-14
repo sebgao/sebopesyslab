@@ -726,9 +726,9 @@ static inline void drawStage(){
  8048619:	c3                   	ret    
 
 0804861a <key>:
+static int timestamp = 1;
 static int curtime = 0;
-
-static int score;
+static int score = 0;
 void dreamOf100HZ(int);
 
 static inline int8_t key(char s){
@@ -805,7 +805,7 @@ int main(){
  804867f:	eb c5                	jmp    8048646 <main+0x11>
 
 08048681 <hitMonster>:
-domain int x, y, size, score = 0;
+domain int x, y, size;
 
 domain MONSTER monsters[MONSTER_SIZE+20];
 
@@ -1460,6 +1460,7 @@ void createMonster(){
  8048deb:	c3                   	ret    
 
 08048dec <dreamOf100HZ>:
+
 void dreamOf100HZ(int timestamp){
  8048dec:	55                   	push   %ebp
  8048ded:	89 e5                	mov    %esp,%ebp
@@ -1473,6 +1474,8 @@ void dreamOf100HZ(int timestamp){
  8048df2:	a1 28 ba 04 08       	mov    0x804ba28,%eax
  8048df7:	85 c0                	test   %eax,%eax
  8048df9:	0f 85 2b 04 00 00    	jne    804922a <dreamOf100HZ+0x43e>
+		//printf("%x\n", st);
+		//printf("Score: %d\n", curtime);
 		clearStage();
  8048dff:	e8 a7 f4 ff ff       	call   80482ab <clearStage>
 		drawText1();
@@ -1820,7 +1823,7 @@ void dreamOf100HZ(int timestamp){
 		printf("Press Q to start\n");
  8049210:	83 ec 0c             	sub    $0xc,%esp
  8049213:	68 c3 9f 04 08       	push   $0x8049fc3
- 8049218:	e8 de 04 00 00       	call   80496fb <printf>
+ 8049218:	e8 cf 04 00 00       	call   80496ec <printf>
  804921d:	83 c4 10             	add    $0x10,%esp
 		gameStatus = GAME_READY;
  8049220:	c7 05 28 ba 04 08 01 	movl   $0x1,0x804ba28
@@ -1841,7 +1844,7 @@ void dreamOf100HZ(int timestamp){
 			printf("Press W, A, S, D to move\n");
  8049245:	83 ec 0c             	sub    $0xc,%esp
  8049248:	68 d5 9f 04 08       	push   $0x8049fd5
- 804924d:	e8 a9 04 00 00       	call   80496fb <printf>
+ 804924d:	e8 9a 04 00 00       	call   80496ec <printf>
  8049252:	83 c4 10             	add    $0x10,%esp
 			gameStatus = GAME_ING;
  8049255:	c7 05 28 ba 04 08 02 	movl   $0x2,0x804ba28
@@ -1986,14 +1989,14 @@ void dreamOf100HZ(int timestamp){
 		printf("You're dead\n");
  80493c3:	83 ec 0c             	sub    $0xc,%esp
  80493c6:	68 ef 9f 04 08       	push   $0x8049fef
- 80493cb:	e8 2b 03 00 00       	call   80496fb <printf>
+ 80493cb:	e8 1c 03 00 00       	call   80496ec <printf>
  80493d0:	83 c4 10             	add    $0x10,%esp
 		printf("Score: %d\n", score);
  80493d3:	a1 24 ba 04 08       	mov    0x804ba24,%eax
  80493d8:	83 ec 08             	sub    $0x8,%esp
  80493db:	50                   	push   %eax
  80493dc:	68 fc 9f 04 08       	push   $0x8049ffc
- 80493e1:	e8 15 03 00 00       	call   80496fb <printf>
+ 80493e1:	e8 06 03 00 00       	call   80496ec <printf>
  80493e6:	83 c4 10             	add    $0x10,%esp
 		clearStage();
  80493e9:	e8 bd ee ff ff       	call   80482ab <clearStage>
@@ -2075,380 +2078,391 @@ void printp(void (*printer)(char), const char *ctl){
 void vfprintf(void (*printer)(char), const char *ctl, void **args) {
  8049452:	55                   	push   %ebp
  8049453:	89 e5                	mov    %esp,%ebp
- 8049455:	81 ec 98 00 00 00    	sub    $0x98,%esp
+ 8049455:	83 ec 58             	sub    $0x58,%esp
 	const char *str = ctl;
- 804945b:	8b 45 0c             	mov    0xc(%ebp),%eax
- 804945e:	89 45 f4             	mov    %eax,-0xc(%ebp)
+ 8049458:	8b 45 0c             	mov    0xc(%ebp),%eax
+ 804945b:	89 45 f4             	mov    %eax,-0xc(%ebp)
 	int32_t i = 0;
- 8049461:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
+ 804945e:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
 	int32_t type = NONE;
- 8049468:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 8049465:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 	void** pointer = args;
- 804946f:	8b 45 10             	mov    0x10(%ebp),%eax
- 8049472:	89 45 e8             	mov    %eax,-0x18(%ebp)
+ 804946c:	8b 45 10             	mov    0x10(%ebp),%eax
+ 804946f:	89 45 e8             	mov    %eax,-0x18(%ebp)
 	//char last='\0';
 	for(;*str != '\0'; str ++){
- 8049475:	e9 71 02 00 00       	jmp    80496eb <vfprintf+0x299>
+ 8049472:	e9 65 02 00 00       	jmp    80496dc <vfprintf+0x28a>
+
 		if(cur == '%'){
- 804947a:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 804947d:	0f b6 00             	movzbl (%eax),%eax
- 8049480:	3c 25                	cmp    $0x25,%al
- 8049482:	75 0c                	jne    8049490 <vfprintf+0x3e>
+ 8049477:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 804947a:	0f b6 00             	movzbl (%eax),%eax
+ 804947d:	3c 25                	cmp    $0x25,%al
+ 804947f:	75 0c                	jne    804948d <vfprintf+0x3b>
+			//sys_printch('0');
 			type = READ;
- 8049484:	c7 45 ec 01 00 00 00 	movl   $0x1,-0x14(%ebp)
+ 8049481:	c7 45 ec 01 00 00 00 	movl   $0x1,-0x14(%ebp)
 			continue;
- 804948b:	e9 57 02 00 00       	jmp    80496e7 <vfprintf+0x295>
+ 8049488:	e9 4b 02 00 00       	jmp    80496d8 <vfprintf+0x286>
 		}
 		if(type == READ){
- 8049490:	83 7d ec 01          	cmpl   $0x1,-0x14(%ebp)
- 8049494:	0f 85 32 02 00 00    	jne    80496cc <vfprintf+0x27a>
+ 804948d:	83 7d ec 01          	cmpl   $0x1,-0x14(%ebp)
+ 8049491:	0f 85 26 02 00 00    	jne    80496bd <vfprintf+0x26b>
+			//sys_printch('1');
+			//sys_printch(cur);
 			if(cur == 's'){
- 804949a:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 804949d:	0f b6 00             	movzbl (%eax),%eax
- 80494a0:	3c 73                	cmp    $0x73,%al
- 80494a2:	75 35                	jne    80494d9 <vfprintf+0x87>
+ 8049497:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 804949a:	0f b6 00             	movzbl (%eax),%eax
+ 804949d:	3c 73                	cmp    $0x73,%al
+ 804949f:	75 35                	jne    80494d6 <vfprintf+0x84>
 				char* p= XGET(pointer, char*);
- 80494a4:	8b 45 e8             	mov    -0x18(%ebp),%eax
- 80494a7:	8b 00                	mov    (%eax),%eax
- 80494a9:	89 45 e4             	mov    %eax,-0x1c(%ebp)
+ 80494a1:	8b 45 e8             	mov    -0x18(%ebp),%eax
+ 80494a4:	8b 00                	mov    (%eax),%eax
+ 80494a6:	89 45 e4             	mov    %eax,-0x1c(%ebp)
 				for(; *p != '\0';p++){
- 80494ac:	eb 19                	jmp    80494c7 <vfprintf+0x75>
+ 80494a9:	eb 19                	jmp    80494c4 <vfprintf+0x72>
 					printer(*p);
- 80494ae:	8b 45 e4             	mov    -0x1c(%ebp),%eax
- 80494b1:	0f b6 00             	movzbl (%eax),%eax
- 80494b4:	0f be c0             	movsbl %al,%eax
- 80494b7:	83 ec 0c             	sub    $0xc,%esp
- 80494ba:	50                   	push   %eax
- 80494bb:	8b 45 08             	mov    0x8(%ebp),%eax
- 80494be:	ff d0                	call   *%eax
- 80494c0:	83 c4 10             	add    $0x10,%esp
-			continue;
-		}
+ 80494ab:	8b 45 e4             	mov    -0x1c(%ebp),%eax
+ 80494ae:	0f b6 00             	movzbl (%eax),%eax
+ 80494b1:	0f be c0             	movsbl %al,%eax
+ 80494b4:	83 ec 0c             	sub    $0xc,%esp
+ 80494b7:	50                   	push   %eax
+ 80494b8:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80494bb:	ff d0                	call   *%eax
+ 80494bd:	83 c4 10             	add    $0x10,%esp
 		if(type == READ){
+			//sys_printch('1');
+			//sys_printch(cur);
 			if(cur == 's'){
 				char* p= XGET(pointer, char*);
 				for(; *p != '\0';p++){
- 80494c3:	83 45 e4 01          	addl   $0x1,-0x1c(%ebp)
- 80494c7:	8b 45 e4             	mov    -0x1c(%ebp),%eax
- 80494ca:	0f b6 00             	movzbl (%eax),%eax
- 80494cd:	84 c0                	test   %al,%al
- 80494cf:	75 dd                	jne    80494ae <vfprintf+0x5c>
+ 80494c0:	83 45 e4 01          	addl   $0x1,-0x1c(%ebp)
+ 80494c4:	8b 45 e4             	mov    -0x1c(%ebp),%eax
+ 80494c7:	0f b6 00             	movzbl (%eax),%eax
+ 80494ca:	84 c0                	test   %al,%al
+ 80494cc:	75 dd                	jne    80494ab <vfprintf+0x59>
 					printer(*p);
 				}
 				XNEXT(pointer);
- 80494d1:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 80494ce:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
- 80494d5:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+ 80494d2:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
+			//sys_printch('2');
+			//sys_printch(cur);
 			if(cur == 'x'){
- 80494d9:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80494dc:	0f b6 00             	movzbl (%eax),%eax
- 80494df:	3c 78                	cmp    $0x78,%al
- 80494e1:	0f 85 9f 00 00 00    	jne    8049586 <vfprintf+0x134>
+ 80494d6:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80494d9:	0f b6 00             	movzbl (%eax),%eax
+ 80494dc:	3c 78                	cmp    $0x78,%al
+ 80494de:	0f 85 99 00 00 00    	jne    804957d <vfprintf+0x12b>
 				uint32_t x = XGET(pointer, int);
- 80494e7:	8b 45 e8             	mov    -0x18(%ebp),%eax
- 80494ea:	8b 00                	mov    (%eax),%eax
- 80494ec:	89 45 e0             	mov    %eax,-0x20(%ebp)
+ 80494e4:	8b 45 e8             	mov    -0x18(%ebp),%eax
+ 80494e7:	8b 00                	mov    (%eax),%eax
+ 80494e9:	89 45 e0             	mov    %eax,-0x20(%ebp)
 				if(x==0){
- 80494ef:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
- 80494f3:	75 1d                	jne    8049512 <vfprintf+0xc0>
+ 80494ec:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
+ 80494f0:	75 1d                	jne    804950f <vfprintf+0xbd>
 					printer('0');
- 80494f5:	83 ec 0c             	sub    $0xc,%esp
- 80494f8:	6a 30                	push   $0x30
- 80494fa:	8b 45 08             	mov    0x8(%ebp),%eax
- 80494fd:	ff d0                	call   *%eax
- 80494ff:	83 c4 10             	add    $0x10,%esp
+ 80494f2:	83 ec 0c             	sub    $0xc,%esp
+ 80494f5:	6a 30                	push   $0x30
+ 80494f7:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80494fa:	ff d0                	call   *%eax
+ 80494fc:	83 c4 10             	add    $0x10,%esp
 					XNEXT(pointer);
- 8049502:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 80494ff:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 					type = NONE;
- 8049506:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
- 804950d:	e9 d5 01 00 00       	jmp    80496e7 <vfprintf+0x295>
+ 8049503:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 804950a:	e9 c9 01 00 00       	jmp    80496d8 <vfprintf+0x286>
 					continue;
 				}
-				char digits[100];
+				char digits[15];
 				int di=0;
- 8049512:	c7 45 dc 00 00 00 00 	movl   $0x0,-0x24(%ebp)
+ 804950f:	c7 45 dc 00 00 00 00 	movl   $0x0,-0x24(%ebp)
 				while(x>=1){
- 8049519:	eb 30                	jmp    804954b <vfprintf+0xf9>
+ 8049516:	eb 2d                	jmp    8049545 <vfprintf+0xf3>
 					int d=(x%16);
- 804951b:	8b 45 e0             	mov    -0x20(%ebp),%eax
- 804951e:	83 e0 0f             	and    $0xf,%eax
- 8049521:	89 45 d8             	mov    %eax,-0x28(%ebp)
+ 8049518:	8b 45 e0             	mov    -0x20(%ebp),%eax
+ 804951b:	83 e0 0f             	and    $0xf,%eax
+ 804951e:	89 45 d8             	mov    %eax,-0x28(%ebp)
 					if(d>=10){
- 8049524:	83 7d d8 09          	cmpl   $0x9,-0x28(%ebp)
- 8049528:	7e 04                	jle    804952e <vfprintf+0xdc>
+ 8049521:	83 7d d8 09          	cmpl   $0x9,-0x28(%ebp)
+ 8049525:	7e 04                	jle    804952b <vfprintf+0xd9>
 						d+='a'-'0'-10;
- 804952a:	83 45 d8 27          	addl   $0x27,-0x28(%ebp)
+ 8049527:	83 45 d8 27          	addl   $0x27,-0x28(%ebp)
 					}
 					digits[di] = '0'+d;
- 804952e:	8b 45 d8             	mov    -0x28(%ebp),%eax
- 8049531:	83 c0 30             	add    $0x30,%eax
- 8049534:	89 c1                	mov    %eax,%ecx
- 8049536:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
- 804953c:	8b 45 dc             	mov    -0x24(%ebp),%eax
- 804953f:	01 d0                	add    %edx,%eax
- 8049541:	88 08                	mov    %cl,(%eax)
+ 804952b:	8b 45 d8             	mov    -0x28(%ebp),%eax
+ 804952e:	83 c0 30             	add    $0x30,%eax
+ 8049531:	89 c1                	mov    %eax,%ecx
+ 8049533:	8d 55 c1             	lea    -0x3f(%ebp),%edx
+ 8049536:	8b 45 dc             	mov    -0x24(%ebp),%eax
+ 8049539:	01 d0                	add    %edx,%eax
+ 804953b:	88 08                	mov    %cl,(%eax)
 					x>>=4;
- 8049543:	c1 6d e0 04          	shrl   $0x4,-0x20(%ebp)
+ 804953d:	c1 6d e0 04          	shrl   $0x4,-0x20(%ebp)
 					di ++;
- 8049547:	83 45 dc 01          	addl   $0x1,-0x24(%ebp)
+ 8049541:	83 45 dc 01          	addl   $0x1,-0x24(%ebp)
 					type = NONE;
 					continue;
 				}
-				char digits[100];
+				char digits[15];
 				int di=0;
 				while(x>=1){
- 804954b:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
- 804954f:	75 ca                	jne    804951b <vfprintf+0xc9>
+ 8049545:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
+ 8049549:	75 cd                	jne    8049518 <vfprintf+0xc6>
 					}
 					digits[di] = '0'+d;
 					x>>=4;
 					di ++;
 				};
 				di--;
- 8049551:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
+ 804954b:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
 				for(;di>=0;di--){
- 8049555:	eb 21                	jmp    8049578 <vfprintf+0x126>
+ 804954f:	eb 1e                	jmp    804956f <vfprintf+0x11d>
 					printer(digits[di]);
- 8049557:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
- 804955d:	8b 45 dc             	mov    -0x24(%ebp),%eax
- 8049560:	01 d0                	add    %edx,%eax
- 8049562:	0f b6 00             	movzbl (%eax),%eax
- 8049565:	0f be c0             	movsbl %al,%eax
- 8049568:	83 ec 0c             	sub    $0xc,%esp
- 804956b:	50                   	push   %eax
- 804956c:	8b 45 08             	mov    0x8(%ebp),%eax
- 804956f:	ff d0                	call   *%eax
- 8049571:	83 c4 10             	add    $0x10,%esp
+ 8049551:	8d 55 c1             	lea    -0x3f(%ebp),%edx
+ 8049554:	8b 45 dc             	mov    -0x24(%ebp),%eax
+ 8049557:	01 d0                	add    %edx,%eax
+ 8049559:	0f b6 00             	movzbl (%eax),%eax
+ 804955c:	0f be c0             	movsbl %al,%eax
+ 804955f:	83 ec 0c             	sub    $0xc,%esp
+ 8049562:	50                   	push   %eax
+ 8049563:	8b 45 08             	mov    0x8(%ebp),%eax
+ 8049566:	ff d0                	call   *%eax
+ 8049568:	83 c4 10             	add    $0x10,%esp
 					digits[di] = '0'+d;
 					x>>=4;
 					di ++;
 				};
 				di--;
 				for(;di>=0;di--){
- 8049574:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
- 8049578:	83 7d dc 00          	cmpl   $0x0,-0x24(%ebp)
- 804957c:	79 d9                	jns    8049557 <vfprintf+0x105>
+ 804956b:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
+ 804956f:	83 7d dc 00          	cmpl   $0x0,-0x24(%ebp)
+ 8049573:	79 dc                	jns    8049551 <vfprintf+0xff>
 					printer(digits[di]);
 				}
 				XNEXT(pointer);
- 804957e:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 8049575:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
- 8049582:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+ 8049579:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
+			//sys_printch(cur);
+			//sys_printch('3');
 			if(cur == 'd'){
- 8049586:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8049589:	0f b6 00             	movzbl (%eax),%eax
- 804958c:	3c 64                	cmp    $0x64,%al
- 804958e:	0f 85 08 01 00 00    	jne    804969c <vfprintf+0x24a>
+ 804957d:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049580:	0f b6 00             	movzbl (%eax),%eax
+ 8049583:	3c 64                	cmp    $0x64,%al
+ 8049585:	0f 85 02 01 00 00    	jne    804968d <vfprintf+0x23b>
+				//sys_printch('6');
+				//sys_printch('e');
 				int x = XGET(pointer, int);
- 8049594:	8b 45 e8             	mov    -0x18(%ebp),%eax
- 8049597:	8b 00                	mov    (%eax),%eax
- 8049599:	89 45 d4             	mov    %eax,-0x2c(%ebp)
+ 804958b:	8b 45 e8             	mov    -0x18(%ebp),%eax
+ 804958e:	8b 00                	mov    (%eax),%eax
+ 8049590:	89 45 d4             	mov    %eax,-0x2c(%ebp)
 				if(x==-2147483648){
- 804959c:	81 7d d4 00 00 00 80 	cmpl   $0x80000000,-0x2c(%ebp)
- 80495a3:	75 23                	jne    80495c8 <vfprintf+0x176>
+ 8049593:	81 7d d4 00 00 00 80 	cmpl   $0x80000000,-0x2c(%ebp)
+ 804959a:	75 23                	jne    80495bf <vfprintf+0x16d>
 					printp(printer, "-2147483648");
- 80495a5:	83 ec 08             	sub    $0x8,%esp
- 80495a8:	68 07 a0 04 08       	push   $0x804a007
- 80495ad:	ff 75 08             	pushl  0x8(%ebp)
- 80495b0:	e8 6a fe ff ff       	call   804941f <printp>
- 80495b5:	83 c4 10             	add    $0x10,%esp
+ 804959c:	83 ec 08             	sub    $0x8,%esp
+ 804959f:	68 07 a0 04 08       	push   $0x804a007
+ 80495a4:	ff 75 08             	pushl  0x8(%ebp)
+ 80495a7:	e8 73 fe ff ff       	call   804941f <printp>
+ 80495ac:	83 c4 10             	add    $0x10,%esp
 					XNEXT(pointer);
- 80495b8:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 80495af:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 					type = NONE;
- 80495bc:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 80495b3:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 					continue;
- 80495c3:	e9 1f 01 00 00       	jmp    80496e7 <vfprintf+0x295>
+ 80495ba:	e9 19 01 00 00       	jmp    80496d8 <vfprintf+0x286>
 				}
 				if(x==0){
- 80495c8:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
- 80495cc:	75 1e                	jne    80495ec <vfprintf+0x19a>
+ 80495bf:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+ 80495c3:	75 1e                	jne    80495e3 <vfprintf+0x191>
 					printer('0');
- 80495ce:	83 ec 0c             	sub    $0xc,%esp
- 80495d1:	6a 30                	push   $0x30
- 80495d3:	8b 45 08             	mov    0x8(%ebp),%eax
- 80495d6:	ff d0                	call   *%eax
- 80495d8:	83 c4 10             	add    $0x10,%esp
+ 80495c5:	83 ec 0c             	sub    $0xc,%esp
+ 80495c8:	6a 30                	push   $0x30
+ 80495ca:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80495cd:	ff d0                	call   *%eax
+ 80495cf:	83 c4 10             	add    $0x10,%esp
 					XNEXT(pointer);
- 80495db:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 80495d2:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 					type = NONE;
- 80495df:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 80495d6:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 					continue;
- 80495e6:	90                   	nop
- 80495e7:	e9 fb 00 00 00       	jmp    80496e7 <vfprintf+0x295>
+ 80495dd:	90                   	nop
+ 80495de:	e9 f5 00 00 00       	jmp    80496d8 <vfprintf+0x286>
 				}
 				if(x<0){
- 80495ec:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
- 80495f0:	79 10                	jns    8049602 <vfprintf+0x1b0>
+ 80495e3:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+ 80495e7:	79 10                	jns    80495f9 <vfprintf+0x1a7>
 					printer('-');
- 80495f2:	83 ec 0c             	sub    $0xc,%esp
- 80495f5:	6a 2d                	push   $0x2d
- 80495f7:	8b 45 08             	mov    0x8(%ebp),%eax
- 80495fa:	ff d0                	call   *%eax
- 80495fc:	83 c4 10             	add    $0x10,%esp
+ 80495e9:	83 ec 0c             	sub    $0xc,%esp
+ 80495ec:	6a 2d                	push   $0x2d
+ 80495ee:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80495f1:	ff d0                	call   *%eax
+ 80495f3:	83 c4 10             	add    $0x10,%esp
 					x=-x;
- 80495ff:	f7 5d d4             	negl   -0x2c(%ebp)
+ 80495f6:	f7 5d d4             	negl   -0x2c(%ebp)
 				}
-				char digits[100];
+				char digits[15];
 				int di=0;
- 8049602:	c7 45 d0 00 00 00 00 	movl   $0x0,-0x30(%ebp)
+ 80495f9:	c7 45 d0 00 00 00 00 	movl   $0x0,-0x30(%ebp)
 				while(x>=1){
- 8049609:	eb 56                	jmp    8049661 <vfprintf+0x20f>
+ 8049600:	eb 53                	jmp    8049655 <vfprintf+0x203>
 					digits[di] = '0'+(x%10);
- 804960b:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
- 804960e:	ba 67 66 66 66       	mov    $0x66666667,%edx
- 8049613:	89 c8                	mov    %ecx,%eax
- 8049615:	f7 ea                	imul   %edx
- 8049617:	c1 fa 02             	sar    $0x2,%edx
- 804961a:	89 c8                	mov    %ecx,%eax
- 804961c:	c1 f8 1f             	sar    $0x1f,%eax
- 804961f:	29 c2                	sub    %eax,%edx
- 8049621:	89 d0                	mov    %edx,%eax
- 8049623:	c1 e0 02             	shl    $0x2,%eax
- 8049626:	01 d0                	add    %edx,%eax
- 8049628:	01 c0                	add    %eax,%eax
- 804962a:	29 c1                	sub    %eax,%ecx
- 804962c:	89 ca                	mov    %ecx,%edx
- 804962e:	89 d0                	mov    %edx,%eax
- 8049630:	83 c0 30             	add    $0x30,%eax
- 8049633:	89 c1                	mov    %eax,%ecx
- 8049635:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
- 804963b:	8b 45 d0             	mov    -0x30(%ebp),%eax
- 804963e:	01 d0                	add    %edx,%eax
- 8049640:	88 08                	mov    %cl,(%eax)
+ 8049602:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
+ 8049605:	ba 67 66 66 66       	mov    $0x66666667,%edx
+ 804960a:	89 c8                	mov    %ecx,%eax
+ 804960c:	f7 ea                	imul   %edx
+ 804960e:	c1 fa 02             	sar    $0x2,%edx
+ 8049611:	89 c8                	mov    %ecx,%eax
+ 8049613:	c1 f8 1f             	sar    $0x1f,%eax
+ 8049616:	29 c2                	sub    %eax,%edx
+ 8049618:	89 d0                	mov    %edx,%eax
+ 804961a:	c1 e0 02             	shl    $0x2,%eax
+ 804961d:	01 d0                	add    %edx,%eax
+ 804961f:	01 c0                	add    %eax,%eax
+ 8049621:	29 c1                	sub    %eax,%ecx
+ 8049623:	89 ca                	mov    %ecx,%edx
+ 8049625:	89 d0                	mov    %edx,%eax
+ 8049627:	83 c0 30             	add    $0x30,%eax
+ 804962a:	89 c1                	mov    %eax,%ecx
+ 804962c:	8d 55 b2             	lea    -0x4e(%ebp),%edx
+ 804962f:	8b 45 d0             	mov    -0x30(%ebp),%eax
+ 8049632:	01 d0                	add    %edx,%eax
+ 8049634:	88 08                	mov    %cl,(%eax)
 					x/=10;
- 8049642:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
- 8049645:	ba 67 66 66 66       	mov    $0x66666667,%edx
- 804964a:	89 c8                	mov    %ecx,%eax
- 804964c:	f7 ea                	imul   %edx
- 804964e:	c1 fa 02             	sar    $0x2,%edx
- 8049651:	89 c8                	mov    %ecx,%eax
- 8049653:	c1 f8 1f             	sar    $0x1f,%eax
- 8049656:	29 c2                	sub    %eax,%edx
- 8049658:	89 d0                	mov    %edx,%eax
- 804965a:	89 45 d4             	mov    %eax,-0x2c(%ebp)
+ 8049636:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
+ 8049639:	ba 67 66 66 66       	mov    $0x66666667,%edx
+ 804963e:	89 c8                	mov    %ecx,%eax
+ 8049640:	f7 ea                	imul   %edx
+ 8049642:	c1 fa 02             	sar    $0x2,%edx
+ 8049645:	89 c8                	mov    %ecx,%eax
+ 8049647:	c1 f8 1f             	sar    $0x1f,%eax
+ 804964a:	29 c2                	sub    %eax,%edx
+ 804964c:	89 d0                	mov    %edx,%eax
+ 804964e:	89 45 d4             	mov    %eax,-0x2c(%ebp)
 					di++;
- 804965d:	83 45 d0 01          	addl   $0x1,-0x30(%ebp)
+ 8049651:	83 45 d0 01          	addl   $0x1,-0x30(%ebp)
 					printer('-');
 					x=-x;
 				}
-				char digits[100];
+				char digits[15];
 				int di=0;
 				while(x>=1){
- 8049661:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
- 8049665:	7f a4                	jg     804960b <vfprintf+0x1b9>
+ 8049655:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+ 8049659:	7f a7                	jg     8049602 <vfprintf+0x1b0>
 					digits[di] = '0'+(x%10);
 					x/=10;
 					di++;
 				};
 				di--;
- 8049667:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
+ 804965b:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
 				for(;di>=0;di--){
- 804966b:	eb 21                	jmp    804968e <vfprintf+0x23c>
+ 804965f:	eb 1e                	jmp    804967f <vfprintf+0x22d>
 					printer(digits[di]);
- 804966d:	8d 95 6c ff ff ff    	lea    -0x94(%ebp),%edx
- 8049673:	8b 45 d0             	mov    -0x30(%ebp),%eax
- 8049676:	01 d0                	add    %edx,%eax
- 8049678:	0f b6 00             	movzbl (%eax),%eax
- 804967b:	0f be c0             	movsbl %al,%eax
- 804967e:	83 ec 0c             	sub    $0xc,%esp
- 8049681:	50                   	push   %eax
- 8049682:	8b 45 08             	mov    0x8(%ebp),%eax
- 8049685:	ff d0                	call   *%eax
- 8049687:	83 c4 10             	add    $0x10,%esp
+ 8049661:	8d 55 b2             	lea    -0x4e(%ebp),%edx
+ 8049664:	8b 45 d0             	mov    -0x30(%ebp),%eax
+ 8049667:	01 d0                	add    %edx,%eax
+ 8049669:	0f b6 00             	movzbl (%eax),%eax
+ 804966c:	0f be c0             	movsbl %al,%eax
+ 804966f:	83 ec 0c             	sub    $0xc,%esp
+ 8049672:	50                   	push   %eax
+ 8049673:	8b 45 08             	mov    0x8(%ebp),%eax
+ 8049676:	ff d0                	call   *%eax
+ 8049678:	83 c4 10             	add    $0x10,%esp
 					digits[di] = '0'+(x%10);
 					x/=10;
 					di++;
 				};
 				di--;
 				for(;di>=0;di--){
- 804968a:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
- 804968e:	83 7d d0 00          	cmpl   $0x0,-0x30(%ebp)
- 8049692:	79 d9                	jns    804966d <vfprintf+0x21b>
+ 804967b:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
+ 804967f:	83 7d d0 00          	cmpl   $0x0,-0x30(%ebp)
+ 8049683:	79 dc                	jns    8049661 <vfprintf+0x20f>
 					printer(digits[di]);
 				}
 				XNEXT(pointer);
- 8049694:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 8049685:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
- 8049698:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+ 8049689:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
 			if(cur == 'c'){
- 804969c:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 804969f:	0f b6 00             	movzbl (%eax),%eax
- 80496a2:	3c 63                	cmp    $0x63,%al
- 80496a4:	75 1d                	jne    80496c3 <vfprintf+0x271>
+ 804968d:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049690:	0f b6 00             	movzbl (%eax),%eax
+ 8049693:	3c 63                	cmp    $0x63,%al
+ 8049695:	75 1d                	jne    80496b4 <vfprintf+0x262>
 				//char* pointer = (char*)args;
 				//printer(*pointer);
 				printer(XGET(pointer, char));
- 80496a6:	8b 45 e8             	mov    -0x18(%ebp),%eax
- 80496a9:	0f b6 00             	movzbl (%eax),%eax
- 80496ac:	0f be c0             	movsbl %al,%eax
- 80496af:	83 ec 0c             	sub    $0xc,%esp
- 80496b2:	50                   	push   %eax
- 80496b3:	8b 45 08             	mov    0x8(%ebp),%eax
- 80496b6:	ff d0                	call   *%eax
- 80496b8:	83 c4 10             	add    $0x10,%esp
+ 8049697:	8b 45 e8             	mov    -0x18(%ebp),%eax
+ 804969a:	0f b6 00             	movzbl (%eax),%eax
+ 804969d:	0f be c0             	movsbl %al,%eax
+ 80496a0:	83 ec 0c             	sub    $0xc,%esp
+ 80496a3:	50                   	push   %eax
+ 80496a4:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80496a7:	ff d0                	call   *%eax
+ 80496a9:	83 c4 10             	add    $0x10,%esp
 				XNEXT(pointer);
- 80496bb:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 80496ac:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
- 80496bf:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+ 80496b0:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
 			type = NONE;
- 80496c3:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 80496b4:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 			continue;
- 80496ca:	eb 1b                	jmp    80496e7 <vfprintf+0x295>
+ 80496bb:	eb 1b                	jmp    80496d8 <vfprintf+0x286>
 		}
 		if(type == NONE){
- 80496cc:	83 7d ec 00          	cmpl   $0x0,-0x14(%ebp)
- 80496d0:	75 15                	jne    80496e7 <vfprintf+0x295>
+ 80496bd:	83 7d ec 00          	cmpl   $0x0,-0x14(%ebp)
+ 80496c1:	75 15                	jne    80496d8 <vfprintf+0x286>
 			printer(cur);
- 80496d2:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80496d5:	0f b6 00             	movzbl (%eax),%eax
- 80496d8:	0f be c0             	movsbl %al,%eax
- 80496db:	83 ec 0c             	sub    $0xc,%esp
- 80496de:	50                   	push   %eax
- 80496df:	8b 45 08             	mov    0x8(%ebp),%eax
- 80496e2:	ff d0                	call   *%eax
- 80496e4:	83 c4 10             	add    $0x10,%esp
+ 80496c3:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80496c6:	0f b6 00             	movzbl (%eax),%eax
+ 80496c9:	0f be c0             	movsbl %al,%eax
+ 80496cc:	83 ec 0c             	sub    $0xc,%esp
+ 80496cf:	50                   	push   %eax
+ 80496d0:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80496d3:	ff d0                	call   *%eax
+ 80496d5:	83 c4 10             	add    $0x10,%esp
 	const char *str = ctl;
 	int32_t i = 0;
 	int32_t type = NONE;
 	void** pointer = args;
 	//char last='\0';
 	for(;*str != '\0'; str ++){
- 80496e7:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
- 80496eb:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80496ee:	0f b6 00             	movzbl (%eax),%eax
- 80496f1:	84 c0                	test   %al,%al
- 80496f3:	0f 85 81 fd ff ff    	jne    804947a <vfprintf+0x28>
+ 80496d8:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+ 80496dc:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80496df:	0f b6 00             	movzbl (%eax),%eax
+ 80496e2:	84 c0                	test   %al,%al
+ 80496e4:	0f 85 8d fd ff ff    	jne    8049477 <vfprintf+0x25>
 		if(type == NONE){
 			printer(cur);
 		}
 		//last = cur;
 	}
 }
- 80496f9:	c9                   	leave  
- 80496fa:	c3                   	ret    
+ 80496ea:	c9                   	leave  
+ 80496eb:	c3                   	ret    
 
-080496fb <printf>:
+080496ec <printf>:
 
 void __attribute__((__noinline__)) 
 printf(const char *ctl, ...) {
- 80496fb:	55                   	push   %ebp
- 80496fc:	89 e5                	mov    %esp,%ebp
- 80496fe:	83 ec 18             	sub    $0x18,%esp
+ 80496ec:	55                   	push   %ebp
+ 80496ed:	89 e5                	mov    %esp,%ebp
+ 80496ef:	83 ec 18             	sub    $0x18,%esp
 	void **args = (void **)&ctl + 1;
- 8049701:	8d 45 0c             	lea    0xc(%ebp),%eax
- 8049704:	89 45 f4             	mov    %eax,-0xc(%ebp)
+ 80496f2:	8d 45 0c             	lea    0xc(%ebp),%eax
+ 80496f5:	89 45 f4             	mov    %eax,-0xc(%ebp)
+	//sys_printch('e');
 	vfprintf(sys_printch, ctl, args);
- 8049707:	8b 45 08             	mov    0x8(%ebp),%eax
- 804970a:	83 ec 04             	sub    $0x4,%esp
- 804970d:	ff 75 f4             	pushl  -0xc(%ebp)
- 8049710:	50                   	push   %eax
- 8049711:	68 ff 93 04 08       	push   $0x80493ff
- 8049716:	e8 37 fd ff ff       	call   8049452 <vfprintf>
- 804971b:	83 c4 10             	add    $0x10,%esp
+ 80496f8:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80496fb:	83 ec 04             	sub    $0x4,%esp
+ 80496fe:	ff 75 f4             	pushl  -0xc(%ebp)
+ 8049701:	50                   	push   %eax
+ 8049702:	68 ff 93 04 08       	push   $0x80493ff
+ 8049707:	e8 46 fd ff ff       	call   8049452 <vfprintf>
+ 804970c:	83 c4 10             	add    $0x10,%esp
 }
- 804971e:	c9                   	leave  
- 804971f:	c3                   	ret    
+ 804970f:	c9                   	leave  
+ 8049710:	c3                   	ret    
