@@ -91,11 +91,15 @@ $(OBJ_BOOT_DIR)/%.o: $(BOOT_DIR)/%.c
 
 $(KERNEL): $(LD_SCRIPT)
 $(KERNEL): $(KERNEL_O) $(LIB_O)
-	$(LD) -e _start -Ttext=0x100000 -m elf_i386 -T $(LD_SCRIPT) -nostdlib -o $@ $^ $(shell $(CC) $(KERNEL_CFLAGS) -print-libgcc-file-name)
+	$(LD) -e _start -m elf_i386 -T $(LD_SCRIPT) -nostdlib -o $@ $^ $(shell $(CC) $(KERNEL_CFLAGS) -print-libgcc-file-name)
+	cp $@ temp.o
+	objdump -S temp.o > kernel.S
 	./fill.sh $@
 
 $(GAME): $(GAME_O) $(LIB_O)
-	$(LD) -e main -Ttext=0x200000 -m elf_i386 -nostdlib -o $@ $^ $(shell $(CC) $(GAME_CFLAGS) -print-libgcc-file-name)
+	$(LD) -e main -m elf_i386 -nostdlib -o $@ $^ $(shell $(CC) $(GAME_CFLAGS) -print-libgcc-file-name)
+	cp $@ temp.o
+	objdump -S temp.o > game.S
 
 $(OBJ_LIB_DIR)/%.o : $(LIB_DIR)/%.c
 	@mkdir -p $(OBJ_LIB_DIR)

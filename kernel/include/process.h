@@ -1,14 +1,17 @@
 #ifndef __PROCESS_H__
 #define __PROCESS_H__
-
-#define USTACKTOP 0x300000
-#define KSTACKTOP 0x200000
-#define KSTACKSIZE 4096
+#include "inc/memlayout.h"
+#define NPUSTACKTOP 0x300000
+#define NPKSTACKTOP 0x200000
+#define NPKSTACKSIZE 4096
 #define PCBPOOLMAX 100
 typedef struct PCB {
-	uint32_t used;
-	void *tf;
-	uint8_t kstack[KSTACKSIZE];
+	struct{
+		uint32_t used;
+		void *tf;
+		pde_t *pgdir;
+	};
+	uint8_t kstack[NPKSTACKSIZE];
 } PCB;
 
 extern PCB *current;

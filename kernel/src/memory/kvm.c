@@ -3,6 +3,7 @@
 #include "process.h"
 #include "memory.h"
 #include "common.h"
+#include "pmap.h"
 //#include "string.h"
 
 /* This source file involves some hardware details. Please refer to 
@@ -35,42 +36,7 @@ PTE* get_kptable() {
 /* Build a page table for the kernel */
 void
 init_page(void) {
-	CR0 cr0;
-	CR3 cr3;
-	PDE *pdir = (PDE *)va_to_pa(kpdir);
-	PTE *ptable = (PTE *)va_to_pa(kptable);
-	uint32_t pdir_idx, ptable_idx, pframe_idx;
-
-
-	for (pdir_idx = 0; pdir_idx < NR_PDE; pdir_idx ++) {
-		make_invalid_pde(&pdir[pdir_idx]);
-	}
-
-	pframe_idx = 0;
-	for (pdir_idx = 0; pdir_idx < PHY_MEM / PD_SIZE; pdir_idx ++) {
-		make_pde(&pdir[pdir_idx], ptable);
-		make_pde(&pdir[pdir_idx + KOFFSET / PD_SIZE], ptable);
-		for (ptable_idx = 0; ptable_idx < NR_PTE; ptable_idx ++) {
-			make_pte(ptable, (void*)(pframe_idx << 12));
-			pframe_idx ++;
-			ptable ++;
-		}
-	}
-
-	/* make CR3 to be the entry of page directory */
-	cr3.val = 0;
-	cr3.page_directory_base = ((uint32_t)pdir) >> 12;
-	write_cr3(&cr3);
-
-	/* set PG bit in CR0 to enable paging */
-	cr0.val = read_cr0();
-	cr0.paging = 1;
-	
-	//write_cr0(&cr0);
-	asm volatile("movl %0, %%cr0" : : "r"(cr0.val));
-	/* Now we can access global variables! 
-	 * Store CR3 in the global variable for future use. */
-	kcr3.val = cr3.val;
+	page_init();
 }
 
 /* One TSS will be enough for all processes in ring 3. It will be used in Lab3. */
@@ -146,10 +112,16 @@ void enter_pcb(PCB* pcb)
 {
 	set_tss_esp0((uint32_t)pcb->kstack);
 	struct TrapFrame *tf = pcb->tf;
-	asm volatile("mov %0, %%ds" : : "r"(tf->ds));
-	asm volatile("mov %0, %%es" : : "r"(tf->es));
-	asm volatile("mov %0, %%fs" : : "r"(tf->fs));
-	asm volatile("mov %0, %%gs" : : "r"(tf->gs));
+	//disable_interrupt();
+	//asm volatile("cli");
+	//asm volatile("mov %0, %%ds" : : "r"(tf->ds));
+	printk("0\n");
+	//asm volatile("mov %0, %%es" : : "r"(tf->es));
+	printk("0\n");
+	//asm volatile("mov %0, %%fs" : : "r"(tf->fs));
+	printk("0\n");
+	//asm volatile("mov %0, %%gs" : : "r"(tf->gs));
+	printk("0\n");
 	asm volatile("pushl %0" : : "r"((uint32_t)tf->ss));
 	asm volatile("pushl %0" : : "r"(tf->esp));
 	asm volatile("pushl %0" : : "r"(tf->eflags));

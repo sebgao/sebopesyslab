@@ -4,6 +4,7 @@
 #include "inc/mmu.h"
 #include "inc/types.h"
 #include "inc/memlayout.h"
+#include "pmap.h"
 
 PCB PCBPool[PCBPOOLMAX];
 struct TrapFrame tfPool[PCBPOOLMAX];
@@ -45,6 +46,14 @@ PCB* pcb_create()
 	}
 	PCB *p = &PCBPool[i];
 	p->tf = &tfPool[i];
+
+	struct PageInfo *pp = page_alloc(ALLOC_ZERO);
+	//printk("0x%x\n", page2kva(pp));
+	if (pp == NULL) return NULL;
+	p->pgdir = page2kva(pp);
+	//printk("%x %x\n", p->pgdir, pp);
+	pp->pp_ref ++;
+	memcpy(p->pgdir, kern_pgdir, PGSIZE);
 	return p;
 }
 
