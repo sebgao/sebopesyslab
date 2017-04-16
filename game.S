@@ -782,9 +782,9 @@ int main(){
 			if(timestamp%4==0)
 				dreamOf100HZ(timestamp>>2);
 			#endif
-			curtime++;
+			curtime+=2;
  8048663:	a1 20 ba 04 08       	mov    0x804ba20,%eax
- 8048668:	83 c0 01             	add    $0x1,%eax
+ 8048668:	83 c0 02             	add    $0x2,%eax
  804866b:	a3 20 ba 04 08       	mov    %eax,0x804ba20
 	//printk("6\n");
 	while(1){

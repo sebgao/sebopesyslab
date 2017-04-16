@@ -26,6 +26,20 @@ static pte_t kpgtable[PHY_MEM / PGSIZE];
 // Pages are reference counted, and free pages are kept on a linked list.
 // --------------------------------------------------------------
 
+void mm_alloc(pde_t *pgdir, uint32_t va, size_t len)
+{
+  struct PageInfo *p;
+  uint32_t va_start = ROUNDDOWN(va, PGSIZE);
+  uint32_t va_end = ROUNDUP(va+len, PGSIZE);
+  int i;
+
+  for (i = va_start; i < va_end; i += PGSIZE) {
+    p = page_alloc(0);
+    //assert(p != NULL);
+    page_insert(pgdir, p, (void*)i, PTE_W | PTE_P | PTE_U);
+  }
+}
+
 void
 boot_map_region(pde_t*, uintptr_t, unsigned long, physaddr_t, int);
 

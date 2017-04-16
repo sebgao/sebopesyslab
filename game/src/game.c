@@ -47,7 +47,7 @@ int main(){
 			if(timestamp%4==0)
 				dreamOf100HZ(timestamp>>2);
 			#endif
-			curtime++;
+			curtime+=2;
 		}
 		
 

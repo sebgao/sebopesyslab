@@ -62,7 +62,7 @@ static void set_tss(SegDesc *ptr) {
 	ptr->base_31_24  = base >> 24;
 }
 
-static void set_tss_esp0(uint32_t esp) {
+void set_tss_esp0(uint32_t esp) {
 	tss.esp0 = esp;
 }
 
@@ -110,7 +110,10 @@ init_segment(void) {
 
 void enter_pcb(PCB* pcb)
 {
-	set_tss_esp0((uint32_t)pcb->kstack);
+	lcr3(PADDR(pcb->pgdir));
+	//printk("2\n");
+	set_tss_esp0((uint32_t)(pcb->kstacktop));
+	//printk("3\n");
 	struct TrapFrame *tf = pcb->tf;
 	//disable_interrupt();
 	//asm volatile("cli");
@@ -128,4 +131,14 @@ void enter_pcb(PCB* pcb)
 	asm volatile("pushl %0" : : "r"((uint32_t)tf->cs));
 	asm volatile("pushl %0" : : "r"(tf->eip));
 	asm volatile("iret"); 
+}
+void switch_proc();
+extern PCB* current;
+void scheduler_switch(PCB* pcb){
+	current = pcb;
+	lcr3(PADDR(pcb->pgdir));
+	set_tss_esp0((uint32_t)(pcb->kstacktop));
+	asm volatile("mov %0, %%esp" : : "r"(pcb->tf));
+	asm volatile("jmp %0" : : "r"(switch_proc));
+
 }

@@ -41,7 +41,7 @@
 .globl vec13;   vec13:  pushl $0;  pushl   $13; jmp asm_do_irq
 .globl vec14;   vec14:  pushl $0;  pushl   $14; jmp asm_do_irq
 
-.globl vecsys; vecsys:  pushl $0;  pushl $0x80; jmp asm_do_irq
+.globl vecsys; vecsys: cli;  pushl $0;  pushl $0x80; jmp asm_do_irq
 
 .globl irq0;     irq0:  pushl $0;  pushl $1000; jmp asm_do_irq
 .globl irq1;     irq1:  pushl $0;  pushl $1001; jmp asm_do_irq
@@ -51,7 +51,7 @@
 
 .globl asm_do_irq
 .extern irq_handle
-
+.globl switch_proc
 
 asm_do_irq:
   cli
@@ -68,8 +68,8 @@ asm_do_irq:
   pushl %esp			# ???
   call irq_handle
   addl $4, %esp
+switch_proc:
   popal
-  
   popl %gs
   popl %fs
   popl %es

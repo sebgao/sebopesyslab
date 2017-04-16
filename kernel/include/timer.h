@@ -5,7 +5,7 @@
 #define PORT_CH_0 0x40
 #define PORT_CMD 0x43
 #define PIT_FREQUENCE 1193182
-#define HZ 100
+#define HZ 200
 
 union CmdByte {
   struct {
