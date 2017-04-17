@@ -2,17 +2,29 @@
 #include "serial.h"
 #include "video.h"
 #include "keyboard.h"
-
+#include "process.h"
 #include "lib/syscall.h"
 
 extern timer_handler timer_handlers[TIMER_HANDLERS_MAX];
 extern uint32_t tick();
+
 
 void do_syscall(struct TrapFrame *tf) {
 	//disable_interrupt();
 	//printk("%d\n", tf->cs&0x3);
 	int i;
 	switch(tf->eax) {
+		case SYS_PID:
+			tf->eax = current->pid;
+		break;
+		case SYS_SLEEP:
+			//printk("SLEEPING");
+			current->ts = SLEEPING;
+			current->timeslice = tf->ebx;
+		break;
+		case SYS_HANDOUT:
+			current->ts = STOP;
+		break;
 		case SYS_PRINT_CHAR:
 			serial_printc(tf->ebx);
 			//printk("1\n");

@@ -3,7 +3,6 @@
 #include "lib/syscall.h"
 
 #include "process.h"
-extern PCB* current;
 //static void (*do_timer)(void);
 extern void press_key(int code);
 
@@ -27,7 +26,9 @@ void do_syscall(struct TrapFrame *);
  * 请仔细理解这段程序的含义，这些内容将在后续的实验中被反复使用。 */
 void switch_proc();
 void irq_handle(struct TrapFrame *tf) {
+	//printk("eh\n");
 	current->tf = tf;
+	//printk("ha\n");
 	//tf->esp = (uint32_t)tf;
 	//uint32_t esp;
 	//asm volatile("mov %%esp, %0" : : "m"(esp));
@@ -61,6 +62,11 @@ void irq_handle(struct TrapFrame *tf) {
 		press_key(code);
 	} else {
 		
+	}
+	if((tf->irq == 0x80 && (tf->eax == SYS_HANDOUT || tf->eax == SYS_SLEEP))){
+		//printk("handout");
+		//current->ts = STOP;
+		do_scheduler();
 	}
 }
 

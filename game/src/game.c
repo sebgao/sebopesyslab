@@ -49,6 +49,7 @@ int main(){
 			#endif
 			curtime+=2;
 		}
+		//sys_handout();
 		
 
 		//enable_interrupt();
@@ -243,6 +244,7 @@ void dreamOf100HZ(int timestamp){
 		drawMonster();
 		drawCirc(x, y, size, 3);
 		drawNumber(score, 0, 180, 1, 7);
+		drawNumber(sys_pid(), 50, 180, 1, 7);
 		drawStage();
 		
 		

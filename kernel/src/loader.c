@@ -9,8 +9,9 @@
 #include "inc/memlayout.h"
 #include "pmap.h"
 
+#define ELFADDR 0x0
 uint8_t elf_t[1000];
-#define elf   ((struct ELFHeader *) elf_t)
+#define elf   ((struct ELFHeader *) ELFADDR)
 
 
 uint32_t entry;
@@ -19,7 +20,9 @@ void loader(PCB* pcb, uint32_t offset){
   //102400
   struct ProgramHeader *ph, *eph;
   unsigned char* pa, *i;
+  lcr3(PADDR(pcb -> pgdir));
 
+  mm_alloc(pcb->pgdir, ELFADDR, 0x1000);
   readseg((unsigned char*)elf, 8*SECTSIZE, offset);
   //printk("b\n");
   //printk("Magic Assertion: %x\n", (elf->magic == 0x464C457FU));
@@ -29,7 +32,7 @@ void loader(PCB* pcb, uint32_t offset){
   eph = ph + elf->phnum;
   //uint32_t p = PADDR(pcb -> pgdir);
   //printk("%x\n", p);
-  lcr3(PADDR(pcb -> pgdir));
+  
   
   //printk("c\n");
 
@@ -49,7 +52,7 @@ void loader(PCB* pcb, uint32_t offset){
   //init_pcb(pcb, entry+4096, entry);
   //printf("%x\n", USTACKTOP-USTACKSIZE);
   mm_alloc(pcb->pgdir, USTACKTOP-USTACKSIZE, USTACKSIZE);
-  init_pcb(pcb, USTACKTOP-8, entry, 3);
+  init_pcb(pcb, USTACKTOP-0x1FF, entry, 3);
   //printk("%x\n", *((uint32_t*)entry));
   lcr3(PADDR(kern_pgdir));
 
@@ -62,8 +65,8 @@ void empty_loader(PCB* pcb, void (*ptr)(void)){
 
   lcr3(PADDR(pcb -> pgdir));
   entry = (uint32_t)ptr;
-  mm_alloc(pcb->pgdir, USTACKTOP-USTACKSIZE, USTACKSIZE);
-  init_pcb(pcb, USTACKTOP-8, entry, 0);
+  //mm_alloc(pcb->pgdir, USTACKTOP-USTACKSIZE, USTACKSIZE);
+  init_pcb(pcb, (uint32_t)pcb->kstack0top, entry, 0);
   lcr3(PADDR(kern_pgdir));
 
 };

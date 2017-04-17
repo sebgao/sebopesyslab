@@ -9,7 +9,10 @@
 PCB PCBPool[PCBPOOLMAX];
 struct TrapFrame tfPool[PCBPOOLMAX];
 uint32_t pid=0;
-PCB* current;
+PCB* current = NULL;
+
+PCB* ready_list = NULL;
+PCB* sleep_list = NULL;
 /*struct TrapFrame {
 	//uint32_t esi, ebx, eax, eip, edx, error_code, eflags, ecx, cs, old_esp, edi, ebp;
 	uint32_t edi, esi, ebp, old_esp, ebx, edx, ecx, eax;
@@ -25,6 +28,9 @@ void init_pcb_pool()
 	for(i=0; i<PCBPOOLMAX; i++){
 		PCBPool[i].used = 0;
 	}
+	// current= &PCBPool[0];
+	// current->used = 1;
+	// current->tf = &tfPool[0];
 }
 
 void init_pcb(PCB *p, uint32_t ustack, uint32_t entry, uint8_t pri)
@@ -50,7 +56,23 @@ void init_pcb(PCB *p, uint32_t ustack, uint32_t entry, uint8_t pri)
 	}
 	
 	tf->esp = ustack;
+
+	//printk("%x %x %x\n", p->kstacktop, tf, p);
 	tf->eip = entry;
+	//lcr3(PADDR(p -> pgdir));
+	if(pri == 0){
+		uint32_t* ptr1 = (void*)(ustack);
+		uint32_t* ptr2 = (void*)tf;
+		uint32_t si = sizeof(struct TrapFrame);
+		uint32_t i;
+		for (i = 0; i < si/4; ++i)
+		{
+			ptr1[i] = ptr2[i];
+		}
+		//memcpy((void*)ustack, tf, sizeof(tf));
+		p->tf = (void*)ptr1;
+	}
+	//lcr3(PADDR(kern_pgdir));
 }
 
 PCB* pcb_create()
@@ -67,6 +89,8 @@ PCB* pcb_create()
 	if (pp == NULL) return NULL;
 	p->pgdir = page2kva(pp);
 	p->pid = pid;
+	p->timeslice = 0;
+	//p->ts = READY;
 	pid ++;
 	//printk("%x %x\n", p->pgdir, pp);
 	pp->pp_ref ++;
@@ -74,6 +98,18 @@ PCB* pcb_create()
 	//PCBPoolByte[0] = 3;
 	//printk("This is pcb_create! %x\n", (uint32_t)current);
 	return p;
+}
+
+void enready_pcb(PCB* pcb){
+	if(ready_list == NULL){
+		ready_list = pcb;
+		ready_list->tail = pcb;
+	}else{
+		PCB* temp = ready_list;
+		ready_list = pcb;
+		ready_list->next = temp;
+		ready_list->tail = temp->tail;
+	}
 }
 
 void switch_pcb(PCB* pcb){

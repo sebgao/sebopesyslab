@@ -3,6 +3,7 @@
 
 #include "lib/common.h"
 
+
 #define SYS_PRINT_CHAR	1000
 
 #define SYS_INIT_CACHE	1100
@@ -13,12 +14,29 @@
 #define SYS_ADD_TIMER	1300
 #define SYS_GET_TICK	1301
 
+#define SYS_HANDOUT		1500
+#define SYS_PID			1501
+#define SYS_SLEEP		1502
+
 #define TIMER_HANDLERS_MAX 100
 typedef struct timer_handler{
 	void (*ptr)(void);
 	int used;
 
 }timer_handler;
+
+static inline void sys_handout(){
+	asm volatile("int $0x80": : "a"(SYS_HANDOUT)); //SYSCALL HERE!
+}
+static inline uint32_t sys_pid(){
+	uint32_t r_eax = 0;
+	asm volatile("int $0x80": "=a"(r_eax) : "a"(SYS_PID)); //SYSCALL HERE!
+	//asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
+	return r_eax;
+}
+static inline void sys_sleep(uint32_t c){
+	asm volatile("int $0x80": : "a"(SYS_SLEEP), "b"(c)); //SYSCALL HERE!
+}
 
 static inline void sys_printch(char c){
 	asm volatile("int $0x80": : "a"(SYS_PRINT_CHAR), "b"(c)); //SYSCALL HERE!

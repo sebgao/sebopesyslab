@@ -3,28 +3,51 @@
 #include "inc/memlayout.h"
 #define NPUSTACKTOP 0x300000
 #define NPKSTACKTOP 0x200000
-#define NPKSTACKSIZE 4*4096
+#define NPKSTACKSIZE 2*4096
 #define PCBPOOLMAX 100
+typedef enum{
+	READY,
+	RUNNING,
+	STOP,
+	SLEEPING,
+	HUNGUP
+}TASK_STATE;
 typedef struct PCB {
+	uint8_t kstack0[NPKSTACKSIZE];
+	uint8_t kstack0top[0x10];
+	uint8_t kstack[NPKSTACKSIZE];
+	uint8_t kstacktop[0x10];
+	uint8_t kstackprotect[0x10];
 	struct{
-		uint32_t pid;
 		uint32_t used;
+		uint32_t pid;
+		uint32_t ppid;
+		TASK_STATE ts;
+		uint32_t timeslice;
 		struct TrapFrame *tf;
 		pde_t *pgdir;
 	};
+	struct PCB *next;
+	struct PCB *tail;
 	//uint8_t kstack_0[NPKSTACKSIZE];
-	uint8_t kstack[NPKSTACKSIZE];
-	uint8_t kstacktop[8];
-	uint8_t kstackprotect[8];
+	//struct TrapFrame *tf;
+	
 } PCB;
 
 extern PCB *current;
+
+extern PCB* ready_list;
+extern PCB* sleep_list;
 
 void init_pcb_pool();
 void init_pcb(PCB *p, uint32_t ustack, uint32_t entry, uint8_t privilege);
 PCB* pcb_create();
 void enter_pcb(PCB* pcb);
 void switch_pcb(PCB* pcb);
+void enready_pcb(PCB* pcb);
+
+void do_scheduler();
+
 void loader(PCB* pcb, uint32_t offset);
 void empty_loader(PCB* pcb, void (*ptr)(void));
 #endif
