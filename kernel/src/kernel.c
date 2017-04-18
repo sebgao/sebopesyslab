@@ -40,13 +40,14 @@ void busy(){
     //while(tick < cur){
       printf("This is busy! Sleep %ds! Recall %d times\n", sys_pid(), tick);
       tick++;
+      //sys_handout();
       //tick++;
     //}
 
     //printf("1 %x\n", _tick);
     //printf("2 %x\n", _tick);
     sys_handout();
-    //sys_sleep(sys_pid()*200);
+    sys_sleep(sys_pid()*200);
     //sys_handout();
     //printf("3 %x\n", _tick);
     //enable_interrupt();
@@ -81,7 +82,7 @@ int main(){
   enready_pcb(pidle);
   enready_pcb(pcb);
   uint32_t i = 0;
-  for(i=0; i<50;i++){
+  for(i=0; i<10;i++){
     PCB* pcc = pcb_create();
     empty_loader(pcc, busy);
     enready_pcb(pcc);

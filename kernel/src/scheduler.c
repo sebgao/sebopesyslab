@@ -15,29 +15,27 @@ void do_scheduler(){
 	count ++;
 
 	if(current == NULL){
+		/*
 		current = ready_list;
 		ready_list = ready_list -> next;
 
 		//current->tail = current;
 		//current->next = NULL;
+		*/
+		//ll_entail(&ready_list, current);
+		current = ll_pop(&ready_list);
+
 		current->ts = RUNNING;
 		current->timeslice = 0;
-		current->next = NULL;
+
 		scheduler_switch(current);
 		return;
 	}
 	if(current->ts == SLEEPING){
-		current->ts = SLEEPING;
 
-		PCB* p=sleep_list;
-		if(p == NULL){
-			sleep_list = current;
-		}else{
-			while(p->next){
-				p=p->next;
-			}
-			p->next = current;
-		}
+		//current->ts = SLEEPING;
+
+		ll_entail(&sleep_list, current);
 
 		current = NULL;
 		do_scheduler();
@@ -67,18 +65,11 @@ void do_scheduler(){
 		scheduler_switch(current);
 		return;*/
 	}
-	if(current->timeslice > 5 || current->ts == STOP){
+	if(current->timeslice > 3 || current->ts == STOP){
+
 		current->ts = READY;
 
-		PCB* p=ready_list;
-		if(p == NULL){
-			ready_list = current;
-		}else{
-			while(p->next){
-				p=p->next;
-			}
-			p->next = current;
-		}
+		ll_entail(&ready_list, current);
 		
 
 		current = NULL;

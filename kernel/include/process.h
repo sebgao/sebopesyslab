@@ -4,7 +4,7 @@
 #define NPUSTACKTOP 0x300000
 #define NPKSTACKTOP 0x200000
 #define NPKSTACKSIZE 2*4096
-#define PCBPOOLMAX 100
+#define PCBPOOLMAX 1000
 typedef enum{
 	READY,
 	RUNNING,
@@ -50,4 +50,10 @@ void do_scheduler();
 
 void loader(PCB* pcb, uint32_t offset);
 void empty_loader(PCB* pcb, void (*ptr)(void));
+
+uint32_t ll_len(PCB** head);
+PCB* 	 ll_pop(PCB** head);
+uint32_t ll_push(PCB** head, PCB* p);
+uint32_t ll_entail(PCB** head, PCB* p);
+uint32_t ll_delete(PCB** head, PCB* p);
 #endif

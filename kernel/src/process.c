@@ -22,6 +22,63 @@ PCB* sleep_list = NULL;
 	//uint32_t esp;
 };*/
 
+uint32_t ll_len(PCB** head){
+	uint32_t i = 0;
+	PCB* p = *head;
+	while(p){
+		p = p->next;
+		i++;
+	}
+	return i;
+}
+PCB* ll_pop(PCB** head){
+	PCB* p = *head;
+	ll_delete(head, p);
+	return p;
+}
+uint32_t ll_push(PCB** head, PCB* p){
+	PCB* h = *head;
+	if(h == NULL){
+		*head = p;
+		return 0;
+	}else{
+		*head = p;
+		p->next = h;
+		return 1;
+	}
+}
+uint32_t ll_entail(PCB** head, PCB* p){
+	PCB* h = *head;
+	p->next = NULL;
+	if(h == NULL){
+		*head = p;
+		return 0;
+	}else{
+		while(h->next){
+			h = h->next;
+		}
+		h->next = p;
+		return 1;
+	}
+}
+uint32_t ll_delete(PCB** head, PCB* p){
+	PCB *sleep = *head, *pre = NULL;
+	while(1){
+		if(sleep == NULL)
+			return 0;
+		if(sleep == p)
+			break;
+		pre = sleep;
+		sleep = sleep->next;
+	}
+	if(pre == NULL)
+		*head = sleep->next;
+	else
+		pre->next = sleep->next;
+	sleep->next = NULL;
+	return 1;
+}
+
 void init_pcb_pool()
 {
 	uint32_t i;
