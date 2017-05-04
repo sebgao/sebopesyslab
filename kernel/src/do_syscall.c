@@ -17,13 +17,22 @@ void do_syscall(struct TrapFrame *tf) {
 		case SYS_PID:
 			tf->eax = current->pid;
 		break;
+		case SYS_PPID:
+			tf->eax = current->ppid;
+		break;
 		case SYS_SLEEP:
 			//printk("SLEEPING");
 			current->ts = SLEEPING;
-			current->timeslice = tf->ebx;
+			current->timeslice = tf->ebx*200;
 		break;
 		case SYS_HANDOUT:
 			current->ts = STOP;
+		break;
+		case SYS_EXIT:
+			exit_current();
+		break;
+		case SYS_FORK:
+			fork_current();
 		break;
 		case SYS_PRINT_CHAR:
 			serial_printc(tf->ebx);

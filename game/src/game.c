@@ -20,9 +20,10 @@ static inline int8_t key(char s){
 	return sys_key_down(s);
 }
 
-
+void game();
 
 int main(){
+	//sys_fork();
 	//printf("GAME START!\n");
 	//printk("1\n");
 	//set_keyboard_intr_handler(press);
@@ -35,6 +36,20 @@ int main(){
 	//printk("5\n");
 	//clear_key();
 	//printk("6\n");
+	printf("Hello this is INIT#%d! Now I want to fork GAME! WATCH ME!\n", getpid());
+	if(fork()!=0){
+		printf("INIT#%d: My dute is done! I choose goudai!\n", getpid());
+		//while(1);
+		exit();
+		printf("INIT#%d: To check whether I am alive! You should not see this!\n", getpid());
+	}else{
+		game();
+	}
+	return 1;
+};
+
+void game(){
+	printf("Hello this is GAME#%d! WATCH ME!\n", getpid());
 	while(1){
 		timestamp = sys_get_tick();
 		//wait_for_interrupt();
@@ -55,10 +70,7 @@ int main(){
 		//enable_interrupt();
 		
 	}
-	return 1;
-};
-
-
+}
 
 
 #define domain static
@@ -225,12 +237,25 @@ void dreamOf100HZ(int timestamp){
 
 		//if(x>0 && x<VWIDTH && y>0 && y<VHEIGHT){
 		//if(timestamp % 3){
-			if(key('a'))x--;
-			if(key('d'))x++;
-			if(key('w'))y--;
-			if(key('s'))y++;
+		if(key('a'))x--;
+		if(key('d'))x++;
+		if(key('w'))y--;
+		if(key('s'))y++;
 		//}
-
+		if(key('l')){
+			printf("GAME#%d: Sleep 5s!\n", getpid());
+			sleep(5);
+		}
+		if(key('m')){
+			clearStage();
+			drawStage();
+			printf("GAME#%d: Ready to exit! Bye!\n", getpid());
+			exit();
+		}
+		if(key('k')){
+			printf("GAME#%d: Fork!\n", getpid());
+			fork();
+		}
 		if(x < 0) x++;
 		if(x > VWIDTH) x--;
 		if(y < 0) y++;
@@ -243,8 +268,11 @@ void dreamOf100HZ(int timestamp){
 
 		drawMonster();
 		drawCirc(x, y, size, 3);
-		drawNumber(score, 0, 180, 1, 7);
-		drawNumber(sys_pid(), 50, 180, 1, 7);
+		drawNumber(score, 10, 180, 1, 7);
+		drawNumber(getpid(), 300, 10, 1, 7);
+		if(key('p')){
+			drawNumber(getpid(), 100, 100, 5, 7);
+		}
 		drawStage();
 		
 		

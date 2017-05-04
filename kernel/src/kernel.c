@@ -27,7 +27,7 @@ void idle(){
   }
 }
 void busy(){
-  uint32_t tick=0;
+  /*uint32_t tick=0;
   //uint32_t ttt[10];
   while(1){
     //if(_tick % 1000 == 999){
@@ -40,6 +40,9 @@ void busy(){
     //while(tick < cur){
       printf("This is busy! Sleep %ds! Recall %d times\n", sys_pid(), tick);
       tick++;
+      if(tick>2){
+        sys_exit();
+      }
       //sys_handout();
       //tick++;
     //}
@@ -51,6 +54,35 @@ void busy(){
     //sys_handout();
     //printf("3 %x\n", _tick);
     //enable_interrupt();
+  }*/
+  //int i=0;
+  //for(i=0; i<5; i++){
+  //fork();
+  //while(1);
+  
+  uint32_t i = 0;
+  uint32_t j = 0;
+  for(i=0;i<3;i++){
+    if(fork()!=0){
+        j++;
+    };
+  }
+  uint32_t pid = getpid();
+  printf("This is BUSY#%d process forked from BUSY#%d. Fork %d times.\n", pid, getppid(), j);
+      //printf("FORK: %d\n", result);
+      //sys_handout();
+  //}
+  uint32_t times=0;
+  while(1){
+    yield();
+    sleep(pid);
+    printf("BUSY#%d: Sleep %ds! Alive %d times\n", pid, pid, times);
+    times++;
+    if(times>3){
+      printf("BUSY#%d: Ready to exit! Bye!\n");
+      exit();
+    }
+    //printk("This is %d\n", res);
   }
 }
 void do_scheduler();
@@ -73,20 +105,20 @@ int main(){
  // loader(pcc, 102400);
   //printk("%x\n", *((uint32_t*)entry));
   //lcr3(PADDR(pcb->pgdir));
-  printk("haha\n");
+  //printk("haha\n");
   //enable_interrupt();
-  printk("haha\n");
+  //printk("haha\n");
   //asm volatile("int $0x0");
   //switch_pcb(pidle);
-  printk("haha\n");
+  //printk("haha\n");
   enready_pcb(pidle);
   enready_pcb(pcb);
-  uint32_t i = 0;
-  for(i=0; i<10;i++){
+  //uint32_t i = 0;
+  //for(i=0; i<10;i++){
     PCB* pcc = pcb_create();
     empty_loader(pcc, busy);
     enready_pcb(pcc);
-  }
+  //}
   //enready_pcb(pcc);
   //enready_pcb(pidle);
 

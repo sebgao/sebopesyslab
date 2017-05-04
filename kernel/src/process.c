@@ -129,6 +129,7 @@ void init_pcb(PCB *p, uint32_t ustack, uint32_t entry, uint8_t pri)
 		//memcpy((void*)ustack, tf, sizeof(tf));
 		p->tf = (void*)ptr1;
 	}
+	p->tt = pri==0?KERNEL:USER;
 	//lcr3(PADDR(kern_pgdir));
 }
 
@@ -177,4 +178,79 @@ void switch_pcb(PCB* pcb){
 	//lcr3(PADDR(pcb -> pgdir));
 	//printk("1\n");
 	enter_pcb(pcb);
+}
+void free_pcb(PCB* pcb){
+	free_pgdir(pcb->pgdir);
+	page_decref(pa2page(PADDR(pcb->pgdir)));
+	pcb->used = 0;
+
+}
+
+void copy_pcb(PCB *dst, PCB *src)
+{
+	//lcr3(PADDR(dst->pgdir));
+	//src->kstackprotect[0]=99;
+	memcpy((void*)dst->kstackbottom, (void*)src->kstackbottom, FORKKSTACKSIZE);
+	//printk("FF: %d\n", dst->kstackprotect[0]);
+	//printk("KTOP: %d %d\n", dst->kstacktop[-20], src->kstacktop[-20]);
+	dst->timeslice = src->timeslice;
+	//printk("KSTACK: %d\n", ((void*)src->tf - (void*)src->kstack));
+	
+	dst->tf = (void*)dst->kstack + ((void*)src->tf - (void*)src->kstack);
+	//dst->tf->esp = (uint32_t)((void*)dst->kstack + ((void*)src->tf->esp - (void*)src->kstack));
+	dst->tt = src->tt;
+
+	if(dst->tt == KERNEL){
+		uint32_t offset = (uint32_t)((void*)dst->kstack - (void*)src->kstack);
+		dst->tf->ebp += offset;
+		uint32_t* ptr = (uint32_t*)dst->tf->ebp;
+		while(*(ptr)!=0){
+			*(ptr) += offset;
+			ptr = (uint32_t*)*(ptr);
+		}
+	//printk("KTOP: %x %x\n", (dst->tf->cs), (src->tf->cs));
+		dst->ts = src->ts;
+	}
+
+	copy_pgdir(dst->pgdir, src->pgdir);
+
+	//lcr3(PADDR(kern_pgdir));
+}
+void empty(){
+	while(1){
+		//printk("-%x\n", *(uint32_t*)(0xc010141d));
+		//sys_handout();
+	}
+	//while(1){
+	//	printk("%x\n", current->tf->cs&0x8);
+	//};
+	//printk("EMPty %x\n", current->tf->ebp);
+}
+void switch_proc();
+void fork_current(){
+	PCB* son = pcb_create();
+	son->ppid = current->pid;
+	copy_pcb(son, current);
+	current->tf->eax = son->pid;
+	//printk("X:%d\n", son->pid);
+	son->tf->eax = 0;
+	//son->tf->eip = (uint32_t)empty;
+	ll_push(&ready_list, son);
+	//JMP:
+	//printk("FORK %x\n", current->tf->ebp);
+	//printk("%x \n", current->tf->eip);
+	//enter_pcb(son);
+	//current->ts = STOP;
+	//do_scheduler();
+	//exit_current();
+	//son->tf->eip = (uint32_t)empty;
+	//printk("EIP %x %x\n", son->tf->eip, current->tf->eip);
+	//printk("SWI %x\n", switch_proc);
+}
+
+void exit_current(){
+	free_pcb(current);
+	lcr3(PADDR(kern_pgdir));
+	current = NULL;
+	do_scheduler();
 }

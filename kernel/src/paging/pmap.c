@@ -3,7 +3,8 @@
 #include "inc/types.h"
 #include "pmap.h"
 #include "memory.h"
-
+#include "common.h"
+#include "syscall.h"
 			// Amount of physical memory (in pages)
 #define false 0
 #define true 1
@@ -118,7 +119,11 @@ page_alloc(int alloc_flags)
 {
 	// Fill this function in
 	struct PageInfo *p = page_free_list;
-	if (p == NULL) return NULL;
+	if (p == NULL){
+		printk("Fatal error: page not available\n");
+		
+		return NULL;
+	}
 	if (alloc_flags & ALLOC_ZERO) {
 		memset(page2kva(p), 0, PGSIZE);
 	}
@@ -290,6 +295,34 @@ page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 //
 // Hint: the TA solution uses pgdir_walk and pa2page.
 //
+void copy_pgdir(pde_t *dst_dir, pde_t *src_dir)
+{
+	struct PageInfo *pp;
+	int pdx, ptx;
+	for (pdx = 0; pdx < NPDENTRIES; ++pdx) {
+		if (src_dir[pdx] & PTE_P) {	
+			if (dst_dir[pdx] & PTE_P) continue;
+			pte_t *src_table = KADDR(PTE_ADDR(src_dir[pdx]));
+
+			pp = page_alloc(ALLOC_ZERO);
+			pp->pp_ref ++;
+
+			dst_dir[pdx] = page2pa(pp) | PTE_ATTR(src_dir[pdx]);
+
+			pte_t *dst_table = KADDR(PTE_ADDR(dst_dir[pdx]));
+			for (ptx = 0; ptx < NPTENTRIES; ++ptx) {
+				if (src_table[ptx] & PTE_P) {
+					pp = page_alloc(0);
+					pp->pp_ref ++;
+
+					dst_table[ptx] = page2pa(pp) | PTE_ATTR(src_table[ptx]);
+					memcpy(page2kva(pp), KADDR(PTE_ADDR(src_table[ptx])), PGSIZE);
+				}
+			}
+		}
+	}
+}
+
 struct PageInfo *
 page_lookup(pde_t *pgdir, void *va, pte_t **pte_store)
 {

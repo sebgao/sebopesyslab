@@ -17,6 +17,20 @@
 #define SYS_HANDOUT		1500
 #define SYS_PID			1501
 #define SYS_SLEEP		1502
+#define SYS_EXIT		1503
+#define SYS_FORK		1504
+#define SYS_PPID			1505
+
+
+//alias begin
+
+#define sleep sys_sleep
+#define exit sys_exit
+#define fork sys_fork
+#define getpid sys_pid
+#define yield sys_handout
+#define getppid sys_ppid
+#define sleep sys_sleep
 
 #define TIMER_HANDLERS_MAX 100
 typedef struct timer_handler{
@@ -28,9 +42,23 @@ typedef struct timer_handler{
 static inline void sys_handout(){
 	asm volatile("int $0x80": : "a"(SYS_HANDOUT)); //SYSCALL HERE!
 }
+static inline void sys_exit(){
+	asm volatile("int $0x80": : "a"(SYS_EXIT)); //SYSCALL HERE!
+}
+static inline uint32_t sys_fork(){
+	uint32_t r_eax = 0;
+	asm volatile("int $0x80": "=a"(r_eax) : "a"(SYS_FORK)); //SYSCALL HERE!
+	return r_eax;
+}
 static inline uint32_t sys_pid(){
 	uint32_t r_eax = 0;
 	asm volatile("int $0x80": "=a"(r_eax) : "a"(SYS_PID)); //SYSCALL HERE!
+	//asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
+	return r_eax;
+}
+static inline uint32_t sys_ppid(){
+	uint32_t r_eax = 0;
+	asm volatile("int $0x80": "=a"(r_eax) : "a"(SYS_PPID)); //SYSCALL HERE!
 	//asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
 	return r_eax;
 }

@@ -247,7 +247,7 @@ static inline void drawNumber(int num, int x, int y, int size, uint8_t color){
         for(yy=0; yy<7; yy++){
             for(xx=0; xx<5; xx++){
                 const char* num = nums[temp[di]-'0'];
-                if(num[yy*5+xx])drawRect(i*(size+10)+x+xx*size, y+yy*size, size, size, color);
+                if(num[yy*5+xx])drawRect(i*(size*size+10)+x+xx*size, y+yy*size, size, size, color);
             }
         }
         i++;

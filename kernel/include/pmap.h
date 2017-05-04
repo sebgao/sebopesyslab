@@ -84,4 +84,6 @@ page2kva(struct PageInfo *pp)
 
 pte_t *pgdir_walk(pde_t *pgdir, const void *va, int create);
 void mm_alloc(pde_t *pgdir, uint32_t va, size_t len);
+void free_pgdir(pde_t *pgdir);
+void copy_pgdir(pde_t *dst_dir, pde_t *src_dir);
 #endif /* !JOS_KERN_PMAP_H */

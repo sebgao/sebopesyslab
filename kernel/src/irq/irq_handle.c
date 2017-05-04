@@ -41,6 +41,7 @@ void irq_handle(struct TrapFrame *tf) {
 			//printk("%s, %d: Unhandled exception!\n", __FUNCTION__, __LINE__);
 		}
 		else {
+			//printk("IRQ::%d\n", tf->irq);
 			//printk("%s, %d: Unexpected exception #%d!\n", __FUNCTION__, __LINE__, tf->irq);
 		}
 	}

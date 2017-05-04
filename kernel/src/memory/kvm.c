@@ -135,10 +135,16 @@ void enter_pcb(PCB* pcb)
 void switch_proc();
 extern PCB* current;
 void scheduler_switch(PCB* pcb){
+	//disable_interrupt();
 	current = pcb;
+	//printk("A\n");
 	lcr3(PADDR(pcb->pgdir));
+	//printk("B\n");
 	set_tss_esp0((uint32_t)(pcb->kstacktop));
-	asm volatile("mov %0, %%esp" : : "r"(pcb->tf));
+	//printk("--PID %d\n", pcb->pid);
+	//printk("--NOW ESP = %x\n", pcb->tf);
+	//printk("--TT %x\n", pcb->tt);
+	asm volatile("mov %0, %%esp" : : "m"(pcb->tf));
 	asm volatile("jmp %0" : : "r"(switch_proc));
 
 }

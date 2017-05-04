@@ -12,7 +12,12 @@ typedef enum{
 	SLEEPING,
 	HUNGUP
 }TASK_STATE;
+typedef enum{
+	KERNEL,
+	USER
+}TASK_TYPE;
 typedef struct PCB {
+	uint8_t kstackbottom[0x10];
 	uint8_t kstack0[NPKSTACKSIZE];
 	uint8_t kstack0top[0x10];
 	uint8_t kstack[NPKSTACKSIZE];
@@ -23,6 +28,7 @@ typedef struct PCB {
 		uint32_t pid;
 		uint32_t ppid;
 		TASK_STATE ts;
+		TASK_TYPE tt;
 		uint32_t timeslice;
 		struct TrapFrame *tf;
 		pde_t *pgdir;
@@ -34,6 +40,7 @@ typedef struct PCB {
 	
 } PCB;
 
+#define FORKKSTACKSIZE ((NPKSTACKSIZE>>1)+(0x10))
 extern PCB *current;
 
 extern PCB* ready_list;
@@ -56,4 +63,6 @@ PCB* 	 ll_pop(PCB** head);
 uint32_t ll_push(PCB** head, PCB* p);
 uint32_t ll_entail(PCB** head, PCB* p);
 uint32_t ll_delete(PCB** head, PCB* p);
+void exit_current();
+void fork_current();
 #endif
