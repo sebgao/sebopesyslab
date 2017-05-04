@@ -23,7 +23,7 @@ extern void init_segment(void);
 extern void init_page(void);
 void idle(){
   while(1){
-    sys_handout();
+    yield();
   }
 }
 void busy(){
@@ -96,41 +96,22 @@ int main(){
   init_pcb_pool();
 
   PCB* pidle = pcb_create();
- // loader(pcb, 102400);
   empty_loader(pidle, idle);
 
   PCB* pcb = pcb_create();
   loader(pcb, 102400);
 
- // loader(pcc, 102400);
-  //printk("%x\n", *((uint32_t*)entry));
-  //lcr3(PADDR(pcb->pgdir));
-  //printk("haha\n");
-  //enable_interrupt();
-  //printk("haha\n");
-  //asm volatile("int $0x0");
-  //switch_pcb(pidle);
-  //printk("haha\n");
   enready_pcb(pidle);
   enready_pcb(pcb);
-  //uint32_t i = 0;
-  //for(i=0; i<10;i++){
-    PCB* pcc = pcb_create();
-    empty_loader(pcc, busy);
-    enready_pcb(pcc);
-  //}
-  //enready_pcb(pcc);
-  //enready_pcb(pidle);
+
+
+  PCB* pcc = pcb_create();
+  empty_loader(pcc, busy);
+  enready_pcb(pcc);
+
 
   do_scheduler();
 
   while(1);
-  //scheduler_switch(pidle);
-  //PCB* pidle = pcb_create();
-  //loader(pcb, 0);
-  //empty_loader(pidle, idle);
-  //switch_pcb(pidle);
-  //printk("e\n");
-
 	return 1;
 };

@@ -195,13 +195,13 @@ void copy_pcb(PCB *dst, PCB *src)
 	//printk("KTOP: %d %d\n", dst->kstacktop[-20], src->kstacktop[-20]);
 	dst->timeslice = src->timeslice;
 	//printk("KSTACK: %d\n", ((void*)src->tf - (void*)src->kstack));
-	
-	dst->tf = (void*)dst->kstack + ((void*)src->tf - (void*)src->kstack);
+	uint32_t offset = (uint32_t)((void*)dst->kstack - (void*)src->kstack);
+	dst->tf = (void*)src->tf + offset;
 	//dst->tf->esp = (uint32_t)((void*)dst->kstack + ((void*)src->tf->esp - (void*)src->kstack));
 	dst->tt = src->tt;
 
 	if(dst->tt == KERNEL){
-		uint32_t offset = (uint32_t)((void*)dst->kstack - (void*)src->kstack);
+		
 		dst->tf->ebp += offset;
 		uint32_t* ptr = (uint32_t*)dst->tf->ebp;
 		while(*(ptr)!=0){

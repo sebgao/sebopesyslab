@@ -187,6 +187,16 @@ void dreamOf100HZ(int timestamp){
 		drawCirc(70+x, 60+y, 15, 6);
 		drawStage();
 	}*/
+	if(key('l')){
+		printf("GAME#%d: Sleep 5s!\n", getpid());
+		sleep(5);
+	}
+	if(key('m')){
+		clearStage();
+		drawStage();
+		printf("GAME#%d: Ready to exit! Bye!\n", getpid());
+		exit();
+	}
 	if(gameStatus == GAME_START){
 		//printf("%x\n", st);
 		//printf("Score: %d\n", curtime);
@@ -224,10 +234,12 @@ void dreamOf100HZ(int timestamp){
 	}
 	if(gameStatus == GAME_READY){
 		//printf("%d\n", key('q'));
-		if(key('q') ){
+		if(key('q')){
 			printf("Press W, A, S, D to move\n");
 			gameStatus = GAME_ING;
+			return;
 		}
+		
 	}
 
 	if(gameStatus == GAME_ING){
@@ -242,20 +254,6 @@ void dreamOf100HZ(int timestamp){
 		if(key('w'))y--;
 		if(key('s'))y++;
 		//}
-		if(key('l')){
-			printf("GAME#%d: Sleep 5s!\n", getpid());
-			sleep(5);
-		}
-		if(key('m')){
-			clearStage();
-			drawStage();
-			printf("GAME#%d: Ready to exit! Bye!\n", getpid());
-			exit();
-		}
-		if(key('k')){
-			printf("GAME#%d: Fork!\n", getpid());
-			fork();
-		}
 		if(x < 0) x++;
 		if(x > VWIDTH) x--;
 		if(y < 0) y++;

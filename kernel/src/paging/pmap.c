@@ -121,7 +121,6 @@ page_alloc(int alloc_flags)
 	struct PageInfo *p = page_free_list;
 	if (p == NULL){
 		printk("Fatal error: page not available\n");
-		
 		return NULL;
 	}
 	if (alloc_flags & ALLOC_ZERO) {
@@ -139,10 +138,7 @@ page_alloc(int alloc_flags)
 void
 page_free(struct PageInfo *pp)
 {
-	// Fill this function in
-	// Hint: You may want to panic if pp->pp_ref is nonzero or
-	// pp->pp_link is not NULL.
-	//assert(pp->pp_ref == 0 && pp->pp_link == NULL);
+
 	pp->pp_link = page_free_list;
 	page_free_list = pp;
 }
@@ -267,7 +263,6 @@ page_insert(pde_t *pgdir, struct PageInfo *pp, void *va, int perm)
 	pte_t *pte = pgdir_walk(pgdir, va, true);
 	if (pte == NULL) {
 		return -1;
-//		return -E_NO_MEM;
 	}
 
 	physaddr_t pa = page2pa(pp);

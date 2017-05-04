@@ -66,7 +66,7 @@ void empty_loader(PCB* pcb, void (*ptr)(void)){
   lcr3(PADDR(pcb -> pgdir));
   entry = (uint32_t)ptr;
   //mm_alloc(pcb->pgdir, USTACKTOP-USTACKSIZE, USTACKSIZE);
-  init_pcb(pcb, (uint32_t)pcb->kstack0top, entry, 0);
+  init_pcb(pcb, (uint32_t)pcb->kstacktop-0x1FF, entry, 0);
   lcr3(PADDR(kern_pgdir));
 
 };

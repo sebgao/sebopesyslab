@@ -34,10 +34,7 @@ typedef struct PCB {
 		pde_t *pgdir;
 	};
 	struct PCB *next;
-	struct PCB *tail;
-	//uint8_t kstack_0[NPKSTACKSIZE];
-	//struct TrapFrame *tf;
-	
+	struct PCB *tail;	
 } PCB;
 
 #define FORKKSTACKSIZE ((NPKSTACKSIZE>>1)+(0x10))
