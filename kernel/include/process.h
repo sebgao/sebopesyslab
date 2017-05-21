@@ -35,7 +35,8 @@ typedef struct PCB {
 		pde_t *pgdir;
 	};
 	struct PCB *next;
-	struct PCB *tail;	
+	struct PCB *tail;
+	struct PCB *join_list;
 } PCB;
 
 #define FORKKSTACKSIZE ((NPKSTACKSIZE>>1)+(0x10))
@@ -64,4 +65,6 @@ uint32_t ll_delete(PCB** head, PCB* p);
 void exit_current();
 void fork_current();
 void thread_current(uint32_t entry, uint32_t esp);
+
+void join_current(int pid);
 #endif

@@ -241,11 +241,10 @@ void thread_current(uint32_t entry, uint32_t esp){
 	son->ppid = current->pid;
 
 	copy_pcb(son, current);
-
 	memcpy(son->pgdir, current->pgdir, PGSIZE);
 	mm_alloc(son->pgdir, esp-2*NPKSTACKSIZE, 2*NPKSTACKSIZE);
-	//son->tf->esp = esp-0x1FF;
-	son->tf->esp = esp-0x1FF;
+
+	son->tf->esp = esp-0x7F;
 	son->tf->eip = entry;
 
 	current->tf->eax = son->pid;
@@ -257,6 +256,30 @@ void thread_current(uint32_t entry, uint32_t esp){
 void exit_current(){
 	free_pcb(current);
 	lcr3(PADDR(kern_pgdir));
+
+	PCB* p;
+
+	while(1){
+		p = ll_pop(&current->join_list);
+		if(p == NULL)break;
+		ll_entail(&ready_list, p);
+	}
+
+	current = NULL;
+	do_scheduler();
+}
+
+void join_current(int pid){
+	uint32_t i;
+	for(i=0; i<PCBPOOLMAX; i++){
+		if(PCBPool[i].pid == pid && PCBPool[i].used)break;
+	}
+	if(i == PCBPOOLMAX) return;
+
+	PCB *p = &PCBPool[i];
+
+	PCB* cur = current;
+	ll_entail(&p->join_list, cur);
 	current = NULL;
 	do_scheduler();
 }

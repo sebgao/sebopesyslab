@@ -2207,9 +2207,9 @@ void dreamOf100HZ(int timestamp){
  804958f:	c3                   	ret    
 
 08049590 <sys_printch>:
-}
-static inline void sys_sleep(uint32_t c){
-	asm volatile("int $0x80": : "a"(SYS_SLEEP), "b"(c)); //SYSCALL HERE!
+
+static inline void sys_join(int pid){
+	asm volatile("int $0x80": : "a"(SYS_JOIN), "b"(pid)); //SYSCALL HERE!
 }
 
 static inline void sys_printch(char c){

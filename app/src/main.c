@@ -14,9 +14,9 @@ void test_process_sem(){
 
 	sys_sem_wait(sem);
 	int i=0;
-	for(; i<3; i++){
+	for(; i<2; i++){
 		sleep(1);
-		printf("TASK#%d!\n", getpid());
+		printf("TASK#%d, %d!\n", getpid(), i);
 	}
 	sys_sem_post(sem);
 	exit();
@@ -25,7 +25,7 @@ semaphore sem;
 void test_thread_sem(){
 	sys_sem_wait(&sem);
 	int i=0;
-	for(; i<3; i++){
+	for(; i<2; i++){
 		sleep(1);
 		printf("TASK#%d!\n", getpid());
 	}
@@ -33,12 +33,21 @@ void test_thread_sem(){
 	exit();
 }
 int main(){
-	sys_sem_init(&sem, 2);
+	sys_sem_init(&sem, 3);
 	int i=0;
-	for (i = 0; i < 8; ++i)
+	for (i = 0; i < 15; ++i)
 	{
-		thread(test_thread_sem, 0xeebfd000-i*0x1000);
+		int pid = thread(test_thread_sem, 0xeebfd000-i*0x1000);
+		printf("%d created!\n", pid);
 	}
+	for(i=3; i<18; i++){
+		sys_join(i);
+	}
+	//sys_join(3);
+	sys_sem_close(&sem);
+	//sleep(40);
+	printf("All taskes are done!\n");
+	exit();
 	while(1);
 	//test_process_sem();
 }

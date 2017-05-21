@@ -20,6 +20,7 @@
 #define SYS_EXIT		1503
 #define SYS_FORK		1504
 #define SYS_PPID		1505
+#define SYS_JOIN		1506
 
 #define SYS_THREAD		1510
 
@@ -76,8 +77,10 @@ static inline int sys_sem_get(semaphore *sem){
 	return count;
 }
 
-static inline void sys_thread(void* entry, uint32_t esp){
-	asm volatile("int $0x80": : "a"(SYS_THREAD), "b"(entry), "c"(esp)); //SYSCALL HERE!
+static inline int sys_thread(void* entry, uint32_t esp){
+	int pid;
+	asm volatile("int $0x80": "=a"(pid) : "a"(SYS_THREAD), "b"(entry), "c"(esp)); //SYSCALL HERE!
+	return pid;
 }
 
 static inline void sys_handout(){
@@ -105,6 +108,10 @@ static inline uint32_t sys_ppid(){
 }
 static inline void sys_sleep(uint32_t c){
 	asm volatile("int $0x80": : "a"(SYS_SLEEP), "b"(c)); //SYSCALL HERE!
+}
+
+static inline void sys_join(int pid){
+	asm volatile("int $0x80": : "a"(SYS_JOIN), "b"(pid)); //SYSCALL HERE!
 }
 
 static inline void sys_printch(char c){
