@@ -19,7 +19,9 @@
 #define SYS_SLEEP		1502
 #define SYS_EXIT		1503
 #define SYS_FORK		1504
-#define SYS_PPID			1505
+#define SYS_PPID		1505
+
+#define SYS_THREAD		1510
 
 
 //alias begin
@@ -31,6 +33,7 @@
 #define yield sys_handout
 #define getppid sys_ppid
 #define sleep sys_sleep
+#define thread sys_thread
 
 #define TIMER_HANDLERS_MAX 100
 typedef struct timer_handler{
@@ -38,6 +41,10 @@ typedef struct timer_handler{
 	int used;
 
 }timer_handler;
+
+static inline void sys_thread(void* entry, uint32_t esp){
+	asm volatile("int $0x80": : "a"(SYS_THREAD), "b"(entry), "c"(esp)); //SYSCALL HERE!
+}
 
 static inline void sys_handout(){
 	asm volatile("int $0x80": : "a"(SYS_HANDOUT)); //SYSCALL HERE!

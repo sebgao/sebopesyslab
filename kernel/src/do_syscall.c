@@ -14,6 +14,9 @@ void do_syscall(struct TrapFrame *tf) {
 	//printk("%d\n", tf->cs&0x3);
 	int i;
 	switch(tf->eax) {
+		case SYS_THREAD:
+			thread_current(tf->ebx, tf->ecx);
+		break;
 		case SYS_PID:
 			tf->eax = current->pid;
 		break;

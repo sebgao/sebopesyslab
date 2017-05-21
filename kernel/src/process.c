@@ -200,7 +200,7 @@ void copy_pcb(PCB *dst, PCB *src)
 	//dst->tf->esp = (uint32_t)((void*)dst->kstack + ((void*)src->tf->esp - (void*)src->kstack));
 	dst->tt = src->tt;
 
-	if(dst->tt == KERNEL){
+	if(dst->tt == KERNEL || dst->tt == THREAD){
 		
 		dst->tf->ebp += offset;
 		uint32_t* ptr = (uint32_t*)dst->tf->ebp;
@@ -210,42 +210,48 @@ void copy_pcb(PCB *dst, PCB *src)
 		}
 	//printk("KTOP: %x %x\n", (dst->tf->cs), (src->tf->cs));
 		dst->ts = src->ts;
+	}else{
+		copy_pgdir(dst->pgdir, src->pgdir);
 	}
-
-	copy_pgdir(dst->pgdir, src->pgdir);
-
 	//lcr3(PADDR(kern_pgdir));
 }
-void empty(){
-	while(1){
-		//printk("-%x\n", *(uint32_t*)(0xc010141d));
-		//sys_handout();
-	}
-	//while(1){
-	//	printk("%x\n", current->tf->cs&0x8);
-	//};
-	//printk("EMPty %x\n", current->tf->ebp);
-}
+
 void switch_proc();
 void fork_current(){
 	PCB* son = pcb_create();
+
 	son->ppid = current->pid;
+
 	copy_pcb(son, current);
+
 	current->tf->eax = son->pid;
-	//printk("X:%d\n", son->pid);
 	son->tf->eax = 0;
-	//son->tf->eip = (uint32_t)empty;
+
 	ll_push(&ready_list, son);
-	//JMP:
-	//printk("FORK %x\n", current->tf->ebp);
-	//printk("%x \n", current->tf->eip);
-	//enter_pcb(son);
-	//current->ts = STOP;
-	//do_scheduler();
-	//exit_current();
-	//son->tf->eip = (uint32_t)empty;
-	//printk("EIP %x %x\n", son->tf->eip, current->tf->eip);
-	//printk("SWI %x\n", switch_proc);
+}
+
+void thread_current(uint32_t entry, uint32_t esp){
+	printk("ahh? %x\n", entry);
+	PCB* son = pcb_create();
+	
+	son->tt = THREAD;
+
+
+
+	son->ppid = current->pid;
+
+	copy_pcb(son, current);
+
+	memcpy(son->pgdir, current->pgdir, PGSIZE);
+	mm_alloc(son->pgdir, esp-2*NPKSTACKSIZE, 2*NPKSTACKSIZE);
+	//son->tf->esp = esp-0x1FF;
+	son->tf->esp = esp-0x1FF;
+	son->tf->eip = entry;
+
+	current->tf->eax = son->pid;
+	son->tf->eax = 0;
+	
+	ll_push(&ready_list, son);
 }
 
 void exit_current(){

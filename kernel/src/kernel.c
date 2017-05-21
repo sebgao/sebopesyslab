@@ -105,10 +105,13 @@ int main(){
   enready_pcb(pcb);
 
 
-  PCB* pcc = pcb_create();
-  empty_loader(pcc, busy);
-  enready_pcb(pcc);
+  //PCB* pcc = pcb_create();
+  //empty_loader(pcc, busy);
+  //enready_pcb(pcc);
 
+  PCB* app = pcb_create();
+  loader(app, 2*102400);
+  enready_pcb(app);
 
   do_scheduler();
 

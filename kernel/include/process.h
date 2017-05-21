@@ -14,7 +14,8 @@ typedef enum{
 }TASK_STATE;
 typedef enum{
 	KERNEL,
-	USER
+	USER,
+	THREAD
 }TASK_TYPE;
 typedef struct PCB {
 	uint8_t kstackbottom[0x10];
@@ -62,4 +63,5 @@ uint32_t ll_entail(PCB** head, PCB* p);
 uint32_t ll_delete(PCB** head, PCB* p);
 void exit_current();
 void fork_current();
+void thread_current(uint32_t entry, uint32_t esp);
 #endif

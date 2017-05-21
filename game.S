@@ -86,7 +86,7 @@ unsigned int UKISS()
  8048166:	c3                   	ret    
 
 08048167 <sys_exit>:
-}timer_handler;
+}
 
 static inline void sys_handout(){
 	asm volatile("int $0x80": : "a"(SYS_HANDOUT)); //SYSCALL HERE!

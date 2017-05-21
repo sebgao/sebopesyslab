@@ -25,7 +25,7 @@ void loader(PCB* pcb, uint32_t offset){
   mm_alloc(pcb->pgdir, ELFADDR, 0x1000);
   readseg((unsigned char*)elf, 8*SECTSIZE, offset);
   //printk("b\n");
-  //printk("Magic Assertion: %x\n", (elf->magic == 0x464C457FU));
+  printk("Magic Assertion: %x\n", (elf->magic == 0x464C457FU));
 
 
   ph = (struct ProgramHeader*)((char *)elf + elf->phoff);
@@ -70,4 +70,3 @@ void empty_loader(PCB* pcb, void (*ptr)(void)){
   lcr3(PADDR(kern_pgdir));
 
 };
-

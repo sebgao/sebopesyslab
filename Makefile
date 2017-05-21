@@ -2,6 +2,7 @@ BOOT   := boot.bin
 KERNEL := kernel.bin
 GAME	:= game.bin
 IMAGE  := disk.bin
+APP 	:= app.bin
 
 CC	  := gcc
 LD	  := ld
@@ -36,9 +37,13 @@ LIB_DIR		:= lib
 BOOT_DIR	   := boot
 KERNEL_DIR	 := kernel
 GAME_DIR     := game
+APP_DIR		:= app
 
 GAME_CFLAGS := $(CFLAGS)
 GAME_CFLAGS += -I $(GAME_DIR)/include
+
+APP_CFLAGS := $(CFLAGS)
+APP_CFLAGS += -I $(APP_DIR)/include
 
 KERNEL_CFLAGS := $(CFLAGS)
 KERNEL_CFLAGS += -I $(KERNEL_DIR)/include
@@ -47,6 +52,7 @@ OBJ_LIB_DIR	:= $(OBJ_DIR)/$(LIB_DIR)
 OBJ_BOOT_DIR   := $(OBJ_DIR)/$(BOOT_DIR)
 OBJ_KERNEL_DIR := $(OBJ_DIR)/$(KERNEL_DIR)
 OBJ_GAME_DIR := $(OBJ_DIR)/$(GAME_DIR)
+OBJ_APP_DIR := $(OBJ_DIR)/$(APP_DIR)
 
 LD_SCRIPT := $(shell find $(KERNEL_DIR) -name "*.ld")
 
@@ -69,11 +75,17 @@ GAME_S := $(shell find $(GAME_DIR) -name "*.S")
 GAME_O := $(GAME_C:%.c=$(OBJ_DIR)/%.o)
 GAME_O += $(GAME_S:%.S=$(OBJ_DIR)/%.o)
 
-$(IMAGE): $(BOOT) $(KERNEL) $(GAME)
+APP_C := $(shell find $(APP_DIR) -name "*.c")
+APP_S := $(shell find $(APP_DIR) -name "*.S")
+APP_O := $(APP_C:%.c=$(OBJ_DIR)/%.o)
+APP_O += $(APP_S:%.S=$(OBJ_DIR)/%.o)
+
+$(IMAGE): $(BOOT) $(KERNEL) $(GAME) $(APP)
 	@$(DD) if=/dev/zero of=$(IMAGE) count=10000		 > /dev/null # 准备磁盘文件
 	@$(DD) if=$(BOOT) of=$(IMAGE) conv=notrunc		  > /dev/null # 填充 boot loader
 	@$(DD) if=$(KERNEL) of=$(IMAGE) seek=1 conv=notrunc > /dev/null # 填充 kernel, 跨过 mbr
 	@$(DD) if=$(GAME) of=$(IMAGE) seek=201 conv=notrunc > /dev/null # 填充 game
+	@$(DD) if=$(APP) of=$(IMAGE) seek=401 conv=notrunc > /dev/null # 填充 app
 
 $(BOOT): $(BOOT_O)
 	$(LD) -e start -Ttext=0x7C00 -m elf_i386 -nostdlib -o $@.out $^
@@ -101,6 +113,11 @@ $(GAME): $(GAME_O) $(LIB_O)
 	cp $@ temp.o
 	objdump -S temp.o > game.S
 
+$(APP): $(APP_O) $(LIB_O)
+	$(LD) -e main -m elf_i386 -nostdlib -o $@ $^ $(shell $(CC) $(APP_CFLAGS) -print-libgcc-file-name)
+	cp $@ temp.o
+	objdump -S temp.o > APP.S
+
 $(OBJ_LIB_DIR)/%.o : $(LIB_DIR)/%.c
 	@mkdir -p $(OBJ_LIB_DIR)
 	$(CC) $(CFLAGS) $< -o $@
@@ -112,6 +129,10 @@ $(OBJ_KERNEL_DIR)/%.o: $(KERNEL_DIR)/%.[cS]
 $(OBJ_GAME_DIR)/%.o: $(GAME_DIR)/%.[cS]
 	mkdir -p $(OBJ_DIR)/$(dir $<)
 	$(CC) $(GAME_CFLAGS) $< -o $@
+
+$(OBJ_APP_DIR)/%.o: $(APP_DIR)/%.[cS]
+	mkdir -p $(OBJ_DIR)/$(dir $<)
+	$(CC) $(APP_CFLAGS) $< -o $@
 
 DEPS := $(shell find -name "*.d")
 -include $(DEPS)
