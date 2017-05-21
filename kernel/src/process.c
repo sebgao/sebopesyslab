@@ -231,7 +231,7 @@ void fork_current(){
 }
 
 void thread_current(uint32_t entry, uint32_t esp){
-	printk("ahh? %x\n", entry);
+	//printk("ahh? %x\n", entry);
 	PCB* son = pcb_create();
 	
 	son->tt = THREAD;

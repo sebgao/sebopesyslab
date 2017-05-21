@@ -3,7 +3,7 @@
 #include "inc/memlayout.h"
 #define NPUSTACKTOP 0x300000
 #define NPKSTACKTOP 0x200000
-#define NPKSTACKSIZE 2*4096
+#define NPKSTACKSIZE 0x1000
 #define PCBPOOLMAX 1000
 typedef enum{
 	READY,

@@ -3,17 +3,35 @@
 #include "video.h"
 #include "keyboard.h"
 #include "process.h"
+#include "semaphore.h"
 #include "lib/syscall.h"
 
-extern timer_handler timer_handlers[TIMER_HANDLERS_MAX];
+
 extern uint32_t tick();
 
 
 void do_syscall(struct TrapFrame *tf) {
 	//disable_interrupt();
 	//printk("%d\n", tf->cs&0x3);
-	int i;
 	switch(tf->eax) {
+		case SYS_SEM_INIT:
+			sem_init_kr((Semaphore*)tf->ebx, tf->ecx);
+		break;
+		case SYS_SEM_OPEN:
+			tf->eax = (uint32_t)sem_open_kr(tf->ebx, tf->ecx);
+		break;
+		case SYS_SEM_POST:
+			sem_post_kr((Semaphore*)tf->ebx);
+		break;
+		case SYS_SEM_WAIT:
+			sem_wait_kr((Semaphore*)tf->ebx);
+		break;
+		case SYS_SEM_CLOSE:
+			sem_close_kr((Semaphore*)tf->ebx);
+		break;
+		case SYS_SEM_GET:
+			tf->eax = sem_get_kr((Semaphore*)tf->ebx);
+		break;
 		case SYS_THREAD:
 			thread_current(tf->ebx, tf->ecx);
 		break;
@@ -60,15 +78,6 @@ void do_syscall(struct TrapFrame *tf) {
 		case SYS_GET_TICK:
 			tf->eax = tick();
 			//printk("%d\n", tf->eax);
-		break;
-		case SYS_ADD_TIMER:
-			for(i=0;i<TIMER_HANDLERS_MAX;i++){
-				if(!timer_handlers[i].used){
-					timer_handlers[i].ptr = (void*)tf->ebx;
-					timer_handlers[i].used = 1;
-					break;
-				}
-			}
 		break;
 		/* The `add_irq_handle' system call is artificial. We use it to
 		 * let user program register its interrupt handlers. But this is

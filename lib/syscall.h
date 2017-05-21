@@ -23,6 +23,12 @@
 
 #define SYS_THREAD		1510
 
+#define SYS_SEM_INIT	1600
+#define SYS_SEM_OPEN	1601
+#define SYS_SEM_POST	1602
+#define SYS_SEM_WAIT	1603
+#define SYS_SEM_CLOSE	1604
+#define SYS_SEM_GET		1605
 
 //alias begin
 
@@ -41,6 +47,34 @@ typedef struct timer_handler{
 	int used;
 
 }timer_handler;
+
+static inline void sys_sem_init(semaphore *sem, int count){
+	asm volatile("int $0x80": : "a"(SYS_SEM_INIT), "b"(sem), "c"(count)); //SYSCALL HERE!
+}
+
+static inline semaphore* sys_sem_open(int index, int count){
+	semaphore *sem;
+	asm volatile("int $0x80": "=a"(sem) : "a"(SYS_SEM_OPEN), "b"(index), "c"(count)); //SYSCALL HERE!
+	return sem;
+}
+
+static inline void sys_sem_post(semaphore *sem){
+	asm volatile("int $0x80": : "a"(SYS_SEM_POST), "b"(sem)); //SYSCALL HERE!
+}
+
+static inline void sys_sem_wait(semaphore *sem){
+	asm volatile("int $0x80": : "a"(SYS_SEM_WAIT), "b"(sem)); //SYSCALL HERE!
+}
+
+static inline void sys_sem_close(semaphore *sem){
+	asm volatile("int $0x80": : "a"(SYS_SEM_CLOSE), "b"(sem)); //SYSCALL HERE!
+}
+
+static inline int sys_sem_get(semaphore *sem){
+	int count;
+	asm volatile("int $0x80": "=a"(count) : "a"(SYS_SEM_GET), "b"(sem)); //SYSCALL HERE!
+	return count;
+}
 
 static inline void sys_thread(void* entry, uint32_t esp){
 	asm volatile("int $0x80": : "a"(SYS_THREAD), "b"(entry), "c"(esp)); //SYSCALL HERE!
