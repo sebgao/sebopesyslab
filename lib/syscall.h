@@ -41,6 +41,14 @@
 #define getppid sys_ppid
 #define sleep sys_sleep
 #define thread sys_thread
+#define sem_init sys_sem_init
+#define sem_open sys_sem_open
+#define sem_post sys_sem_post
+#define sem_wait sys_sem_wait
+#define sem_get sys_sem_get
+#define sem_close sys_sem_close
+#define thread_join sys_join
+#define process_join sys_join
 
 #define TIMER_HANDLERS_MAX 100
 typedef struct timer_handler{
@@ -87,6 +95,7 @@ static inline void sys_handout(){
 	asm volatile("int $0x80": : "a"(SYS_HANDOUT)); //SYSCALL HERE!
 }
 static inline void sys_exit(){
+	asm volatile("int $0x80": : "a"(SYS_HANDOUT));
 	asm volatile("int $0x80": : "a"(SYS_EXIT)); //SYSCALL HERE!
 }
 static inline uint32_t sys_fork(){

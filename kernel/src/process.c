@@ -8,7 +8,7 @@
 
 PCB PCBPool[PCBPOOLMAX];
 struct TrapFrame tfPool[PCBPOOLMAX];
-uint32_t pid=0;
+uint32_t pid = 1;
 PCB* current = NULL;
 
 PCB* ready_list = NULL;
@@ -254,28 +254,31 @@ void thread_current(uint32_t entry, uint32_t esp){
 }
 
 void exit_current(){
-	free_pcb(current);
-	lcr3(PADDR(kern_pgdir));
+
+	
 
 	PCB* p;
 
 	while(1){
 		p = ll_pop(&current->join_list);
-		if(p == NULL)break;
+		if(p == NULL) break;
+		if(p->used == 0) continue;
 		ll_entail(&ready_list, p);
 	}
-
+	
+	free_pcb(current);
 	current = NULL;
 	do_scheduler();
 }
 
 void join_current(int pid){
+	if(pid == 0)return;
 	uint32_t i;
 	for(i=0; i<PCBPOOLMAX; i++){
-		if(PCBPool[i].pid == pid && PCBPool[i].used)break;
+		if(PCBPool[i].pid == pid)break;
 	}
 	if(i == PCBPOOLMAX) return;
-
+	if(PCBPool[i].used == 0) return;
 	PCB *p = &PCBPool[i];
 
 	PCB* cur = current;

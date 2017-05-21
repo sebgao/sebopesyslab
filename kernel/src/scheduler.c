@@ -65,7 +65,7 @@ void do_scheduler(){
 		scheduler_switch(current);
 		return;*/
 	}
-	if(current->timeslice > 3 || current->ts == STOP){
+	if(current->timeslice > 2 || current->ts == STOP){
 
 		current->ts = READY;
 

@@ -39,8 +39,10 @@ typedef int32_t ssize_t;
 typedef int32_t off_t;
 
 typedef struct semaphore{
-	uint32_t foo[3];
+	uint32_t justinbieber[3];
 }semaphore;
+typedef uint32_t thread_t;
+typedef uint32_t process_t;
 
 // Efficient min and max operations
 #define MIN(_a, _b)						\

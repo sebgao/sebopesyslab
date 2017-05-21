@@ -94,2572 +94,2575 @@ static inline void sys_handout(){
 static inline void sys_exit(){
  8048167:	55                   	push   %ebp
  8048168:	89 e5                	mov    %esp,%ebp
-	asm volatile("int $0x80": : "a"(SYS_EXIT)); //SYSCALL HERE!
- 804816a:	b8 df 05 00 00       	mov    $0x5df,%eax
+	asm volatile("int $0x80": : "a"(SYS_HANDOUT));
+ 804816a:	b8 dc 05 00 00       	mov    $0x5dc,%eax
  804816f:	cd 80                	int    $0x80
+	asm volatile("int $0x80": : "a"(SYS_EXIT)); //SYSCALL HERE!
+ 8048171:	b8 df 05 00 00       	mov    $0x5df,%eax
+ 8048176:	cd 80                	int    $0x80
 }
- 8048171:	5d                   	pop    %ebp
- 8048172:	c3                   	ret    
+ 8048178:	5d                   	pop    %ebp
+ 8048179:	c3                   	ret    
 
-08048173 <sys_fork>:
+0804817a <sys_fork>:
 static inline uint32_t sys_fork(){
- 8048173:	55                   	push   %ebp
- 8048174:	89 e5                	mov    %esp,%ebp
- 8048176:	83 ec 10             	sub    $0x10,%esp
+ 804817a:	55                   	push   %ebp
+ 804817b:	89 e5                	mov    %esp,%ebp
+ 804817d:	83 ec 10             	sub    $0x10,%esp
 	uint32_t r_eax = 0;
- 8048179:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
+ 8048180:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
 	asm volatile("int $0x80": "=a"(r_eax) : "a"(SYS_FORK)); //SYSCALL HERE!
- 8048180:	b8 e0 05 00 00       	mov    $0x5e0,%eax
- 8048185:	cd 80                	int    $0x80
- 8048187:	89 45 fc             	mov    %eax,-0x4(%ebp)
+ 8048187:	b8 e0 05 00 00       	mov    $0x5e0,%eax
+ 804818c:	cd 80                	int    $0x80
+ 804818e:	89 45 fc             	mov    %eax,-0x4(%ebp)
 	return r_eax;
- 804818a:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 8048191:	8b 45 fc             	mov    -0x4(%ebp),%eax
 }
- 804818d:	c9                   	leave  
- 804818e:	c3                   	ret    
+ 8048194:	c9                   	leave  
+ 8048195:	c3                   	ret    
 
-0804818f <sys_pid>:
+08048196 <sys_pid>:
 static inline uint32_t sys_pid(){
- 804818f:	55                   	push   %ebp
- 8048190:	89 e5                	mov    %esp,%ebp
- 8048192:	83 ec 10             	sub    $0x10,%esp
+ 8048196:	55                   	push   %ebp
+ 8048197:	89 e5                	mov    %esp,%ebp
+ 8048199:	83 ec 10             	sub    $0x10,%esp
 	uint32_t r_eax = 0;
- 8048195:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
+ 804819c:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
 	asm volatile("int $0x80": "=a"(r_eax) : "a"(SYS_PID)); //SYSCALL HERE!
- 804819c:	b8 dd 05 00 00       	mov    $0x5dd,%eax
- 80481a1:	cd 80                	int    $0x80
- 80481a3:	89 45 fc             	mov    %eax,-0x4(%ebp)
+ 80481a3:	b8 dd 05 00 00       	mov    $0x5dd,%eax
+ 80481a8:	cd 80                	int    $0x80
+ 80481aa:	89 45 fc             	mov    %eax,-0x4(%ebp)
 	//asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
 	return r_eax;
- 80481a6:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80481ad:	8b 45 fc             	mov    -0x4(%ebp),%eax
 }
- 80481a9:	c9                   	leave  
- 80481aa:	c3                   	ret    
+ 80481b0:	c9                   	leave  
+ 80481b1:	c3                   	ret    
 
-080481ab <sys_sleep>:
+080481b2 <sys_sleep>:
 	uint32_t r_eax = 0;
 	asm volatile("int $0x80": "=a"(r_eax) : "a"(SYS_PPID)); //SYSCALL HERE!
 	//asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
 	return r_eax;
 }
 static inline void sys_sleep(uint32_t c){
- 80481ab:	55                   	push   %ebp
- 80481ac:	89 e5                	mov    %esp,%ebp
- 80481ae:	53                   	push   %ebx
+ 80481b2:	55                   	push   %ebp
+ 80481b3:	89 e5                	mov    %esp,%ebp
+ 80481b5:	53                   	push   %ebx
 	asm volatile("int $0x80": : "a"(SYS_SLEEP), "b"(c)); //SYSCALL HERE!
- 80481af:	b8 de 05 00 00       	mov    $0x5de,%eax
- 80481b4:	8b 55 08             	mov    0x8(%ebp),%edx
- 80481b7:	89 d3                	mov    %edx,%ebx
- 80481b9:	cd 80                	int    $0x80
+ 80481b6:	b8 de 05 00 00       	mov    $0x5de,%eax
+ 80481bb:	8b 55 08             	mov    0x8(%ebp),%edx
+ 80481be:	89 d3                	mov    %edx,%ebx
+ 80481c0:	cd 80                	int    $0x80
 }
- 80481bb:	5b                   	pop    %ebx
- 80481bc:	5d                   	pop    %ebp
- 80481bd:	c3                   	ret    
+ 80481c2:	5b                   	pop    %ebx
+ 80481c3:	5d                   	pop    %ebp
+ 80481c4:	c3                   	ret    
 
-080481be <sys_init_vcache>:
+080481c5 <sys_init_vcache>:
 
 static inline void sys_printch(char c){
 	asm volatile("int $0x80": : "a"(SYS_PRINT_CHAR), "b"(c)); //SYSCALL HERE!
 }
 
 static inline void sys_init_vcache(){
- 80481be:	55                   	push   %ebp
- 80481bf:	89 e5                	mov    %esp,%ebp
+ 80481c5:	55                   	push   %ebp
+ 80481c6:	89 e5                	mov    %esp,%ebp
 	asm volatile("int $0x80": : "a"(SYS_INIT_CACHE)); //SYSCALL HERE!
- 80481c1:	b8 4c 04 00 00       	mov    $0x44c,%eax
- 80481c6:	cd 80                	int    $0x80
+ 80481c8:	b8 4c 04 00 00       	mov    $0x44c,%eax
+ 80481cd:	cd 80                	int    $0x80
 }
- 80481c8:	5d                   	pop    %ebp
- 80481c9:	c3                   	ret    
+ 80481cf:	5d                   	pop    %ebp
+ 80481d0:	c3                   	ret    
 
-080481ca <sys_flush_vcache>:
+080481d1 <sys_flush_vcache>:
 
 static inline void sys_clear_vram(){
 	asm volatile("int $0x80": : "a"(SYS_CLEAR_VRAM)); //SYSCALL HERE!
 }
 static inline void sys_flush_vcache(){
- 80481ca:	55                   	push   %ebp
- 80481cb:	89 e5                	mov    %esp,%ebp
+ 80481d1:	55                   	push   %ebp
+ 80481d2:	89 e5                	mov    %esp,%ebp
 	asm volatile("int $0x80": : "a"(SYS_FLUSH_VCACHE)); //SYSCALL HERE!
- 80481cd:	b8 4e 04 00 00       	mov    $0x44e,%eax
- 80481d2:	cd 80                	int    $0x80
+ 80481d4:	b8 4e 04 00 00       	mov    $0x44e,%eax
+ 80481d9:	cd 80                	int    $0x80
 }
- 80481d4:	5d                   	pop    %ebp
- 80481d5:	c3                   	ret    
+ 80481db:	5d                   	pop    %ebp
+ 80481dc:	c3                   	ret    
 
-080481d6 <sys_set_pixel>:
+080481dd <sys_set_pixel>:
 static inline void sys_set_pixel(int x, int y, int color){
- 80481d6:	55                   	push   %ebp
- 80481d7:	89 e5                	mov    %esp,%ebp
- 80481d9:	53                   	push   %ebx
+ 80481dd:	55                   	push   %ebp
+ 80481de:	89 e5                	mov    %esp,%ebp
+ 80481e0:	53                   	push   %ebx
 	asm volatile("int $0x80": : "a"(SYS_SET_PIXEL), "b"(x), "c"(y), "d"(color)); //SYSCALL HERE!
- 80481da:	b8 4f 04 00 00       	mov    $0x44f,%eax
- 80481df:	8b 5d 08             	mov    0x8(%ebp),%ebx
- 80481e2:	8b 4d 0c             	mov    0xc(%ebp),%ecx
- 80481e5:	8b 55 10             	mov    0x10(%ebp),%edx
- 80481e8:	cd 80                	int    $0x80
+ 80481e1:	b8 4f 04 00 00       	mov    $0x44f,%eax
+ 80481e6:	8b 5d 08             	mov    0x8(%ebp),%ebx
+ 80481e9:	8b 4d 0c             	mov    0xc(%ebp),%ecx
+ 80481ec:	8b 55 10             	mov    0x10(%ebp),%edx
+ 80481ef:	cd 80                	int    $0x80
 }
- 80481ea:	5b                   	pop    %ebx
- 80481eb:	5d                   	pop    %ebp
- 80481ec:	c3                   	ret    
+ 80481f1:	5b                   	pop    %ebx
+ 80481f2:	5d                   	pop    %ebp
+ 80481f3:	c3                   	ret    
 
-080481ed <sys_key_down>:
+080481f4 <sys_key_down>:
 static inline void sys_add_timer(void (*ptr)(void)){
 	asm volatile("int $0x80": : "a"(SYS_ADD_TIMER), "b"(ptr));
 }
 static inline char sys_key_down(char s){
- 80481ed:	55                   	push   %ebp
- 80481ee:	89 e5                	mov    %esp,%ebp
- 80481f0:	53                   	push   %ebx
- 80481f1:	83 ec 14             	sub    $0x14,%esp
- 80481f4:	8b 45 08             	mov    0x8(%ebp),%eax
- 80481f7:	88 45 e8             	mov    %al,-0x18(%ebp)
+ 80481f4:	55                   	push   %ebp
+ 80481f5:	89 e5                	mov    %esp,%ebp
+ 80481f7:	53                   	push   %ebx
+ 80481f8:	83 ec 14             	sub    $0x14,%esp
+ 80481fb:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80481fe:	88 45 e8             	mov    %al,-0x18(%ebp)
 	char r_eax = 0;
- 80481fa:	c6 45 fb 00          	movb   $0x0,-0x5(%ebp)
+ 8048201:	c6 45 fb 00          	movb   $0x0,-0x5(%ebp)
 	asm volatile("int $0x80": "=a"(r_eax) : "a"(SYS_GET_KEY), "b"(s)); //SYSCALL HERE!
- 80481fe:	b8 b0 04 00 00       	mov    $0x4b0,%eax
- 8048203:	0f b6 55 e8          	movzbl -0x18(%ebp),%edx
- 8048207:	89 d3                	mov    %edx,%ebx
- 8048209:	cd 80                	int    $0x80
- 804820b:	88 45 fb             	mov    %al,-0x5(%ebp)
+ 8048205:	b8 b0 04 00 00       	mov    $0x4b0,%eax
+ 804820a:	0f b6 55 e8          	movzbl -0x18(%ebp),%edx
+ 804820e:	89 d3                	mov    %edx,%ebx
+ 8048210:	cd 80                	int    $0x80
+ 8048212:	88 45 fb             	mov    %al,-0x5(%ebp)
 	//asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
 	return r_eax;
- 804820e:	0f b6 45 fb          	movzbl -0x5(%ebp),%eax
+ 8048215:	0f b6 45 fb          	movzbl -0x5(%ebp),%eax
 }
- 8048212:	83 c4 14             	add    $0x14,%esp
- 8048215:	5b                   	pop    %ebx
- 8048216:	5d                   	pop    %ebp
- 8048217:	c3                   	ret    
+ 8048219:	83 c4 14             	add    $0x14,%esp
+ 804821c:	5b                   	pop    %ebx
+ 804821d:	5d                   	pop    %ebp
+ 804821e:	c3                   	ret    
 
-08048218 <sys_get_tick>:
+0804821f <sys_get_tick>:
 static inline uint32_t sys_get_tick(){
- 8048218:	55                   	push   %ebp
- 8048219:	89 e5                	mov    %esp,%ebp
- 804821b:	83 ec 10             	sub    $0x10,%esp
+ 804821f:	55                   	push   %ebp
+ 8048220:	89 e5                	mov    %esp,%ebp
+ 8048222:	83 ec 10             	sub    $0x10,%esp
 	uint32_t r_eax = 0;
- 804821e:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
+ 8048225:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
 	asm volatile("int $0x80": "=a"(r_eax) : "a"(SYS_GET_TICK)); //SYSCALL HERE!
- 8048225:	b8 15 05 00 00       	mov    $0x515,%eax
- 804822a:	cd 80                	int    $0x80
- 804822c:	89 45 fc             	mov    %eax,-0x4(%ebp)
+ 804822c:	b8 15 05 00 00       	mov    $0x515,%eax
+ 8048231:	cd 80                	int    $0x80
+ 8048233:	89 45 fc             	mov    %eax,-0x4(%ebp)
 	//asm volatile("movl %%eax, %0\n" : : "m"(r_eax));
 	return r_eax;
- 804822f:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 8048236:	8b 45 fc             	mov    -0x4(%ebp),%eax
 }
- 8048232:	c9                   	leave  
- 8048233:	c3                   	ret    
+ 8048239:	c9                   	leave  
+ 804823a:	c3                   	ret    
 
-08048234 <isqrt>:
+0804823b <isqrt>:
     1,1,1,1,1
 };
 const char* nums[10]={
     num0, num1, num2, num3, num4, num5, num6, num7, num8, num9
 };
 static inline int isqrt(uint32_t x) {
- 8048234:	55                   	push   %ebp
- 8048235:	89 e5                	mov    %esp,%ebp
- 8048237:	83 ec 10             	sub    $0x10,%esp
+ 804823b:	55                   	push   %ebp
+ 804823c:	89 e5                	mov    %esp,%ebp
+ 804823e:	83 ec 10             	sub    $0x10,%esp
     if(memoriza[x] > 0) return memoriza[x];
- 804823a:	8b 45 08             	mov    0x8(%ebp),%eax
- 804823d:	8b 04 85 c0 b0 04 08 	mov    0x804b0c0(,%eax,4),%eax
- 8048244:	85 c0                	test   %eax,%eax
- 8048246:	74 0f                	je     8048257 <isqrt+0x23>
- 8048248:	8b 45 08             	mov    0x8(%ebp),%eax
- 804824b:	8b 04 85 c0 b0 04 08 	mov    0x804b0c0(,%eax,4),%eax
- 8048252:	e9 a9 00 00 00       	jmp    8048300 <isqrt+0xcc>
+ 8048241:	8b 45 08             	mov    0x8(%ebp),%eax
+ 8048244:	8b 04 85 c0 b0 04 08 	mov    0x804b0c0(,%eax,4),%eax
+ 804824b:	85 c0                	test   %eax,%eax
+ 804824d:	74 0f                	je     804825e <isqrt+0x23>
+ 804824f:	8b 45 08             	mov    0x8(%ebp),%eax
+ 8048252:	8b 04 85 c0 b0 04 08 	mov    0x804b0c0(,%eax,4),%eax
+ 8048259:	e9 a9 00 00 00       	jmp    8048307 <isqrt+0xcc>
     const uint16_t *p = squares;
- 8048257:	c7 45 fc c0 98 04 08 	movl   $0x80498c0,-0x4(%ebp)
+ 804825e:	c7 45 fc c0 98 04 08 	movl   $0x80498c0,-0x4(%ebp)
     //if (p[128] <= x) p += 128;
     //if (p[ 64] <= x) p +=  64;
     if (p[ 32] <= x) p +=  32;
- 804825e:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 8048261:	83 c0 40             	add    $0x40,%eax
- 8048264:	0f b7 00             	movzwl (%eax),%eax
- 8048267:	0f b7 c0             	movzwl %ax,%eax
- 804826a:	3b 45 08             	cmp    0x8(%ebp),%eax
- 804826d:	77 04                	ja     8048273 <isqrt+0x3f>
- 804826f:	83 45 fc 40          	addl   $0x40,-0x4(%ebp)
+ 8048265:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 8048268:	83 c0 40             	add    $0x40,%eax
+ 804826b:	0f b7 00             	movzwl (%eax),%eax
+ 804826e:	0f b7 c0             	movzwl %ax,%eax
+ 8048271:	3b 45 08             	cmp    0x8(%ebp),%eax
+ 8048274:	77 04                	ja     804827a <isqrt+0x3f>
+ 8048276:	83 45 fc 40          	addl   $0x40,-0x4(%ebp)
     if (p[ 16] <= x) p +=  16;
- 8048273:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 8048276:	83 c0 20             	add    $0x20,%eax
- 8048279:	0f b7 00             	movzwl (%eax),%eax
- 804827c:	0f b7 c0             	movzwl %ax,%eax
- 804827f:	3b 45 08             	cmp    0x8(%ebp),%eax
- 8048282:	77 04                	ja     8048288 <isqrt+0x54>
- 8048284:	83 45 fc 20          	addl   $0x20,-0x4(%ebp)
+ 804827a:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 804827d:	83 c0 20             	add    $0x20,%eax
+ 8048280:	0f b7 00             	movzwl (%eax),%eax
+ 8048283:	0f b7 c0             	movzwl %ax,%eax
+ 8048286:	3b 45 08             	cmp    0x8(%ebp),%eax
+ 8048289:	77 04                	ja     804828f <isqrt+0x54>
+ 804828b:	83 45 fc 20          	addl   $0x20,-0x4(%ebp)
     if (p[  8] <= x) p +=   8;
- 8048288:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 804828b:	83 c0 10             	add    $0x10,%eax
- 804828e:	0f b7 00             	movzwl (%eax),%eax
- 8048291:	0f b7 c0             	movzwl %ax,%eax
- 8048294:	3b 45 08             	cmp    0x8(%ebp),%eax
- 8048297:	77 04                	ja     804829d <isqrt+0x69>
- 8048299:	83 45 fc 10          	addl   $0x10,-0x4(%ebp)
+ 804828f:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 8048292:	83 c0 10             	add    $0x10,%eax
+ 8048295:	0f b7 00             	movzwl (%eax),%eax
+ 8048298:	0f b7 c0             	movzwl %ax,%eax
+ 804829b:	3b 45 08             	cmp    0x8(%ebp),%eax
+ 804829e:	77 04                	ja     80482a4 <isqrt+0x69>
+ 80482a0:	83 45 fc 10          	addl   $0x10,-0x4(%ebp)
     if (p[  4] <= x) p +=   4;
- 804829d:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 80482a0:	83 c0 08             	add    $0x8,%eax
- 80482a3:	0f b7 00             	movzwl (%eax),%eax
- 80482a6:	0f b7 c0             	movzwl %ax,%eax
- 80482a9:	3b 45 08             	cmp    0x8(%ebp),%eax
- 80482ac:	77 04                	ja     80482b2 <isqrt+0x7e>
- 80482ae:	83 45 fc 08          	addl   $0x8,-0x4(%ebp)
+ 80482a4:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80482a7:	83 c0 08             	add    $0x8,%eax
+ 80482aa:	0f b7 00             	movzwl (%eax),%eax
+ 80482ad:	0f b7 c0             	movzwl %ax,%eax
+ 80482b0:	3b 45 08             	cmp    0x8(%ebp),%eax
+ 80482b3:	77 04                	ja     80482b9 <isqrt+0x7e>
+ 80482b5:	83 45 fc 08          	addl   $0x8,-0x4(%ebp)
     if (p[  2] <= x) p +=   2;
- 80482b2:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 80482b5:	83 c0 04             	add    $0x4,%eax
- 80482b8:	0f b7 00             	movzwl (%eax),%eax
- 80482bb:	0f b7 c0             	movzwl %ax,%eax
- 80482be:	3b 45 08             	cmp    0x8(%ebp),%eax
- 80482c1:	77 04                	ja     80482c7 <isqrt+0x93>
- 80482c3:	83 45 fc 04          	addl   $0x4,-0x4(%ebp)
+ 80482b9:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80482bc:	83 c0 04             	add    $0x4,%eax
+ 80482bf:	0f b7 00             	movzwl (%eax),%eax
+ 80482c2:	0f b7 c0             	movzwl %ax,%eax
+ 80482c5:	3b 45 08             	cmp    0x8(%ebp),%eax
+ 80482c8:	77 04                	ja     80482ce <isqrt+0x93>
+ 80482ca:	83 45 fc 04          	addl   $0x4,-0x4(%ebp)
     if (p[  1] <= x) p +=   1;
- 80482c7:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 80482ca:	83 c0 02             	add    $0x2,%eax
- 80482cd:	0f b7 00             	movzwl (%eax),%eax
- 80482d0:	0f b7 c0             	movzwl %ax,%eax
- 80482d3:	3b 45 08             	cmp    0x8(%ebp),%eax
- 80482d6:	77 04                	ja     80482dc <isqrt+0xa8>
- 80482d8:	83 45 fc 02          	addl   $0x2,-0x4(%ebp)
+ 80482ce:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80482d1:	83 c0 02             	add    $0x2,%eax
+ 80482d4:	0f b7 00             	movzwl (%eax),%eax
+ 80482d7:	0f b7 c0             	movzwl %ax,%eax
+ 80482da:	3b 45 08             	cmp    0x8(%ebp),%eax
+ 80482dd:	77 04                	ja     80482e3 <isqrt+0xa8>
+ 80482df:	83 45 fc 02          	addl   $0x2,-0x4(%ebp)
     memoriza[x] = p - squares;
- 80482dc:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 80482df:	ba c0 98 04 08       	mov    $0x80498c0,%edx
- 80482e4:	29 d0                	sub    %edx,%eax
- 80482e6:	d1 f8                	sar    %eax
- 80482e8:	89 c2                	mov    %eax,%edx
- 80482ea:	8b 45 08             	mov    0x8(%ebp),%eax
- 80482ed:	89 14 85 c0 b0 04 08 	mov    %edx,0x804b0c0(,%eax,4)
+ 80482e3:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80482e6:	ba c0 98 04 08       	mov    $0x80498c0,%edx
+ 80482eb:	29 d0                	sub    %edx,%eax
+ 80482ed:	d1 f8                	sar    %eax
+ 80482ef:	89 c2                	mov    %eax,%edx
+ 80482f1:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80482f4:	89 14 85 c0 b0 04 08 	mov    %edx,0x804b0c0(,%eax,4)
     return p - squares;
- 80482f4:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 80482f7:	ba c0 98 04 08       	mov    $0x80498c0,%edx
- 80482fc:	29 d0                	sub    %edx,%eax
- 80482fe:	d1 f8                	sar    %eax
+ 80482fb:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80482fe:	ba c0 98 04 08       	mov    $0x80498c0,%edx
+ 8048303:	29 d0                	sub    %edx,%eax
+ 8048305:	d1 f8                	sar    %eax
 }
- 8048300:	c9                   	leave  
- 8048301:	c3                   	ret    
+ 8048307:	c9                   	leave  
+ 8048308:	c3                   	ret    
 
-08048302 <clearStage>:
+08048309 <clearStage>:
 
 
 static inline void clearStage(){
- 8048302:	55                   	push   %ebp
- 8048303:	89 e5                	mov    %esp,%ebp
+ 8048309:	55                   	push   %ebp
+ 804830a:	89 e5                	mov    %esp,%ebp
 	hash = 0;
- 8048305:	c7 05 80 b0 04 08 00 	movl   $0x0,0x804b080
- 804830c:	00 00 00 
+ 804830c:	c7 05 80 b0 04 08 00 	movl   $0x0,0x804b080
+ 8048313:	00 00 00 
 	sys_init_vcache();
- 804830f:	e8 aa fe ff ff       	call   80481be <sys_init_vcache>
+ 8048316:	e8 aa fe ff ff       	call   80481c5 <sys_init_vcache>
 }
- 8048314:	5d                   	pop    %ebp
- 8048315:	c3                   	ret    
+ 804831b:	5d                   	pop    %ebp
+ 804831c:	c3                   	ret    
 
-08048316 <drawPoint>:
+0804831d <drawPoint>:
 static inline void drawPoint(int x, int y, uint8_t color){
- 8048316:	55                   	push   %ebp
- 8048317:	89 e5                	mov    %esp,%ebp
- 8048319:	83 ec 04             	sub    $0x4,%esp
- 804831c:	8b 45 10             	mov    0x10(%ebp),%eax
- 804831f:	88 45 fc             	mov    %al,-0x4(%ebp)
+ 804831d:	55                   	push   %ebp
+ 804831e:	89 e5                	mov    %esp,%ebp
+ 8048320:	83 ec 04             	sub    $0x4,%esp
+ 8048323:	8b 45 10             	mov    0x10(%ebp),%eax
+ 8048326:	88 45 fc             	mov    %al,-0x4(%ebp)
 	sys_set_pixel(y, x, color);
- 8048322:	0f b6 45 fc          	movzbl -0x4(%ebp),%eax
- 8048326:	50                   	push   %eax
- 8048327:	ff 75 08             	pushl  0x8(%ebp)
- 804832a:	ff 75 0c             	pushl  0xc(%ebp)
- 804832d:	e8 a4 fe ff ff       	call   80481d6 <sys_set_pixel>
- 8048332:	83 c4 0c             	add    $0xc,%esp
+ 8048329:	0f b6 45 fc          	movzbl -0x4(%ebp),%eax
+ 804832d:	50                   	push   %eax
+ 804832e:	ff 75 08             	pushl  0x8(%ebp)
+ 8048331:	ff 75 0c             	pushl  0xc(%ebp)
+ 8048334:	e8 a4 fe ff ff       	call   80481dd <sys_set_pixel>
+ 8048339:	83 c4 0c             	add    $0xc,%esp
 }
- 8048335:	c9                   	leave  
- 8048336:	c3                   	ret    
+ 804833c:	c9                   	leave  
+ 804833d:	c3                   	ret    
 
-08048337 <drawRect>:
+0804833e <drawRect>:
 static inline void drawRect(int x, int y, int w, int h, uint8_t color){
- 8048337:	55                   	push   %ebp
- 8048338:	89 e5                	mov    %esp,%ebp
- 804833a:	53                   	push   %ebx
- 804833b:	83 ec 14             	sub    $0x14,%esp
- 804833e:	8b 45 18             	mov    0x18(%ebp),%eax
- 8048341:	88 45 e8             	mov    %al,-0x18(%ebp)
+ 804833e:	55                   	push   %ebp
+ 804833f:	89 e5                	mov    %esp,%ebp
+ 8048341:	53                   	push   %ebx
+ 8048342:	83 ec 14             	sub    $0x14,%esp
+ 8048345:	8b 45 18             	mov    0x18(%ebp),%eax
+ 8048348:	88 45 e8             	mov    %al,-0x18(%ebp)
 	hash += 29*x+57*y+13*color;
- 8048344:	8b 45 08             	mov    0x8(%ebp),%eax
- 8048347:	6b d0 1d             	imul   $0x1d,%eax,%edx
- 804834a:	8b 45 0c             	mov    0xc(%ebp),%eax
- 804834d:	6b c0 39             	imul   $0x39,%eax,%eax
- 8048350:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 8048353:	0f b6 55 e8          	movzbl -0x18(%ebp),%edx
- 8048357:	89 d0                	mov    %edx,%eax
- 8048359:	01 c0                	add    %eax,%eax
- 804835b:	01 d0                	add    %edx,%eax
- 804835d:	c1 e0 02             	shl    $0x2,%eax
- 8048360:	01 d0                	add    %edx,%eax
- 8048362:	01 c8                	add    %ecx,%eax
- 8048364:	89 c2                	mov    %eax,%edx
- 8048366:	a1 80 b0 04 08       	mov    0x804b080,%eax
- 804836b:	01 d0                	add    %edx,%eax
- 804836d:	a3 80 b0 04 08       	mov    %eax,0x804b080
+ 804834b:	8b 45 08             	mov    0x8(%ebp),%eax
+ 804834e:	6b d0 1d             	imul   $0x1d,%eax,%edx
+ 8048351:	8b 45 0c             	mov    0xc(%ebp),%eax
+ 8048354:	6b c0 39             	imul   $0x39,%eax,%eax
+ 8048357:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 804835a:	0f b6 55 e8          	movzbl -0x18(%ebp),%edx
+ 804835e:	89 d0                	mov    %edx,%eax
+ 8048360:	01 c0                	add    %eax,%eax
+ 8048362:	01 d0                	add    %edx,%eax
+ 8048364:	c1 e0 02             	shl    $0x2,%eax
+ 8048367:	01 d0                	add    %edx,%eax
+ 8048369:	01 c8                	add    %ecx,%eax
+ 804836b:	89 c2                	mov    %eax,%edx
+ 804836d:	a1 80 b0 04 08       	mov    0x804b080,%eax
+ 8048372:	01 d0                	add    %edx,%eax
+ 8048374:	a3 80 b0 04 08       	mov    %eax,0x804b080
 	int i=0, j=0;
- 8048372:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
- 8048379:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+ 8048379:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+ 8048380:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
 	for(i=0;i<w;i++){
- 8048380:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
- 8048387:	eb 38                	jmp    80483c1 <drawRect+0x8a>
+ 8048387:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+ 804838e:	eb 38                	jmp    80483c8 <drawRect+0x8a>
 		for(j=0;j<h;j++){
- 8048389:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
- 8048390:	eb 23                	jmp    80483b5 <drawRect+0x7e>
+ 8048390:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+ 8048397:	eb 23                	jmp    80483bc <drawRect+0x7e>
 			drawPoint(x+i, y+j, color);
- 8048392:	0f b6 45 e8          	movzbl -0x18(%ebp),%eax
- 8048396:	8b 4d 0c             	mov    0xc(%ebp),%ecx
- 8048399:	8b 55 f4             	mov    -0xc(%ebp),%edx
- 804839c:	01 d1                	add    %edx,%ecx
- 804839e:	8b 5d 08             	mov    0x8(%ebp),%ebx
- 80483a1:	8b 55 f8             	mov    -0x8(%ebp),%edx
- 80483a4:	01 da                	add    %ebx,%edx
- 80483a6:	50                   	push   %eax
- 80483a7:	51                   	push   %ecx
- 80483a8:	52                   	push   %edx
- 80483a9:	e8 68 ff ff ff       	call   8048316 <drawPoint>
- 80483ae:	83 c4 0c             	add    $0xc,%esp
+ 8048399:	0f b6 45 e8          	movzbl -0x18(%ebp),%eax
+ 804839d:	8b 4d 0c             	mov    0xc(%ebp),%ecx
+ 80483a0:	8b 55 f4             	mov    -0xc(%ebp),%edx
+ 80483a3:	01 d1                	add    %edx,%ecx
+ 80483a5:	8b 5d 08             	mov    0x8(%ebp),%ebx
+ 80483a8:	8b 55 f8             	mov    -0x8(%ebp),%edx
+ 80483ab:	01 da                	add    %ebx,%edx
+ 80483ad:	50                   	push   %eax
+ 80483ae:	51                   	push   %ecx
+ 80483af:	52                   	push   %edx
+ 80483b0:	e8 68 ff ff ff       	call   804831d <drawPoint>
+ 80483b5:	83 c4 0c             	add    $0xc,%esp
 }
 static inline void drawRect(int x, int y, int w, int h, uint8_t color){
 	hash += 29*x+57*y+13*color;
 	int i=0, j=0;
 	for(i=0;i<w;i++){
 		for(j=0;j<h;j++){
- 80483b1:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
- 80483b5:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80483b8:	3b 45 14             	cmp    0x14(%ebp),%eax
- 80483bb:	7c d5                	jl     8048392 <drawRect+0x5b>
+ 80483b8:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+ 80483bc:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80483bf:	3b 45 14             	cmp    0x14(%ebp),%eax
+ 80483c2:	7c d5                	jl     8048399 <drawRect+0x5b>
 	sys_set_pixel(y, x, color);
 }
 static inline void drawRect(int x, int y, int w, int h, uint8_t color){
 	hash += 29*x+57*y+13*color;
 	int i=0, j=0;
 	for(i=0;i<w;i++){
- 80483bd:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
- 80483c1:	8b 45 f8             	mov    -0x8(%ebp),%eax
- 80483c4:	3b 45 10             	cmp    0x10(%ebp),%eax
- 80483c7:	7c c0                	jl     8048389 <drawRect+0x52>
+ 80483c4:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
+ 80483c8:	8b 45 f8             	mov    -0x8(%ebp),%eax
+ 80483cb:	3b 45 10             	cmp    0x10(%ebp),%eax
+ 80483ce:	7c c0                	jl     8048390 <drawRect+0x52>
 		for(j=0;j<h;j++){
 			drawPoint(x+i, y+j, color);
 		}
 	}
 }
- 80483c9:	8b 5d fc             	mov    -0x4(%ebp),%ebx
- 80483cc:	c9                   	leave  
- 80483cd:	c3                   	ret    
+ 80483d0:	8b 5d fc             	mov    -0x4(%ebp),%ebx
+ 80483d3:	c9                   	leave  
+ 80483d4:	c3                   	ret    
 
-080483ce <drawCirc>:
+080483d5 <drawCirc>:
 
 
 static inline void drawCirc(int x, int y, int r, uint8_t color){
- 80483ce:	55                   	push   %ebp
- 80483cf:	89 e5                	mov    %esp,%ebp
- 80483d1:	53                   	push   %ebx
- 80483d2:	83 ec 14             	sub    $0x14,%esp
- 80483d5:	8b 45 14             	mov    0x14(%ebp),%eax
- 80483d8:	88 45 e8             	mov    %al,-0x18(%ebp)
+ 80483d5:	55                   	push   %ebp
+ 80483d6:	89 e5                	mov    %esp,%ebp
+ 80483d8:	53                   	push   %ebx
+ 80483d9:	83 ec 14             	sub    $0x14,%esp
+ 80483dc:	8b 45 14             	mov    0x14(%ebp),%eax
+ 80483df:	88 45 e8             	mov    %al,-0x18(%ebp)
 	int i, j;
 	hash += 329*x+157*y+713*r;
- 80483db:	8b 45 08             	mov    0x8(%ebp),%eax
- 80483de:	69 d0 49 01 00 00    	imul   $0x149,%eax,%edx
- 80483e4:	8b 45 0c             	mov    0xc(%ebp),%eax
- 80483e7:	69 c0 9d 00 00 00    	imul   $0x9d,%eax,%eax
- 80483ed:	01 c2                	add    %eax,%edx
- 80483ef:	8b 45 10             	mov    0x10(%ebp),%eax
- 80483f2:	69 c0 c9 02 00 00    	imul   $0x2c9,%eax,%eax
- 80483f8:	01 d0                	add    %edx,%eax
- 80483fa:	89 c2                	mov    %eax,%edx
- 80483fc:	a1 80 b0 04 08       	mov    0x804b080,%eax
- 8048401:	01 d0                	add    %edx,%eax
- 8048403:	a3 80 b0 04 08       	mov    %eax,0x804b080
+ 80483e2:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80483e5:	69 d0 49 01 00 00    	imul   $0x149,%eax,%edx
+ 80483eb:	8b 45 0c             	mov    0xc(%ebp),%eax
+ 80483ee:	69 c0 9d 00 00 00    	imul   $0x9d,%eax,%eax
+ 80483f4:	01 c2                	add    %eax,%edx
+ 80483f6:	8b 45 10             	mov    0x10(%ebp),%eax
+ 80483f9:	69 c0 c9 02 00 00    	imul   $0x2c9,%eax,%eax
+ 80483ff:	01 d0                	add    %edx,%eax
+ 8048401:	89 c2                	mov    %eax,%edx
+ 8048403:	a1 80 b0 04 08       	mov    0x804b080,%eax
+ 8048408:	01 d0                	add    %edx,%eax
+ 804840a:	a3 80 b0 04 08       	mov    %eax,0x804b080
 	for(i=-r; i<=r; i++){
- 8048408:	8b 45 10             	mov    0x10(%ebp),%eax
- 804840b:	f7 d8                	neg    %eax
- 804840d:	89 45 f8             	mov    %eax,-0x8(%ebp)
- 8048410:	eb 5c                	jmp    804846e <drawCirc+0xa0>
+ 804840f:	8b 45 10             	mov    0x10(%ebp),%eax
+ 8048412:	f7 d8                	neg    %eax
+ 8048414:	89 45 f8             	mov    %eax,-0x8(%ebp)
+ 8048417:	eb 5c                	jmp    8048475 <drawCirc+0xa0>
 		int delta = isqrt(r*r-i*i)+1;
- 8048412:	8b 45 10             	mov    0x10(%ebp),%eax
- 8048415:	0f af 45 10          	imul   0x10(%ebp),%eax
- 8048419:	89 c2                	mov    %eax,%edx
- 804841b:	8b 45 f8             	mov    -0x8(%ebp),%eax
- 804841e:	0f af 45 f8          	imul   -0x8(%ebp),%eax
- 8048422:	29 c2                	sub    %eax,%edx
- 8048424:	89 d0                	mov    %edx,%eax
- 8048426:	50                   	push   %eax
- 8048427:	e8 08 fe ff ff       	call   8048234 <isqrt>
- 804842c:	83 c4 04             	add    $0x4,%esp
- 804842f:	83 c0 01             	add    $0x1,%eax
- 8048432:	89 45 f0             	mov    %eax,-0x10(%ebp)
+ 8048419:	8b 45 10             	mov    0x10(%ebp),%eax
+ 804841c:	0f af 45 10          	imul   0x10(%ebp),%eax
+ 8048420:	89 c2                	mov    %eax,%edx
+ 8048422:	8b 45 f8             	mov    -0x8(%ebp),%eax
+ 8048425:	0f af 45 f8          	imul   -0x8(%ebp),%eax
+ 8048429:	29 c2                	sub    %eax,%edx
+ 804842b:	89 d0                	mov    %edx,%eax
+ 804842d:	50                   	push   %eax
+ 804842e:	e8 08 fe ff ff       	call   804823b <isqrt>
+ 8048433:	83 c4 04             	add    $0x4,%esp
+ 8048436:	83 c0 01             	add    $0x1,%eax
+ 8048439:	89 45 f0             	mov    %eax,-0x10(%ebp)
 		//printk("%d\n", delta);
 		for(j=-delta; j<=delta; j++){
- 8048435:	8b 45 f0             	mov    -0x10(%ebp),%eax
- 8048438:	f7 d8                	neg    %eax
- 804843a:	89 45 f4             	mov    %eax,-0xc(%ebp)
- 804843d:	eb 23                	jmp    8048462 <drawCirc+0x94>
+ 804843c:	8b 45 f0             	mov    -0x10(%ebp),%eax
+ 804843f:	f7 d8                	neg    %eax
+ 8048441:	89 45 f4             	mov    %eax,-0xc(%ebp)
+ 8048444:	eb 23                	jmp    8048469 <drawCirc+0x94>
 			//printk("(%d, %d)", x+i, y+j);
 			drawPoint(x+i, y+j, color);
- 804843f:	0f b6 45 e8          	movzbl -0x18(%ebp),%eax
- 8048443:	8b 4d 0c             	mov    0xc(%ebp),%ecx
- 8048446:	8b 55 f4             	mov    -0xc(%ebp),%edx
- 8048449:	01 d1                	add    %edx,%ecx
- 804844b:	8b 5d 08             	mov    0x8(%ebp),%ebx
- 804844e:	8b 55 f8             	mov    -0x8(%ebp),%edx
- 8048451:	01 da                	add    %ebx,%edx
- 8048453:	50                   	push   %eax
- 8048454:	51                   	push   %ecx
- 8048455:	52                   	push   %edx
- 8048456:	e8 bb fe ff ff       	call   8048316 <drawPoint>
- 804845b:	83 c4 0c             	add    $0xc,%esp
+ 8048446:	0f b6 45 e8          	movzbl -0x18(%ebp),%eax
+ 804844a:	8b 4d 0c             	mov    0xc(%ebp),%ecx
+ 804844d:	8b 55 f4             	mov    -0xc(%ebp),%edx
+ 8048450:	01 d1                	add    %edx,%ecx
+ 8048452:	8b 5d 08             	mov    0x8(%ebp),%ebx
+ 8048455:	8b 55 f8             	mov    -0x8(%ebp),%edx
+ 8048458:	01 da                	add    %ebx,%edx
+ 804845a:	50                   	push   %eax
+ 804845b:	51                   	push   %ecx
+ 804845c:	52                   	push   %edx
+ 804845d:	e8 bb fe ff ff       	call   804831d <drawPoint>
+ 8048462:	83 c4 0c             	add    $0xc,%esp
 	int i, j;
 	hash += 329*x+157*y+713*r;
 	for(i=-r; i<=r; i++){
 		int delta = isqrt(r*r-i*i)+1;
 		//printk("%d\n", delta);
 		for(j=-delta; j<=delta; j++){
- 804845e:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
- 8048462:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048465:	3b 45 f0             	cmp    -0x10(%ebp),%eax
- 8048468:	7e d5                	jle    804843f <drawCirc+0x71>
+ 8048465:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+ 8048469:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 804846c:	3b 45 f0             	cmp    -0x10(%ebp),%eax
+ 804846f:	7e d5                	jle    8048446 <drawCirc+0x71>
 
 
 static inline void drawCirc(int x, int y, int r, uint8_t color){
 	int i, j;
 	hash += 329*x+157*y+713*r;
 	for(i=-r; i<=r; i++){
- 804846a:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
- 804846e:	8b 45 f8             	mov    -0x8(%ebp),%eax
- 8048471:	3b 45 10             	cmp    0x10(%ebp),%eax
- 8048474:	7e 9c                	jle    8048412 <drawCirc+0x44>
+ 8048471:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
+ 8048475:	8b 45 f8             	mov    -0x8(%ebp),%eax
+ 8048478:	3b 45 10             	cmp    0x10(%ebp),%eax
+ 804847b:	7e 9c                	jle    8048419 <drawCirc+0x44>
 		for(j=-delta; j<=delta; j++){
 			//printk("(%d, %d)", x+i, y+j);
 			drawPoint(x+i, y+j, color);
 		}
 	}
 }
- 8048476:	8b 5d fc             	mov    -0x4(%ebp),%ebx
- 8048479:	c9                   	leave  
- 804847a:	c3                   	ret    
+ 804847d:	8b 5d fc             	mov    -0x4(%ebp),%ebx
+ 8048480:	c9                   	leave  
+ 8048481:	c3                   	ret    
 
-0804847b <drawText1>:
+08048482 <drawText1>:
 
 static inline void drawText1(){
- 804847b:	55                   	push   %ebp
- 804847c:	89 e5                	mov    %esp,%ebp
- 804847e:	83 ec 10             	sub    $0x10,%esp
+ 8048482:	55                   	push   %ebp
+ 8048483:	89 e5                	mov    %esp,%ebp
+ 8048485:	83 ec 10             	sub    $0x10,%esp
     int i=0, j=0;
- 8048481:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
- 8048488:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
-    for(j=0;j<20;j++){
+ 8048488:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
  804848f:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
- 8048496:	eb 53                	jmp    80484eb <drawText1+0x70>
+    for(j=0;j<20;j++){
+ 8048496:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+ 804849d:	eb 53                	jmp    80484f2 <drawText1+0x70>
         for(i=0;i<52;i++){
- 8048498:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
- 804849f:	eb 40                	jmp    80484e1 <drawText1+0x66>
+ 804849f:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
+ 80484a6:	eb 40                	jmp    80484e8 <drawText1+0x66>
             if(text1[j*52+i])drawRect(50+i*4, 20+j*5, 4, 5, 14);
- 80484a1:	8b 45 f8             	mov    -0x8(%ebp),%eax
- 80484a4:	6b d0 34             	imul   $0x34,%eax,%edx
- 80484a7:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 80484aa:	01 d0                	add    %edx,%eax
- 80484ac:	0f b6 80 c0 9a 04 08 	movzbl 0x8049ac0(%eax),%eax
- 80484b3:	84 c0                	test   %al,%al
- 80484b5:	74 26                	je     80484dd <drawText1+0x62>
- 80484b7:	8b 55 f8             	mov    -0x8(%ebp),%edx
- 80484ba:	89 d0                	mov    %edx,%eax
- 80484bc:	c1 e0 02             	shl    $0x2,%eax
- 80484bf:	01 d0                	add    %edx,%eax
- 80484c1:	8d 50 14             	lea    0x14(%eax),%edx
- 80484c4:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 80484c7:	c1 e0 02             	shl    $0x2,%eax
- 80484ca:	83 c0 32             	add    $0x32,%eax
- 80484cd:	6a 0e                	push   $0xe
- 80484cf:	6a 05                	push   $0x5
- 80484d1:	6a 04                	push   $0x4
- 80484d3:	52                   	push   %edx
- 80484d4:	50                   	push   %eax
- 80484d5:	e8 5d fe ff ff       	call   8048337 <drawRect>
- 80484da:	83 c4 14             	add    $0x14,%esp
+ 80484a8:	8b 45 f8             	mov    -0x8(%ebp),%eax
+ 80484ab:	6b d0 34             	imul   $0x34,%eax,%edx
+ 80484ae:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80484b1:	01 d0                	add    %edx,%eax
+ 80484b3:	0f b6 80 c0 9a 04 08 	movzbl 0x8049ac0(%eax),%eax
+ 80484ba:	84 c0                	test   %al,%al
+ 80484bc:	74 26                	je     80484e4 <drawText1+0x62>
+ 80484be:	8b 55 f8             	mov    -0x8(%ebp),%edx
+ 80484c1:	89 d0                	mov    %edx,%eax
+ 80484c3:	c1 e0 02             	shl    $0x2,%eax
+ 80484c6:	01 d0                	add    %edx,%eax
+ 80484c8:	8d 50 14             	lea    0x14(%eax),%edx
+ 80484cb:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80484ce:	c1 e0 02             	shl    $0x2,%eax
+ 80484d1:	83 c0 32             	add    $0x32,%eax
+ 80484d4:	6a 0e                	push   $0xe
+ 80484d6:	6a 05                	push   $0x5
+ 80484d8:	6a 04                	push   $0x4
+ 80484da:	52                   	push   %edx
+ 80484db:	50                   	push   %eax
+ 80484dc:	e8 5d fe ff ff       	call   804833e <drawRect>
+ 80484e1:	83 c4 14             	add    $0x14,%esp
 }
 
 static inline void drawText1(){
     int i=0, j=0;
     for(j=0;j<20;j++){
         for(i=0;i<52;i++){
- 80484dd:	83 45 fc 01          	addl   $0x1,-0x4(%ebp)
- 80484e1:	83 7d fc 33          	cmpl   $0x33,-0x4(%ebp)
- 80484e5:	7e ba                	jle    80484a1 <drawText1+0x26>
+ 80484e4:	83 45 fc 01          	addl   $0x1,-0x4(%ebp)
+ 80484e8:	83 7d fc 33          	cmpl   $0x33,-0x4(%ebp)
+ 80484ec:	7e ba                	jle    80484a8 <drawText1+0x26>
 	}
 }
 
 static inline void drawText1(){
     int i=0, j=0;
     for(j=0;j<20;j++){
- 80484e7:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
- 80484eb:	83 7d f8 13          	cmpl   $0x13,-0x8(%ebp)
- 80484ef:	7e a7                	jle    8048498 <drawText1+0x1d>
+ 80484ee:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
+ 80484f2:	83 7d f8 13          	cmpl   $0x13,-0x8(%ebp)
+ 80484f6:	7e a7                	jle    804849f <drawText1+0x1d>
         for(i=0;i<52;i++){
             if(text1[j*52+i])drawRect(50+i*4, 20+j*5, 4, 5, 14);
         }
     }
 }
- 80484f1:	c9                   	leave  
- 80484f2:	c3                   	ret    
+ 80484f8:	c9                   	leave  
+ 80484f9:	c3                   	ret    
 
-080484f3 <drawNumber>:
+080484fa <drawNumber>:
 
 static inline void drawNumber(int num, int x, int y, int size, uint8_t color){
- 80484f3:	55                   	push   %ebp
- 80484f4:	89 e5                	mov    %esp,%ebp
- 80484f6:	53                   	push   %ebx
- 80484f7:	83 ec 24             	sub    $0x24,%esp
- 80484fa:	8b 45 18             	mov    0x18(%ebp),%eax
- 80484fd:	88 45 d8             	mov    %al,-0x28(%ebp)
+ 80484fa:	55                   	push   %ebp
+ 80484fb:	89 e5                	mov    %esp,%ebp
+ 80484fd:	53                   	push   %ebx
+ 80484fe:	83 ec 24             	sub    $0x24,%esp
+ 8048501:	8b 45 18             	mov    0x18(%ebp),%eax
+ 8048504:	88 45 d8             	mov    %al,-0x28(%ebp)
     char temp[11];
     int di=0;
- 8048500:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+ 8048507:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
     if(num == 0){
- 8048507:	83 7d 08 00          	cmpl   $0x0,0x8(%ebp)
- 804850b:	75 0d                	jne    804851a <drawNumber+0x27>
+ 804850e:	83 7d 08 00          	cmpl   $0x0,0x8(%ebp)
+ 8048512:	75 0d                	jne    8048521 <drawNumber+0x27>
         temp[0] = '0';
- 804850d:	c6 45 dd 30          	movb   $0x30,-0x23(%ebp)
+ 8048514:	c6 45 dd 30          	movb   $0x30,-0x23(%ebp)
         di = 0;
- 8048511:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
- 8048518:	eb 5f                	jmp    8048579 <drawNumber+0x86>
+ 8048518:	c7 45 f8 00 00 00 00 	movl   $0x0,-0x8(%ebp)
+ 804851f:	eb 5f                	jmp    8048580 <drawNumber+0x86>
 
     }else{    
         while(num>=1){
- 804851a:	eb 53                	jmp    804856f <drawNumber+0x7c>
+ 8048521:	eb 53                	jmp    8048576 <drawNumber+0x7c>
             temp[di] = '0'+(num%10);
- 804851c:	8b 4d 08             	mov    0x8(%ebp),%ecx
- 804851f:	ba 67 66 66 66       	mov    $0x66666667,%edx
- 8048524:	89 c8                	mov    %ecx,%eax
- 8048526:	f7 ea                	imul   %edx
- 8048528:	c1 fa 02             	sar    $0x2,%edx
+ 8048523:	8b 4d 08             	mov    0x8(%ebp),%ecx
+ 8048526:	ba 67 66 66 66       	mov    $0x66666667,%edx
  804852b:	89 c8                	mov    %ecx,%eax
- 804852d:	c1 f8 1f             	sar    $0x1f,%eax
- 8048530:	29 c2                	sub    %eax,%edx
- 8048532:	89 d0                	mov    %edx,%eax
- 8048534:	c1 e0 02             	shl    $0x2,%eax
- 8048537:	01 d0                	add    %edx,%eax
- 8048539:	01 c0                	add    %eax,%eax
- 804853b:	29 c1                	sub    %eax,%ecx
- 804853d:	89 ca                	mov    %ecx,%edx
- 804853f:	89 d0                	mov    %edx,%eax
- 8048541:	83 c0 30             	add    $0x30,%eax
- 8048544:	89 c1                	mov    %eax,%ecx
- 8048546:	8d 55 dd             	lea    -0x23(%ebp),%edx
- 8048549:	8b 45 f8             	mov    -0x8(%ebp),%eax
- 804854c:	01 d0                	add    %edx,%eax
- 804854e:	88 08                	mov    %cl,(%eax)
+ 804852d:	f7 ea                	imul   %edx
+ 804852f:	c1 fa 02             	sar    $0x2,%edx
+ 8048532:	89 c8                	mov    %ecx,%eax
+ 8048534:	c1 f8 1f             	sar    $0x1f,%eax
+ 8048537:	29 c2                	sub    %eax,%edx
+ 8048539:	89 d0                	mov    %edx,%eax
+ 804853b:	c1 e0 02             	shl    $0x2,%eax
+ 804853e:	01 d0                	add    %edx,%eax
+ 8048540:	01 c0                	add    %eax,%eax
+ 8048542:	29 c1                	sub    %eax,%ecx
+ 8048544:	89 ca                	mov    %ecx,%edx
+ 8048546:	89 d0                	mov    %edx,%eax
+ 8048548:	83 c0 30             	add    $0x30,%eax
+ 804854b:	89 c1                	mov    %eax,%ecx
+ 804854d:	8d 55 dd             	lea    -0x23(%ebp),%edx
+ 8048550:	8b 45 f8             	mov    -0x8(%ebp),%eax
+ 8048553:	01 d0                	add    %edx,%eax
+ 8048555:	88 08                	mov    %cl,(%eax)
             num/=10;
- 8048550:	8b 4d 08             	mov    0x8(%ebp),%ecx
- 8048553:	ba 67 66 66 66       	mov    $0x66666667,%edx
- 8048558:	89 c8                	mov    %ecx,%eax
- 804855a:	f7 ea                	imul   %edx
- 804855c:	c1 fa 02             	sar    $0x2,%edx
+ 8048557:	8b 4d 08             	mov    0x8(%ebp),%ecx
+ 804855a:	ba 67 66 66 66       	mov    $0x66666667,%edx
  804855f:	89 c8                	mov    %ecx,%eax
- 8048561:	c1 f8 1f             	sar    $0x1f,%eax
- 8048564:	29 c2                	sub    %eax,%edx
- 8048566:	89 d0                	mov    %edx,%eax
- 8048568:	89 45 08             	mov    %eax,0x8(%ebp)
+ 8048561:	f7 ea                	imul   %edx
+ 8048563:	c1 fa 02             	sar    $0x2,%edx
+ 8048566:	89 c8                	mov    %ecx,%eax
+ 8048568:	c1 f8 1f             	sar    $0x1f,%eax
+ 804856b:	29 c2                	sub    %eax,%edx
+ 804856d:	89 d0                	mov    %edx,%eax
+ 804856f:	89 45 08             	mov    %eax,0x8(%ebp)
             di++;
- 804856b:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
+ 8048572:	83 45 f8 01          	addl   $0x1,-0x8(%ebp)
     if(num == 0){
         temp[0] = '0';
         di = 0;
 
     }else{    
         while(num>=1){
- 804856f:	83 7d 08 00          	cmpl   $0x0,0x8(%ebp)
- 8048573:	7f a7                	jg     804851c <drawNumber+0x29>
+ 8048576:	83 7d 08 00          	cmpl   $0x0,0x8(%ebp)
+ 804857a:	7f a7                	jg     8048523 <drawNumber+0x29>
             temp[di] = '0'+(num%10);
             num/=10;
             di++;
         };
         di--;
- 8048575:	83 6d f8 01          	subl   $0x1,-0x8(%ebp)
+ 804857c:	83 6d f8 01          	subl   $0x1,-0x8(%ebp)
     }
     int i=0, xx=0, yy=0;
- 8048579:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
- 8048580:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
- 8048587:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 8048580:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+ 8048587:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
+ 804858e:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
     for(;di>=0;di--){
- 804858e:	e9 b2 00 00 00       	jmp    8048645 <drawNumber+0x152>
+ 8048595:	e9 b2 00 00 00       	jmp    804864c <drawNumber+0x152>
         for(yy=0; yy<7; yy++){
- 8048593:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
- 804859a:	e9 94 00 00 00       	jmp    8048633 <drawNumber+0x140>
+ 804859a:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 80485a1:	e9 94 00 00 00       	jmp    804863a <drawNumber+0x140>
             for(xx=0; xx<5; xx++){
- 804859f:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
- 80485a6:	eb 7d                	jmp    8048625 <drawNumber+0x132>
+ 80485a6:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
+ 80485ad:	eb 7d                	jmp    804862c <drawNumber+0x132>
                 const char* num = nums[temp[di]-'0'];
- 80485a8:	8d 55 dd             	lea    -0x23(%ebp),%edx
- 80485ab:	8b 45 f8             	mov    -0x8(%ebp),%eax
- 80485ae:	01 d0                	add    %edx,%eax
- 80485b0:	0f b6 00             	movzbl (%eax),%eax
- 80485b3:	0f be c0             	movsbl %al,%eax
- 80485b6:	83 e8 30             	sub    $0x30,%eax
- 80485b9:	8b 04 85 20 b0 04 08 	mov    0x804b020(,%eax,4),%eax
- 80485c0:	89 45 e8             	mov    %eax,-0x18(%ebp)
+ 80485af:	8d 55 dd             	lea    -0x23(%ebp),%edx
+ 80485b2:	8b 45 f8             	mov    -0x8(%ebp),%eax
+ 80485b5:	01 d0                	add    %edx,%eax
+ 80485b7:	0f b6 00             	movzbl (%eax),%eax
+ 80485ba:	0f be c0             	movsbl %al,%eax
+ 80485bd:	83 e8 30             	sub    $0x30,%eax
+ 80485c0:	8b 04 85 20 b0 04 08 	mov    0x804b020(,%eax,4),%eax
+ 80485c7:	89 45 e8             	mov    %eax,-0x18(%ebp)
                 if(num[yy*5+xx])drawRect(i*(size*size+10)+x+xx*size, y+yy*size, size, size, color);
- 80485c3:	8b 55 ec             	mov    -0x14(%ebp),%edx
- 80485c6:	89 d0                	mov    %edx,%eax
- 80485c8:	c1 e0 02             	shl    $0x2,%eax
- 80485cb:	01 c2                	add    %eax,%edx
- 80485cd:	8b 45 f0             	mov    -0x10(%ebp),%eax
- 80485d0:	01 d0                	add    %edx,%eax
- 80485d2:	89 c2                	mov    %eax,%edx
- 80485d4:	8b 45 e8             	mov    -0x18(%ebp),%eax
+ 80485ca:	8b 55 ec             	mov    -0x14(%ebp),%edx
+ 80485cd:	89 d0                	mov    %edx,%eax
+ 80485cf:	c1 e0 02             	shl    $0x2,%eax
+ 80485d2:	01 c2                	add    %eax,%edx
+ 80485d4:	8b 45 f0             	mov    -0x10(%ebp),%eax
  80485d7:	01 d0                	add    %edx,%eax
- 80485d9:	0f b6 00             	movzbl (%eax),%eax
- 80485dc:	84 c0                	test   %al,%al
- 80485de:	74 41                	je     8048621 <drawNumber+0x12e>
- 80485e0:	0f b6 45 d8          	movzbl -0x28(%ebp),%eax
- 80485e4:	8b 55 ec             	mov    -0x14(%ebp),%edx
- 80485e7:	89 d1                	mov    %edx,%ecx
- 80485e9:	0f af 4d 14          	imul   0x14(%ebp),%ecx
- 80485ed:	8b 55 10             	mov    0x10(%ebp),%edx
- 80485f0:	01 d1                	add    %edx,%ecx
- 80485f2:	8b 55 14             	mov    0x14(%ebp),%edx
- 80485f5:	0f af 55 14          	imul   0x14(%ebp),%edx
- 80485f9:	83 c2 0a             	add    $0xa,%edx
- 80485fc:	89 d3                	mov    %edx,%ebx
- 80485fe:	0f af 5d f4          	imul   -0xc(%ebp),%ebx
- 8048602:	8b 55 0c             	mov    0xc(%ebp),%edx
- 8048605:	01 d3                	add    %edx,%ebx
- 8048607:	8b 55 f0             	mov    -0x10(%ebp),%edx
- 804860a:	0f af 55 14          	imul   0x14(%ebp),%edx
- 804860e:	01 da                	add    %ebx,%edx
- 8048610:	50                   	push   %eax
- 8048611:	ff 75 14             	pushl  0x14(%ebp)
- 8048614:	ff 75 14             	pushl  0x14(%ebp)
- 8048617:	51                   	push   %ecx
- 8048618:	52                   	push   %edx
- 8048619:	e8 19 fd ff ff       	call   8048337 <drawRect>
- 804861e:	83 c4 14             	add    $0x14,%esp
+ 80485d9:	89 c2                	mov    %eax,%edx
+ 80485db:	8b 45 e8             	mov    -0x18(%ebp),%eax
+ 80485de:	01 d0                	add    %edx,%eax
+ 80485e0:	0f b6 00             	movzbl (%eax),%eax
+ 80485e3:	84 c0                	test   %al,%al
+ 80485e5:	74 41                	je     8048628 <drawNumber+0x12e>
+ 80485e7:	0f b6 45 d8          	movzbl -0x28(%ebp),%eax
+ 80485eb:	8b 55 ec             	mov    -0x14(%ebp),%edx
+ 80485ee:	89 d1                	mov    %edx,%ecx
+ 80485f0:	0f af 4d 14          	imul   0x14(%ebp),%ecx
+ 80485f4:	8b 55 10             	mov    0x10(%ebp),%edx
+ 80485f7:	01 d1                	add    %edx,%ecx
+ 80485f9:	8b 55 14             	mov    0x14(%ebp),%edx
+ 80485fc:	0f af 55 14          	imul   0x14(%ebp),%edx
+ 8048600:	83 c2 0a             	add    $0xa,%edx
+ 8048603:	89 d3                	mov    %edx,%ebx
+ 8048605:	0f af 5d f4          	imul   -0xc(%ebp),%ebx
+ 8048609:	8b 55 0c             	mov    0xc(%ebp),%edx
+ 804860c:	01 d3                	add    %edx,%ebx
+ 804860e:	8b 55 f0             	mov    -0x10(%ebp),%edx
+ 8048611:	0f af 55 14          	imul   0x14(%ebp),%edx
+ 8048615:	01 da                	add    %ebx,%edx
+ 8048617:	50                   	push   %eax
+ 8048618:	ff 75 14             	pushl  0x14(%ebp)
+ 804861b:	ff 75 14             	pushl  0x14(%ebp)
+ 804861e:	51                   	push   %ecx
+ 804861f:	52                   	push   %edx
+ 8048620:	e8 19 fd ff ff       	call   804833e <drawRect>
+ 8048625:	83 c4 14             	add    $0x14,%esp
         di--;
     }
     int i=0, xx=0, yy=0;
     for(;di>=0;di--){
         for(yy=0; yy<7; yy++){
             for(xx=0; xx<5; xx++){
- 8048621:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
- 8048625:	83 7d f0 04          	cmpl   $0x4,-0x10(%ebp)
- 8048629:	0f 8e 79 ff ff ff    	jle    80485a8 <drawNumber+0xb5>
+ 8048628:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+ 804862c:	83 7d f0 04          	cmpl   $0x4,-0x10(%ebp)
+ 8048630:	0f 8e 79 ff ff ff    	jle    80485af <drawNumber+0xb5>
         };
         di--;
     }
     int i=0, xx=0, yy=0;
     for(;di>=0;di--){
         for(yy=0; yy<7; yy++){
- 804862f:	83 45 ec 01          	addl   $0x1,-0x14(%ebp)
- 8048633:	83 7d ec 06          	cmpl   $0x6,-0x14(%ebp)
- 8048637:	0f 8e 62 ff ff ff    	jle    804859f <drawNumber+0xac>
+ 8048636:	83 45 ec 01          	addl   $0x1,-0x14(%ebp)
+ 804863a:	83 7d ec 06          	cmpl   $0x6,-0x14(%ebp)
+ 804863e:	0f 8e 62 ff ff ff    	jle    80485a6 <drawNumber+0xac>
             for(xx=0; xx<5; xx++){
                 const char* num = nums[temp[di]-'0'];
                 if(num[yy*5+xx])drawRect(i*(size*size+10)+x+xx*size, y+yy*size, size, size, color);
             }
         }
         i++;
- 804863d:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+ 8048644:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
             di++;
         };
         di--;
     }
     int i=0, xx=0, yy=0;
     for(;di>=0;di--){
- 8048641:	83 6d f8 01          	subl   $0x1,-0x8(%ebp)
- 8048645:	83 7d f8 00          	cmpl   $0x0,-0x8(%ebp)
- 8048649:	0f 89 44 ff ff ff    	jns    8048593 <drawNumber+0xa0>
+ 8048648:	83 6d f8 01          	subl   $0x1,-0x8(%ebp)
+ 804864c:	83 7d f8 00          	cmpl   $0x0,-0x8(%ebp)
+ 8048650:	0f 89 44 ff ff ff    	jns    804859a <drawNumber+0xa0>
                 if(num[yy*5+xx])drawRect(i*(size*size+10)+x+xx*size, y+yy*size, size, size, color);
             }
         }
         i++;
     }
 }
- 804864f:	8b 5d fc             	mov    -0x4(%ebp),%ebx
- 8048652:	c9                   	leave  
- 8048653:	c3                   	ret    
+ 8048656:	8b 5d fc             	mov    -0x4(%ebp),%ebx
+ 8048659:	c9                   	leave  
+ 804865a:	c3                   	ret    
 
-08048654 <drawStage>:
+0804865b <drawStage>:
 
 static inline void drawStage(){
- 8048654:	55                   	push   %ebp
- 8048655:	89 e5                	mov    %esp,%ebp
+ 804865b:	55                   	push   %ebp
+ 804865c:	89 e5                	mov    %esp,%ebp
 	if(lhash == hash)return;
- 8048657:	8b 15 84 b0 04 08    	mov    0x804b084,%edx
- 804865d:	a1 80 b0 04 08       	mov    0x804b080,%eax
- 8048662:	39 c2                	cmp    %eax,%edx
- 8048664:	75 02                	jne    8048668 <drawStage+0x14>
- 8048666:	eb 0f                	jmp    8048677 <drawStage+0x23>
+ 804865e:	8b 15 84 b0 04 08    	mov    0x804b084,%edx
+ 8048664:	a1 80 b0 04 08       	mov    0x804b080,%eax
+ 8048669:	39 c2                	cmp    %eax,%edx
+ 804866b:	75 02                	jne    804866f <drawStage+0x14>
+ 804866d:	eb 0f                	jmp    804867e <drawStage+0x23>
 	//clear_vram();
 	sys_flush_vcache();
- 8048668:	e8 5d fb ff ff       	call   80481ca <sys_flush_vcache>
+ 804866f:	e8 5d fb ff ff       	call   80481d1 <sys_flush_vcache>
 	lhash = hash;
- 804866d:	a1 80 b0 04 08       	mov    0x804b080,%eax
- 8048672:	a3 84 b0 04 08       	mov    %eax,0x804b084
+ 8048674:	a1 80 b0 04 08       	mov    0x804b080,%eax
+ 8048679:	a3 84 b0 04 08       	mov    %eax,0x804b084
 }
- 8048677:	5d                   	pop    %ebp
- 8048678:	c3                   	ret    
+ 804867e:	5d                   	pop    %ebp
+ 804867f:	c3                   	ret    
 
-08048679 <key>:
+08048680 <key>:
 static int timestamp = 1;
 static int curtime = 0;
 static int score = 0;
 void dreamOf100HZ(int);
 
 static inline int8_t key(char s){
- 8048679:	55                   	push   %ebp
- 804867a:	89 e5                	mov    %esp,%ebp
- 804867c:	83 ec 04             	sub    $0x4,%esp
- 804867f:	8b 45 08             	mov    0x8(%ebp),%eax
- 8048682:	88 45 fc             	mov    %al,-0x4(%ebp)
+ 8048680:	55                   	push   %ebp
+ 8048681:	89 e5                	mov    %esp,%ebp
+ 8048683:	83 ec 04             	sub    $0x4,%esp
+ 8048686:	8b 45 08             	mov    0x8(%ebp),%eax
+ 8048689:	88 45 fc             	mov    %al,-0x4(%ebp)
 	return sys_key_down(s);
- 8048685:	0f be 45 fc          	movsbl -0x4(%ebp),%eax
- 8048689:	50                   	push   %eax
- 804868a:	e8 5e fb ff ff       	call   80481ed <sys_key_down>
- 804868f:	83 c4 04             	add    $0x4,%esp
+ 804868c:	0f be 45 fc          	movsbl -0x4(%ebp),%eax
+ 8048690:	50                   	push   %eax
+ 8048691:	e8 5e fb ff ff       	call   80481f4 <sys_key_down>
+ 8048696:	83 c4 04             	add    $0x4,%esp
 }
- 8048692:	c9                   	leave  
- 8048693:	c3                   	ret    
+ 8048699:	c9                   	leave  
+ 804869a:	c3                   	ret    
 
-08048694 <main>:
+0804869b <main>:
 
 void game();
 
 int main(){
- 8048694:	8d 4c 24 04          	lea    0x4(%esp),%ecx
- 8048698:	83 e4 f0             	and    $0xfffffff0,%esp
- 804869b:	ff 71 fc             	pushl  -0x4(%ecx)
- 804869e:	55                   	push   %ebp
- 804869f:	89 e5                	mov    %esp,%ebp
- 80486a1:	51                   	push   %ecx
- 80486a2:	83 ec 04             	sub    $0x4,%esp
+ 804869b:	8d 4c 24 04          	lea    0x4(%esp),%ecx
+ 804869f:	83 e4 f0             	and    $0xfffffff0,%esp
+ 80486a2:	ff 71 fc             	pushl  -0x4(%ecx)
+ 80486a5:	55                   	push   %ebp
+ 80486a6:	89 e5                	mov    %esp,%ebp
+ 80486a8:	51                   	push   %ecx
+ 80486a9:	83 ec 04             	sub    $0x4,%esp
 	//printk("4\n");
 	//initVCache();
 	//printk("5\n");
 	//clear_key();
 	//printk("6\n");
 	printf("Hello this is INIT#%d! Now I want to fork GAME! WATCH ME!\n", getpid());
- 80486a5:	e8 e5 fa ff ff       	call   804818f <sys_pid>
- 80486aa:	83 ec 08             	sub    $0x8,%esp
- 80486ad:	50                   	push   %eax
- 80486ae:	68 44 a1 04 08       	push   $0x804a144
- 80486b3:	e8 c5 11 00 00       	call   804987d <printf>
- 80486b8:	83 c4 10             	add    $0x10,%esp
+ 80486ac:	e8 e5 fa ff ff       	call   8048196 <sys_pid>
+ 80486b1:	83 ec 08             	sub    $0x8,%esp
+ 80486b4:	50                   	push   %eax
+ 80486b5:	68 44 a1 04 08       	push   $0x804a144
+ 80486ba:	e8 c5 11 00 00       	call   8049884 <printf>
+ 80486bf:	83 c4 10             	add    $0x10,%esp
 	if(fork()!=0){
- 80486bb:	e8 b3 fa ff ff       	call   8048173 <sys_fork>
- 80486c0:	85 c0                	test   %eax,%eax
- 80486c2:	74 33                	je     80486f7 <main+0x63>
-		printf("INIT#%d: My dute is done! I choose goudai!\n", getpid());
- 80486c4:	e8 c6 fa ff ff       	call   804818f <sys_pid>
- 80486c9:	83 ec 08             	sub    $0x8,%esp
- 80486cc:	50                   	push   %eax
- 80486cd:	68 80 a1 04 08       	push   $0x804a180
- 80486d2:	e8 a6 11 00 00       	call   804987d <printf>
- 80486d7:	83 c4 10             	add    $0x10,%esp
+ 80486c2:	e8 b3 fa ff ff       	call   804817a <sys_fork>
+ 80486c7:	85 c0                	test   %eax,%eax
+ 80486c9:	74 33                	je     80486fe <main+0x63>
+		printf("INIT#%d: My duty is done! I choose goudai!\n", getpid());
+ 80486cb:	e8 c6 fa ff ff       	call   8048196 <sys_pid>
+ 80486d0:	83 ec 08             	sub    $0x8,%esp
+ 80486d3:	50                   	push   %eax
+ 80486d4:	68 80 a1 04 08       	push   $0x804a180
+ 80486d9:	e8 a6 11 00 00       	call   8049884 <printf>
+ 80486de:	83 c4 10             	add    $0x10,%esp
 		//while(1);
 		exit();
- 80486da:	e8 88 fa ff ff       	call   8048167 <sys_exit>
+ 80486e1:	e8 81 fa ff ff       	call   8048167 <sys_exit>
 		printf("INIT#%d: To check whether I am alive! You should not see this!\n", getpid());
- 80486df:	e8 ab fa ff ff       	call   804818f <sys_pid>
- 80486e4:	83 ec 08             	sub    $0x8,%esp
- 80486e7:	50                   	push   %eax
- 80486e8:	68 ac a1 04 08       	push   $0x804a1ac
- 80486ed:	e8 8b 11 00 00       	call   804987d <printf>
- 80486f2:	83 c4 10             	add    $0x10,%esp
- 80486f5:	eb 05                	jmp    80486fc <main+0x68>
+ 80486e6:	e8 ab fa ff ff       	call   8048196 <sys_pid>
+ 80486eb:	83 ec 08             	sub    $0x8,%esp
+ 80486ee:	50                   	push   %eax
+ 80486ef:	68 ac a1 04 08       	push   $0x804a1ac
+ 80486f4:	e8 8b 11 00 00       	call   8049884 <printf>
+ 80486f9:	83 c4 10             	add    $0x10,%esp
+ 80486fc:	eb 05                	jmp    8048703 <main+0x68>
 	}else{
 		game();
- 80486f7:	e8 0d 00 00 00       	call   8048709 <game>
+ 80486fe:	e8 0d 00 00 00       	call   8048710 <game>
 	}
 	return 1;
- 80486fc:	b8 01 00 00 00       	mov    $0x1,%eax
+ 8048703:	b8 01 00 00 00       	mov    $0x1,%eax
 };
- 8048701:	8b 4d fc             	mov    -0x4(%ebp),%ecx
- 8048704:	c9                   	leave  
- 8048705:	8d 61 fc             	lea    -0x4(%ecx),%esp
- 8048708:	c3                   	ret    
+ 8048708:	8b 4d fc             	mov    -0x4(%ebp),%ecx
+ 804870b:	c9                   	leave  
+ 804870c:	8d 61 fc             	lea    -0x4(%ecx),%esp
+ 804870f:	c3                   	ret    
 
-08048709 <game>:
+08048710 <game>:
 
 void game(){
- 8048709:	55                   	push   %ebp
- 804870a:	89 e5                	mov    %esp,%ebp
- 804870c:	83 ec 08             	sub    $0x8,%esp
+ 8048710:	55                   	push   %ebp
+ 8048711:	89 e5                	mov    %esp,%ebp
+ 8048713:	83 ec 08             	sub    $0x8,%esp
 	printf("Hello this is GAME#%d! WATCH ME!\n", getpid());
- 804870f:	e8 7b fa ff ff       	call   804818f <sys_pid>
- 8048714:	83 ec 08             	sub    $0x8,%esp
- 8048717:	50                   	push   %eax
- 8048718:	68 ec a1 04 08       	push   $0x804a1ec
- 804871d:	e8 5b 11 00 00       	call   804987d <printf>
- 8048722:	83 c4 10             	add    $0x10,%esp
+ 8048716:	e8 7b fa ff ff       	call   8048196 <sys_pid>
+ 804871b:	83 ec 08             	sub    $0x8,%esp
+ 804871e:	50                   	push   %eax
+ 804871f:	68 ec a1 04 08       	push   $0x804a1ec
+ 8048724:	e8 5b 11 00 00       	call   8049884 <printf>
+ 8048729:	83 c4 10             	add    $0x10,%esp
 	while(1){
 		timestamp = sys_get_tick();
- 8048725:	e8 ee fa ff ff       	call   8048218 <sys_get_tick>
- 804872a:	a3 48 b0 04 08       	mov    %eax,0x804b048
+ 804872c:	e8 ee fa ff ff       	call   804821f <sys_get_tick>
+ 8048731:	a3 48 b0 04 08       	mov    %eax,0x804b048
 		//wait_for_interrupt();
 		//disable_interrupt();
 		while(curtime<timestamp){
- 804872f:	eb 1e                	jmp    804874f <game+0x46>
+ 8048736:	eb 1e                	jmp    8048756 <game+0x46>
 			
 			#ifdef QUICK
 			dreamOf100HZ(timestamp);
- 8048731:	a1 48 b0 04 08       	mov    0x804b048,%eax
- 8048736:	83 ec 0c             	sub    $0xc,%esp
- 8048739:	50                   	push   %eax
- 804873a:	e8 8c 07 00 00       	call   8048ecb <dreamOf100HZ>
- 804873f:	83 c4 10             	add    $0x10,%esp
+ 8048738:	a1 48 b0 04 08       	mov    0x804b048,%eax
+ 804873d:	83 ec 0c             	sub    $0xc,%esp
+ 8048740:	50                   	push   %eax
+ 8048741:	e8 8c 07 00 00       	call   8048ed2 <dreamOf100HZ>
+ 8048746:	83 c4 10             	add    $0x10,%esp
 			#else
 			if(timestamp%4==0)
 				dreamOf100HZ(timestamp>>2);
 			#endif
 			curtime+=2;
- 8048742:	a1 20 ba 04 08       	mov    0x804ba20,%eax
- 8048747:	83 c0 02             	add    $0x2,%eax
- 804874a:	a3 20 ba 04 08       	mov    %eax,0x804ba20
+ 8048749:	a1 20 ba 04 08       	mov    0x804ba20,%eax
+ 804874e:	83 c0 02             	add    $0x2,%eax
+ 8048751:	a3 20 ba 04 08       	mov    %eax,0x804ba20
 	printf("Hello this is GAME#%d! WATCH ME!\n", getpid());
 	while(1){
 		timestamp = sys_get_tick();
 		//wait_for_interrupt();
 		//disable_interrupt();
 		while(curtime<timestamp){
- 804874f:	8b 15 20 ba 04 08    	mov    0x804ba20,%edx
- 8048755:	a1 48 b0 04 08       	mov    0x804b048,%eax
- 804875a:	39 c2                	cmp    %eax,%edx
- 804875c:	7c d3                	jl     8048731 <game+0x28>
+ 8048756:	8b 15 20 ba 04 08    	mov    0x804ba20,%edx
+ 804875c:	a1 48 b0 04 08       	mov    0x804b048,%eax
+ 8048761:	39 c2                	cmp    %eax,%edx
+ 8048763:	7c d3                	jl     8048738 <game+0x28>
 		//sys_handout();
 		
 
 		//enable_interrupt();
 		
 	}
- 804875e:	eb c5                	jmp    8048725 <game+0x1c>
+ 8048765:	eb c5                	jmp    804872c <game+0x1c>
 
-08048760 <hitMonster>:
+08048767 <hitMonster>:
 domain int x, y, size;
 
 domain MONSTER monsters[MONSTER_SIZE+20];
 
 
 int hitMonster(){
- 8048760:	55                   	push   %ebp
- 8048761:	89 e5                	mov    %esp,%ebp
- 8048763:	83 ec 10             	sub    $0x10,%esp
+ 8048767:	55                   	push   %ebp
+ 8048768:	89 e5                	mov    %esp,%ebp
+ 804876a:	83 ec 10             	sub    $0x10,%esp
 	int i=0;
- 8048766:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
+ 804876d:	c7 45 fc 00 00 00 00 	movl   $0x0,-0x4(%ebp)
 	REP_MONSTER(){
- 804876d:	e9 9c 01 00 00       	jmp    804890e <hitMonster+0x1ae>
+ 8048774:	e9 9c 01 00 00       	jmp    8048915 <hitMonster+0x1ae>
 		int dx = x-mon.x; 
- 8048772:	8b 15 2c ba 04 08    	mov    0x804ba2c,%edx
- 8048778:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 804877b:	c1 e0 02             	shl    $0x2,%eax
- 804877e:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
- 8048785:	29 c1                	sub    %eax,%ecx
- 8048787:	89 c8                	mov    %ecx,%eax
- 8048789:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 804878e:	8b 40 04             	mov    0x4(%eax),%eax
- 8048791:	29 c2                	sub    %eax,%edx
- 8048793:	89 d0                	mov    %edx,%eax
- 8048795:	89 45 f8             	mov    %eax,-0x8(%ebp)
+ 8048779:	8b 15 2c ba 04 08    	mov    0x804ba2c,%edx
+ 804877f:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 8048782:	c1 e0 02             	shl    $0x2,%eax
+ 8048785:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+ 804878c:	29 c1                	sub    %eax,%ecx
+ 804878e:	89 c8                	mov    %ecx,%eax
+ 8048790:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048795:	8b 40 04             	mov    0x4(%eax),%eax
+ 8048798:	29 c2                	sub    %eax,%edx
+ 804879a:	89 d0                	mov    %edx,%eax
+ 804879c:	89 45 f8             	mov    %eax,-0x8(%ebp)
 		int dy = y-mon.y;
- 8048798:	8b 15 30 ba 04 08    	mov    0x804ba30,%edx
- 804879e:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 80487a1:	c1 e0 02             	shl    $0x2,%eax
- 80487a4:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
- 80487ab:	29 c1                	sub    %eax,%ecx
- 80487ad:	89 c8                	mov    %ecx,%eax
- 80487af:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80487b4:	8b 40 08             	mov    0x8(%eax),%eax
- 80487b7:	29 c2                	sub    %eax,%edx
- 80487b9:	89 d0                	mov    %edx,%eax
- 80487bb:	89 45 f4             	mov    %eax,-0xc(%ebp)
+ 804879f:	8b 15 30 ba 04 08    	mov    0x804ba30,%edx
+ 80487a5:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80487a8:	c1 e0 02             	shl    $0x2,%eax
+ 80487ab:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+ 80487b2:	29 c1                	sub    %eax,%ecx
+ 80487b4:	89 c8                	mov    %ecx,%eax
+ 80487b6:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 80487bb:	8b 40 08             	mov    0x8(%eax),%eax
+ 80487be:	29 c2                	sub    %eax,%edx
+ 80487c0:	89 d0                	mov    %edx,%eax
+ 80487c2:	89 45 f4             	mov    %eax,-0xc(%ebp)
 		//printk("%d %d", dx, dy);
 		if(mon.status == MONSTER_ALIVE && dx <= mon.size && dy <= mon.size && dx >= -mon.size && dy >= -mon.size){
- 80487be:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 80487c1:	89 c2                	mov    %eax,%edx
- 80487c3:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 80487ca:	89 c2                	mov    %eax,%edx
- 80487cc:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 80487d3:	29 d0                	sub    %edx,%eax
- 80487d5:	83 c0 10             	add    $0x10,%eax
- 80487d8:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80487dd:	8b 40 04             	mov    0x4(%eax),%eax
- 80487e0:	85 c0                	test   %eax,%eax
- 80487e2:	0f 85 22 01 00 00    	jne    804890a <hitMonster+0x1aa>
- 80487e8:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 80487eb:	c1 e0 02             	shl    $0x2,%eax
- 80487ee:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 80487f5:	29 c2                	sub    %eax,%edx
- 80487f7:	89 d0                	mov    %edx,%eax
- 80487f9:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80487fe:	8b 00                	mov    (%eax),%eax
- 8048800:	3b 45 f8             	cmp    -0x8(%ebp),%eax
- 8048803:	0f 8c 01 01 00 00    	jl     804890a <hitMonster+0x1aa>
- 8048809:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 804880c:	c1 e0 02             	shl    $0x2,%eax
- 804880f:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048816:	29 c2                	sub    %eax,%edx
- 8048818:	89 d0                	mov    %edx,%eax
- 804881a:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 804881f:	8b 00                	mov    (%eax),%eax
- 8048821:	3b 45 f4             	cmp    -0xc(%ebp),%eax
- 8048824:	0f 8c e0 00 00 00    	jl     804890a <hitMonster+0x1aa>
- 804882a:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 804882d:	c1 e0 02             	shl    $0x2,%eax
- 8048830:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048837:	29 c2                	sub    %eax,%edx
- 8048839:	89 d0                	mov    %edx,%eax
- 804883b:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048840:	8b 00                	mov    (%eax),%eax
- 8048842:	f7 d8                	neg    %eax
- 8048844:	3b 45 f8             	cmp    -0x8(%ebp),%eax
- 8048847:	0f 8f bd 00 00 00    	jg     804890a <hitMonster+0x1aa>
- 804884d:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 8048850:	c1 e0 02             	shl    $0x2,%eax
- 8048853:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 804885a:	29 c2                	sub    %eax,%edx
- 804885c:	89 d0                	mov    %edx,%eax
- 804885e:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048863:	8b 00                	mov    (%eax),%eax
- 8048865:	f7 d8                	neg    %eax
- 8048867:	3b 45 f4             	cmp    -0xc(%ebp),%eax
- 804886a:	0f 8f 9a 00 00 00    	jg     804890a <hitMonster+0x1aa>
+ 80487c5:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80487c8:	89 c2                	mov    %eax,%edx
+ 80487ca:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 80487d1:	89 c2                	mov    %eax,%edx
+ 80487d3:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 80487da:	29 d0                	sub    %edx,%eax
+ 80487dc:	83 c0 10             	add    $0x10,%eax
+ 80487df:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 80487e4:	8b 40 04             	mov    0x4(%eax),%eax
+ 80487e7:	85 c0                	test   %eax,%eax
+ 80487e9:	0f 85 22 01 00 00    	jne    8048911 <hitMonster+0x1aa>
+ 80487ef:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80487f2:	c1 e0 02             	shl    $0x2,%eax
+ 80487f5:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 80487fc:	29 c2                	sub    %eax,%edx
+ 80487fe:	89 d0                	mov    %edx,%eax
+ 8048800:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048805:	8b 00                	mov    (%eax),%eax
+ 8048807:	3b 45 f8             	cmp    -0x8(%ebp),%eax
+ 804880a:	0f 8c 01 01 00 00    	jl     8048911 <hitMonster+0x1aa>
+ 8048810:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 8048813:	c1 e0 02             	shl    $0x2,%eax
+ 8048816:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 804881d:	29 c2                	sub    %eax,%edx
+ 804881f:	89 d0                	mov    %edx,%eax
+ 8048821:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048826:	8b 00                	mov    (%eax),%eax
+ 8048828:	3b 45 f4             	cmp    -0xc(%ebp),%eax
+ 804882b:	0f 8c e0 00 00 00    	jl     8048911 <hitMonster+0x1aa>
+ 8048831:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 8048834:	c1 e0 02             	shl    $0x2,%eax
+ 8048837:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 804883e:	29 c2                	sub    %eax,%edx
+ 8048840:	89 d0                	mov    %edx,%eax
+ 8048842:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048847:	8b 00                	mov    (%eax),%eax
+ 8048849:	f7 d8                	neg    %eax
+ 804884b:	3b 45 f8             	cmp    -0x8(%ebp),%eax
+ 804884e:	0f 8f bd 00 00 00    	jg     8048911 <hitMonster+0x1aa>
+ 8048854:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 8048857:	c1 e0 02             	shl    $0x2,%eax
+ 804885a:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048861:	29 c2                	sub    %eax,%edx
+ 8048863:	89 d0                	mov    %edx,%eax
+ 8048865:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 804886a:	8b 00                	mov    (%eax),%eax
+ 804886c:	f7 d8                	neg    %eax
+ 804886e:	3b 45 f4             	cmp    -0xc(%ebp),%eax
+ 8048871:	0f 8f 9a 00 00 00    	jg     8048911 <hitMonster+0x1aa>
 			if(mon.size <= size){
- 8048870:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 8048873:	c1 e0 02             	shl    $0x2,%eax
- 8048876:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 804887d:	29 c2                	sub    %eax,%edx
- 804887f:	89 d0                	mov    %edx,%eax
- 8048881:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048886:	8b 10                	mov    (%eax),%edx
- 8048888:	a1 34 ba 04 08       	mov    0x804ba34,%eax
- 804888d:	39 c2                	cmp    %eax,%edx
- 804888f:	7f 68                	jg     80488f9 <hitMonster+0x199>
+ 8048877:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 804887a:	c1 e0 02             	shl    $0x2,%eax
+ 804887d:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048884:	29 c2                	sub    %eax,%edx
+ 8048886:	89 d0                	mov    %edx,%eax
+ 8048888:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 804888d:	8b 10                	mov    (%eax),%edx
+ 804888f:	a1 34 ba 04 08       	mov    0x804ba34,%eax
+ 8048894:	39 c2                	cmp    %eax,%edx
+ 8048896:	7f 68                	jg     8048900 <hitMonster+0x199>
 				mon.status = MONSTER_DEAD;
- 8048891:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 8048894:	89 c2                	mov    %eax,%edx
- 8048896:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 804889d:	89 c2                	mov    %eax,%edx
- 804889f:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 80488a6:	29 d0                	sub    %edx,%eax
- 80488a8:	83 c0 10             	add    $0x10,%eax
- 80488ab:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80488b0:	c7 40 04 01 00 00 00 	movl   $0x1,0x4(%eax)
+ 8048898:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 804889b:	89 c2                	mov    %eax,%edx
+ 804889d:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 80488a4:	89 c2                	mov    %eax,%edx
+ 80488a6:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 80488ad:	29 d0                	sub    %edx,%eax
+ 80488af:	83 c0 10             	add    $0x10,%eax
+ 80488b2:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 80488b7:	c7 40 04 01 00 00 00 	movl   $0x1,0x4(%eax)
 				if(size<13)size++;
- 80488b7:	a1 34 ba 04 08       	mov    0x804ba34,%eax
- 80488bc:	83 f8 0c             	cmp    $0xc,%eax
- 80488bf:	7f 0d                	jg     80488ce <hitMonster+0x16e>
- 80488c1:	a1 34 ba 04 08       	mov    0x804ba34,%eax
- 80488c6:	83 c0 01             	add    $0x1,%eax
- 80488c9:	a3 34 ba 04 08       	mov    %eax,0x804ba34
+ 80488be:	a1 34 ba 04 08       	mov    0x804ba34,%eax
+ 80488c3:	83 f8 0c             	cmp    $0xc,%eax
+ 80488c6:	7f 0d                	jg     80488d5 <hitMonster+0x16e>
+ 80488c8:	a1 34 ba 04 08       	mov    0x804ba34,%eax
+ 80488cd:	83 c0 01             	add    $0x1,%eax
+ 80488d0:	a3 34 ba 04 08       	mov    %eax,0x804ba34
 				score += mon.size;
- 80488ce:	8b 45 fc             	mov    -0x4(%ebp),%eax
- 80488d1:	c1 e0 02             	shl    $0x2,%eax
- 80488d4:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 80488db:	29 c2                	sub    %eax,%edx
- 80488dd:	89 d0                	mov    %edx,%eax
- 80488df:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80488e4:	8b 10                	mov    (%eax),%edx
- 80488e6:	a1 24 ba 04 08       	mov    0x804ba24,%eax
- 80488eb:	01 d0                	add    %edx,%eax
- 80488ed:	a3 24 ba 04 08       	mov    %eax,0x804ba24
+ 80488d5:	8b 45 fc             	mov    -0x4(%ebp),%eax
+ 80488d8:	c1 e0 02             	shl    $0x2,%eax
+ 80488db:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 80488e2:	29 c2                	sub    %eax,%edx
+ 80488e4:	89 d0                	mov    %edx,%eax
+ 80488e6:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 80488eb:	8b 10                	mov    (%eax),%edx
+ 80488ed:	a1 24 ba 04 08       	mov    0x804ba24,%eax
+ 80488f2:	01 d0                	add    %edx,%eax
+ 80488f4:	a3 24 ba 04 08       	mov    %eax,0x804ba24
 			}else{
 				gameStatus = GAME_END;
 				return 0;
 			}
 			return 1;
- 80488f2:	b8 01 00 00 00       	mov    $0x1,%eax
- 80488f7:	eb 24                	jmp    804891d <hitMonster+0x1bd>
+ 80488f9:	b8 01 00 00 00       	mov    $0x1,%eax
+ 80488fe:	eb 24                	jmp    8048924 <hitMonster+0x1bd>
 			if(mon.size <= size){
 				mon.status = MONSTER_DEAD;
 				if(size<13)size++;
 				score += mon.size;
 			}else{
 				gameStatus = GAME_END;
- 80488f9:	c7 05 28 ba 04 08 03 	movl   $0x3,0x804ba28
- 8048900:	00 00 00 
+ 8048900:	c7 05 28 ba 04 08 03 	movl   $0x3,0x804ba28
+ 8048907:	00 00 00 
 				return 0;
- 8048903:	b8 00 00 00 00       	mov    $0x0,%eax
- 8048908:	eb 13                	jmp    804891d <hitMonster+0x1bd>
+ 804890a:	b8 00 00 00 00       	mov    $0x0,%eax
+ 804890f:	eb 13                	jmp    8048924 <hitMonster+0x1bd>
 domain MONSTER monsters[MONSTER_SIZE+20];
 
 
 int hitMonster(){
 	int i=0;
 	REP_MONSTER(){
- 804890a:	83 45 fc 01          	addl   $0x1,-0x4(%ebp)
- 804890e:	83 7d fc 13          	cmpl   $0x13,-0x4(%ebp)
- 8048912:	0f 8e 5a fe ff ff    	jle    8048772 <hitMonster+0x12>
+ 8048911:	83 45 fc 01          	addl   $0x1,-0x4(%ebp)
+ 8048915:	83 7d fc 13          	cmpl   $0x13,-0x4(%ebp)
+ 8048919:	0f 8e 5a fe ff ff    	jle    8048779 <hitMonster+0x12>
 				return 0;
 			}
 			return 1;
 		}
 	}
 	return 0;
- 8048918:	b8 00 00 00 00       	mov    $0x0,%eax
+ 804891f:	b8 00 00 00 00       	mov    $0x0,%eax
 }
- 804891d:	c9                   	leave  
- 804891e:	c3                   	ret    
+ 8048924:	c9                   	leave  
+ 8048925:	c3                   	ret    
 
-0804891f <drawMonster>:
+08048926 <drawMonster>:
 
 void drawMonster(){
- 804891f:	55                   	push   %ebp
- 8048920:	89 e5                	mov    %esp,%ebp
- 8048922:	56                   	push   %esi
- 8048923:	53                   	push   %ebx
- 8048924:	83 ec 10             	sub    $0x10,%esp
+ 8048926:	55                   	push   %ebp
+ 8048927:	89 e5                	mov    %esp,%ebp
+ 8048929:	56                   	push   %esi
+ 804892a:	53                   	push   %ebx
+ 804892b:	83 ec 10             	sub    $0x10,%esp
 	int i=0;
- 8048927:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+ 804892e:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
 	REP_MONSTER(){
- 804892e:	e9 89 03 00 00       	jmp    8048cbc <drawMonster+0x39d>
+ 8048935:	e9 89 03 00 00       	jmp    8048cc3 <drawMonster+0x39d>
 		if(mon.status == MONSTER_ALIVE){
- 8048933:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048936:	89 c2                	mov    %eax,%edx
- 8048938:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 804893f:	89 c2                	mov    %eax,%edx
- 8048941:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 8048948:	29 d0                	sub    %edx,%eax
- 804894a:	83 c0 10             	add    $0x10,%eax
- 804894d:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048952:	8b 40 04             	mov    0x4(%eax),%eax
- 8048955:	85 c0                	test   %eax,%eax
- 8048957:	0f 85 5b 03 00 00    	jne    8048cb8 <drawMonster+0x399>
+ 804893a:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 804893d:	89 c2                	mov    %eax,%edx
+ 804893f:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 8048946:	89 c2                	mov    %eax,%edx
+ 8048948:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 804894f:	29 d0                	sub    %edx,%eax
+ 8048951:	83 c0 10             	add    $0x10,%eax
+ 8048954:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048959:	8b 40 04             	mov    0x4(%eax),%eax
+ 804895c:	85 c0                	test   %eax,%eax
+ 804895e:	0f 85 5b 03 00 00    	jne    8048cbf <drawMonster+0x399>
 			mon.x += mon.sx;
- 804895d:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048960:	c1 e0 02             	shl    $0x2,%eax
- 8048963:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 804896a:	29 c2                	sub    %eax,%edx
- 804896c:	89 d0                	mov    %edx,%eax
- 804896e:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048973:	8b 50 04             	mov    0x4(%eax),%edx
- 8048976:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048979:	c1 e0 02             	shl    $0x2,%eax
- 804897c:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
- 8048983:	29 c1                	sub    %eax,%ecx
- 8048985:	89 c8                	mov    %ecx,%eax
- 8048987:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 804898c:	8b 40 0c             	mov    0xc(%eax),%eax
- 804898f:	01 c2                	add    %eax,%edx
- 8048991:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048994:	c1 e0 02             	shl    $0x2,%eax
- 8048997:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
- 804899e:	29 c1                	sub    %eax,%ecx
- 80489a0:	89 c8                	mov    %ecx,%eax
- 80489a2:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80489a7:	89 50 04             	mov    %edx,0x4(%eax)
+ 8048964:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048967:	c1 e0 02             	shl    $0x2,%eax
+ 804896a:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048971:	29 c2                	sub    %eax,%edx
+ 8048973:	89 d0                	mov    %edx,%eax
+ 8048975:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 804897a:	8b 50 04             	mov    0x4(%eax),%edx
+ 804897d:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048980:	c1 e0 02             	shl    $0x2,%eax
+ 8048983:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+ 804898a:	29 c1                	sub    %eax,%ecx
+ 804898c:	89 c8                	mov    %ecx,%eax
+ 804898e:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048993:	8b 40 0c             	mov    0xc(%eax),%eax
+ 8048996:	01 c2                	add    %eax,%edx
+ 8048998:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 804899b:	c1 e0 02             	shl    $0x2,%eax
+ 804899e:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+ 80489a5:	29 c1                	sub    %eax,%ecx
+ 80489a7:	89 c8                	mov    %ecx,%eax
+ 80489a9:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 80489ae:	89 50 04             	mov    %edx,0x4(%eax)
 			mon.y += mon.sy;
- 80489aa:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80489ad:	c1 e0 02             	shl    $0x2,%eax
- 80489b0:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 80489b7:	29 c2                	sub    %eax,%edx
- 80489b9:	89 d0                	mov    %edx,%eax
- 80489bb:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80489c0:	8b 48 08             	mov    0x8(%eax),%ecx
- 80489c3:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80489c6:	89 c2                	mov    %eax,%edx
- 80489c8:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 80489cf:	89 c2                	mov    %eax,%edx
- 80489d1:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 80489d8:	29 d0                	sub    %edx,%eax
- 80489da:	83 c0 10             	add    $0x10,%eax
- 80489dd:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80489e2:	8b 00                	mov    (%eax),%eax
- 80489e4:	8d 14 01             	lea    (%ecx,%eax,1),%edx
- 80489e7:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80489ea:	c1 e0 02             	shl    $0x2,%eax
- 80489ed:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
- 80489f4:	29 c1                	sub    %eax,%ecx
- 80489f6:	89 c8                	mov    %ecx,%eax
- 80489f8:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80489fd:	89 50 08             	mov    %edx,0x8(%eax)
+ 80489b1:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80489b4:	c1 e0 02             	shl    $0x2,%eax
+ 80489b7:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 80489be:	29 c2                	sub    %eax,%edx
+ 80489c0:	89 d0                	mov    %edx,%eax
+ 80489c2:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 80489c7:	8b 48 08             	mov    0x8(%eax),%ecx
+ 80489ca:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80489cd:	89 c2                	mov    %eax,%edx
+ 80489cf:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 80489d6:	89 c2                	mov    %eax,%edx
+ 80489d8:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 80489df:	29 d0                	sub    %edx,%eax
+ 80489e1:	83 c0 10             	add    $0x10,%eax
+ 80489e4:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 80489e9:	8b 00                	mov    (%eax),%eax
+ 80489eb:	8d 14 01             	lea    (%ecx,%eax,1),%edx
+ 80489ee:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80489f1:	c1 e0 02             	shl    $0x2,%eax
+ 80489f4:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+ 80489fb:	29 c1                	sub    %eax,%ecx
+ 80489fd:	89 c8                	mov    %ecx,%eax
+ 80489ff:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048a04:	89 50 08             	mov    %edx,0x8(%eax)
 
 			if(mon.x < 10) mon.x++;
- 8048a00:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048a03:	c1 e0 02             	shl    $0x2,%eax
- 8048a06:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048a0d:	29 c2                	sub    %eax,%edx
- 8048a0f:	89 d0                	mov    %edx,%eax
- 8048a11:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048a16:	8b 40 04             	mov    0x4(%eax),%eax
- 8048a19:	83 f8 09             	cmp    $0x9,%eax
- 8048a1c:	7f 35                	jg     8048a53 <drawMonster+0x134>
- 8048a1e:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048a21:	c1 e0 02             	shl    $0x2,%eax
- 8048a24:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048a2b:	29 c2                	sub    %eax,%edx
- 8048a2d:	89 d0                	mov    %edx,%eax
- 8048a2f:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048a34:	8b 40 04             	mov    0x4(%eax),%eax
- 8048a37:	8d 50 01             	lea    0x1(%eax),%edx
- 8048a3a:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048a3d:	c1 e0 02             	shl    $0x2,%eax
- 8048a40:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
- 8048a47:	29 c1                	sub    %eax,%ecx
- 8048a49:	89 c8                	mov    %ecx,%eax
- 8048a4b:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048a50:	89 50 04             	mov    %edx,0x4(%eax)
+ 8048a07:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048a0a:	c1 e0 02             	shl    $0x2,%eax
+ 8048a0d:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048a14:	29 c2                	sub    %eax,%edx
+ 8048a16:	89 d0                	mov    %edx,%eax
+ 8048a18:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048a1d:	8b 40 04             	mov    0x4(%eax),%eax
+ 8048a20:	83 f8 09             	cmp    $0x9,%eax
+ 8048a23:	7f 35                	jg     8048a5a <drawMonster+0x134>
+ 8048a25:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048a28:	c1 e0 02             	shl    $0x2,%eax
+ 8048a2b:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048a32:	29 c2                	sub    %eax,%edx
+ 8048a34:	89 d0                	mov    %edx,%eax
+ 8048a36:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048a3b:	8b 40 04             	mov    0x4(%eax),%eax
+ 8048a3e:	8d 50 01             	lea    0x1(%eax),%edx
+ 8048a41:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048a44:	c1 e0 02             	shl    $0x2,%eax
+ 8048a47:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+ 8048a4e:	29 c1                	sub    %eax,%ecx
+ 8048a50:	89 c8                	mov    %ecx,%eax
+ 8048a52:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048a57:	89 50 04             	mov    %edx,0x4(%eax)
 			if(mon.x > VWIDTH-10) mon.x--;
- 8048a53:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048a56:	c1 e0 02             	shl    $0x2,%eax
- 8048a59:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048a60:	29 c2                	sub    %eax,%edx
- 8048a62:	89 d0                	mov    %edx,%eax
- 8048a64:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048a69:	8b 40 04             	mov    0x4(%eax),%eax
- 8048a6c:	3d 36 01 00 00       	cmp    $0x136,%eax
- 8048a71:	7e 35                	jle    8048aa8 <drawMonster+0x189>
- 8048a73:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048a76:	c1 e0 02             	shl    $0x2,%eax
- 8048a79:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048a80:	29 c2                	sub    %eax,%edx
- 8048a82:	89 d0                	mov    %edx,%eax
- 8048a84:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048a89:	8b 40 04             	mov    0x4(%eax),%eax
- 8048a8c:	8d 50 ff             	lea    -0x1(%eax),%edx
- 8048a8f:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048a92:	c1 e0 02             	shl    $0x2,%eax
- 8048a95:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
- 8048a9c:	29 c1                	sub    %eax,%ecx
- 8048a9e:	89 c8                	mov    %ecx,%eax
- 8048aa0:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048aa5:	89 50 04             	mov    %edx,0x4(%eax)
+ 8048a5a:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048a5d:	c1 e0 02             	shl    $0x2,%eax
+ 8048a60:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048a67:	29 c2                	sub    %eax,%edx
+ 8048a69:	89 d0                	mov    %edx,%eax
+ 8048a6b:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048a70:	8b 40 04             	mov    0x4(%eax),%eax
+ 8048a73:	3d 36 01 00 00       	cmp    $0x136,%eax
+ 8048a78:	7e 35                	jle    8048aaf <drawMonster+0x189>
+ 8048a7a:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048a7d:	c1 e0 02             	shl    $0x2,%eax
+ 8048a80:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048a87:	29 c2                	sub    %eax,%edx
+ 8048a89:	89 d0                	mov    %edx,%eax
+ 8048a8b:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048a90:	8b 40 04             	mov    0x4(%eax),%eax
+ 8048a93:	8d 50 ff             	lea    -0x1(%eax),%edx
+ 8048a96:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048a99:	c1 e0 02             	shl    $0x2,%eax
+ 8048a9c:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+ 8048aa3:	29 c1                	sub    %eax,%ecx
+ 8048aa5:	89 c8                	mov    %ecx,%eax
+ 8048aa7:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048aac:	89 50 04             	mov    %edx,0x4(%eax)
 			if(mon.y < 10) mon.y++;
- 8048aa8:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048aab:	c1 e0 02             	shl    $0x2,%eax
- 8048aae:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048ab5:	29 c2                	sub    %eax,%edx
- 8048ab7:	89 d0                	mov    %edx,%eax
- 8048ab9:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048abe:	8b 40 08             	mov    0x8(%eax),%eax
- 8048ac1:	83 f8 09             	cmp    $0x9,%eax
- 8048ac4:	7f 35                	jg     8048afb <drawMonster+0x1dc>
- 8048ac6:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048ac9:	c1 e0 02             	shl    $0x2,%eax
- 8048acc:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048ad3:	29 c2                	sub    %eax,%edx
- 8048ad5:	89 d0                	mov    %edx,%eax
- 8048ad7:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048adc:	8b 40 08             	mov    0x8(%eax),%eax
- 8048adf:	8d 50 01             	lea    0x1(%eax),%edx
- 8048ae2:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048ae5:	c1 e0 02             	shl    $0x2,%eax
- 8048ae8:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
- 8048aef:	29 c1                	sub    %eax,%ecx
- 8048af1:	89 c8                	mov    %ecx,%eax
- 8048af3:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048af8:	89 50 08             	mov    %edx,0x8(%eax)
+ 8048aaf:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048ab2:	c1 e0 02             	shl    $0x2,%eax
+ 8048ab5:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048abc:	29 c2                	sub    %eax,%edx
+ 8048abe:	89 d0                	mov    %edx,%eax
+ 8048ac0:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048ac5:	8b 40 08             	mov    0x8(%eax),%eax
+ 8048ac8:	83 f8 09             	cmp    $0x9,%eax
+ 8048acb:	7f 35                	jg     8048b02 <drawMonster+0x1dc>
+ 8048acd:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048ad0:	c1 e0 02             	shl    $0x2,%eax
+ 8048ad3:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048ada:	29 c2                	sub    %eax,%edx
+ 8048adc:	89 d0                	mov    %edx,%eax
+ 8048ade:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048ae3:	8b 40 08             	mov    0x8(%eax),%eax
+ 8048ae6:	8d 50 01             	lea    0x1(%eax),%edx
+ 8048ae9:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048aec:	c1 e0 02             	shl    $0x2,%eax
+ 8048aef:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+ 8048af6:	29 c1                	sub    %eax,%ecx
+ 8048af8:	89 c8                	mov    %ecx,%eax
+ 8048afa:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048aff:	89 50 08             	mov    %edx,0x8(%eax)
 			if(mon.y > VHEIGHT-10) mon.y--;
- 8048afb:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048afe:	c1 e0 02             	shl    $0x2,%eax
- 8048b01:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048b08:	29 c2                	sub    %eax,%edx
- 8048b0a:	89 d0                	mov    %edx,%eax
- 8048b0c:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048b11:	8b 40 08             	mov    0x8(%eax),%eax
- 8048b14:	3d be 00 00 00       	cmp    $0xbe,%eax
- 8048b19:	7e 35                	jle    8048b50 <drawMonster+0x231>
- 8048b1b:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048b1e:	c1 e0 02             	shl    $0x2,%eax
- 8048b21:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048b28:	29 c2                	sub    %eax,%edx
- 8048b2a:	89 d0                	mov    %edx,%eax
- 8048b2c:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048b31:	8b 40 08             	mov    0x8(%eax),%eax
- 8048b34:	8d 50 ff             	lea    -0x1(%eax),%edx
- 8048b37:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048b3a:	c1 e0 02             	shl    $0x2,%eax
- 8048b3d:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
- 8048b44:	29 c1                	sub    %eax,%ecx
- 8048b46:	89 c8                	mov    %ecx,%eax
- 8048b48:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048b4d:	89 50 08             	mov    %edx,0x8(%eax)
+ 8048b02:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048b05:	c1 e0 02             	shl    $0x2,%eax
+ 8048b08:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048b0f:	29 c2                	sub    %eax,%edx
+ 8048b11:	89 d0                	mov    %edx,%eax
+ 8048b13:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048b18:	8b 40 08             	mov    0x8(%eax),%eax
+ 8048b1b:	3d be 00 00 00       	cmp    $0xbe,%eax
+ 8048b20:	7e 35                	jle    8048b57 <drawMonster+0x231>
+ 8048b22:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048b25:	c1 e0 02             	shl    $0x2,%eax
+ 8048b28:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048b2f:	29 c2                	sub    %eax,%edx
+ 8048b31:	89 d0                	mov    %edx,%eax
+ 8048b33:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048b38:	8b 40 08             	mov    0x8(%eax),%eax
+ 8048b3b:	8d 50 ff             	lea    -0x1(%eax),%edx
+ 8048b3e:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048b41:	c1 e0 02             	shl    $0x2,%eax
+ 8048b44:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+ 8048b4b:	29 c1                	sub    %eax,%ecx
+ 8048b4d:	89 c8                	mov    %ecx,%eax
+ 8048b4f:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048b54:	89 50 08             	mov    %edx,0x8(%eax)
 			int color = size>=mon.size?15:5;
- 8048b50:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048b53:	c1 e0 02             	shl    $0x2,%eax
- 8048b56:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048b5d:	29 c2                	sub    %eax,%edx
- 8048b5f:	89 d0                	mov    %edx,%eax
- 8048b61:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048b66:	8b 10                	mov    (%eax),%edx
- 8048b68:	a1 34 ba 04 08       	mov    0x804ba34,%eax
- 8048b6d:	39 c2                	cmp    %eax,%edx
- 8048b6f:	7f 07                	jg     8048b78 <drawMonster+0x259>
- 8048b71:	b8 0f 00 00 00       	mov    $0xf,%eax
- 8048b76:	eb 05                	jmp    8048b7d <drawMonster+0x25e>
- 8048b78:	b8 05 00 00 00       	mov    $0x5,%eax
- 8048b7d:	89 45 f0             	mov    %eax,-0x10(%ebp)
+ 8048b57:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048b5a:	c1 e0 02             	shl    $0x2,%eax
+ 8048b5d:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048b64:	29 c2                	sub    %eax,%edx
+ 8048b66:	89 d0                	mov    %edx,%eax
+ 8048b68:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048b6d:	8b 10                	mov    (%eax),%edx
+ 8048b6f:	a1 34 ba 04 08       	mov    0x804ba34,%eax
+ 8048b74:	39 c2                	cmp    %eax,%edx
+ 8048b76:	7f 07                	jg     8048b7f <drawMonster+0x259>
+ 8048b78:	b8 0f 00 00 00       	mov    $0xf,%eax
+ 8048b7d:	eb 05                	jmp    8048b84 <drawMonster+0x25e>
+ 8048b7f:	b8 05 00 00 00       	mov    $0x5,%eax
+ 8048b84:	89 45 f0             	mov    %eax,-0x10(%ebp)
 			drawCirc(mon.x, mon.y, mon.size, color);
- 8048b80:	8b 45 f0             	mov    -0x10(%ebp),%eax
- 8048b83:	0f b6 d8             	movzbl %al,%ebx
- 8048b86:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048b89:	c1 e0 02             	shl    $0x2,%eax
- 8048b8c:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048b93:	29 c2                	sub    %eax,%edx
- 8048b95:	89 d0                	mov    %edx,%eax
- 8048b97:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048b9c:	8b 08                	mov    (%eax),%ecx
- 8048b9e:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048ba1:	c1 e0 02             	shl    $0x2,%eax
- 8048ba4:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048bab:	29 c2                	sub    %eax,%edx
- 8048bad:	89 d0                	mov    %edx,%eax
- 8048baf:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048bb4:	8b 50 08             	mov    0x8(%eax),%edx
- 8048bb7:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048bba:	c1 e0 02             	shl    $0x2,%eax
- 8048bbd:	8d 34 c5 00 00 00 00 	lea    0x0(,%eax,8),%esi
- 8048bc4:	29 c6                	sub    %eax,%esi
- 8048bc6:	89 f0                	mov    %esi,%eax
- 8048bc8:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048bcd:	8b 40 04             	mov    0x4(%eax),%eax
- 8048bd0:	53                   	push   %ebx
- 8048bd1:	51                   	push   %ecx
- 8048bd2:	52                   	push   %edx
- 8048bd3:	50                   	push   %eax
- 8048bd4:	e8 f5 f7 ff ff       	call   80483ce <drawCirc>
- 8048bd9:	83 c4 10             	add    $0x10,%esp
+ 8048b87:	8b 45 f0             	mov    -0x10(%ebp),%eax
+ 8048b8a:	0f b6 d8             	movzbl %al,%ebx
+ 8048b8d:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048b90:	c1 e0 02             	shl    $0x2,%eax
+ 8048b93:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048b9a:	29 c2                	sub    %eax,%edx
+ 8048b9c:	89 d0                	mov    %edx,%eax
+ 8048b9e:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048ba3:	8b 08                	mov    (%eax),%ecx
+ 8048ba5:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048ba8:	c1 e0 02             	shl    $0x2,%eax
+ 8048bab:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048bb2:	29 c2                	sub    %eax,%edx
+ 8048bb4:	89 d0                	mov    %edx,%eax
+ 8048bb6:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048bbb:	8b 50 08             	mov    0x8(%eax),%edx
+ 8048bbe:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048bc1:	c1 e0 02             	shl    $0x2,%eax
+ 8048bc4:	8d 34 c5 00 00 00 00 	lea    0x0(,%eax,8),%esi
+ 8048bcb:	29 c6                	sub    %eax,%esi
+ 8048bcd:	89 f0                	mov    %esi,%eax
+ 8048bcf:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048bd4:	8b 40 04             	mov    0x4(%eax),%eax
+ 8048bd7:	53                   	push   %ebx
+ 8048bd8:	51                   	push   %ecx
+ 8048bd9:	52                   	push   %edx
+ 8048bda:	50                   	push   %eax
+ 8048bdb:	e8 f5 f7 ff ff       	call   80483d5 <drawCirc>
+ 8048be0:	83 c4 10             	add    $0x10,%esp
 			if(KISS()%60==0){
- 8048bdc:	e8 b3 f4 ff ff       	call   8048094 <UKISS>
- 8048be1:	89 c2                	mov    %eax,%edx
- 8048be3:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8048be8:	01 c2                	add    %eax,%edx
- 8048bea:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8048bef:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 8048bf2:	ba 89 88 88 88       	mov    $0x88888889,%edx
- 8048bf7:	89 c8                	mov    %ecx,%eax
- 8048bf9:	f7 e2                	mul    %edx
- 8048bfb:	89 d0                	mov    %edx,%eax
- 8048bfd:	c1 e8 05             	shr    $0x5,%eax
- 8048c00:	89 c2                	mov    %eax,%edx
- 8048c02:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 8048c09:	89 c2                	mov    %eax,%edx
- 8048c0b:	89 d0                	mov    %edx,%eax
- 8048c0d:	c1 e0 04             	shl    $0x4,%eax
- 8048c10:	29 d0                	sub    %edx,%eax
- 8048c12:	29 c1                	sub    %eax,%ecx
- 8048c14:	89 c8                	mov    %ecx,%eax
- 8048c16:	85 c0                	test   %eax,%eax
- 8048c18:	0f 85 9a 00 00 00    	jne    8048cb8 <drawMonster+0x399>
+ 8048be3:	e8 ac f4 ff ff       	call   8048094 <UKISS>
+ 8048be8:	89 c2                	mov    %eax,%edx
+ 8048bea:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8048bef:	01 c2                	add    %eax,%edx
+ 8048bf1:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8048bf6:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 8048bf9:	ba 89 88 88 88       	mov    $0x88888889,%edx
+ 8048bfe:	89 c8                	mov    %ecx,%eax
+ 8048c00:	f7 e2                	mul    %edx
+ 8048c02:	89 d0                	mov    %edx,%eax
+ 8048c04:	c1 e8 05             	shr    $0x5,%eax
+ 8048c07:	89 c2                	mov    %eax,%edx
+ 8048c09:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 8048c10:	89 c2                	mov    %eax,%edx
+ 8048c12:	89 d0                	mov    %edx,%eax
+ 8048c14:	c1 e0 04             	shl    $0x4,%eax
+ 8048c17:	29 d0                	sub    %edx,%eax
+ 8048c19:	29 c1                	sub    %eax,%ecx
+ 8048c1b:	89 c8                	mov    %ecx,%eax
+ 8048c1d:	85 c0                	test   %eax,%eax
+ 8048c1f:	0f 85 9a 00 00 00    	jne    8048cbf <drawMonster+0x399>
 				mon.sx = -1 + KISS()%3;
- 8048c1e:	e8 71 f4 ff ff       	call   8048094 <UKISS>
- 8048c23:	89 c2                	mov    %eax,%edx
- 8048c25:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8048c2a:	01 c2                	add    %eax,%edx
- 8048c2c:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8048c31:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 8048c34:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
- 8048c39:	89 c8                	mov    %ecx,%eax
- 8048c3b:	f7 e2                	mul    %edx
- 8048c3d:	d1 ea                	shr    %edx
- 8048c3f:	89 d0                	mov    %edx,%eax
- 8048c41:	01 c0                	add    %eax,%eax
- 8048c43:	01 d0                	add    %edx,%eax
- 8048c45:	29 c1                	sub    %eax,%ecx
- 8048c47:	89 ca                	mov    %ecx,%edx
- 8048c49:	8d 42 ff             	lea    -0x1(%edx),%eax
- 8048c4c:	89 c1                	mov    %eax,%ecx
- 8048c4e:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048c51:	c1 e0 02             	shl    $0x2,%eax
- 8048c54:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048c5b:	29 c2                	sub    %eax,%edx
- 8048c5d:	89 d0                	mov    %edx,%eax
- 8048c5f:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048c64:	89 48 0c             	mov    %ecx,0xc(%eax)
+ 8048c25:	e8 6a f4 ff ff       	call   8048094 <UKISS>
+ 8048c2a:	89 c2                	mov    %eax,%edx
+ 8048c2c:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8048c31:	01 c2                	add    %eax,%edx
+ 8048c33:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8048c38:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 8048c3b:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+ 8048c40:	89 c8                	mov    %ecx,%eax
+ 8048c42:	f7 e2                	mul    %edx
+ 8048c44:	d1 ea                	shr    %edx
+ 8048c46:	89 d0                	mov    %edx,%eax
+ 8048c48:	01 c0                	add    %eax,%eax
+ 8048c4a:	01 d0                	add    %edx,%eax
+ 8048c4c:	29 c1                	sub    %eax,%ecx
+ 8048c4e:	89 ca                	mov    %ecx,%edx
+ 8048c50:	8d 42 ff             	lea    -0x1(%edx),%eax
+ 8048c53:	89 c1                	mov    %eax,%ecx
+ 8048c55:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048c58:	c1 e0 02             	shl    $0x2,%eax
+ 8048c5b:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048c62:	29 c2                	sub    %eax,%edx
+ 8048c64:	89 d0                	mov    %edx,%eax
+ 8048c66:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048c6b:	89 48 0c             	mov    %ecx,0xc(%eax)
 				mon.sy = -1 + KISS()%3;
- 8048c67:	e8 28 f4 ff ff       	call   8048094 <UKISS>
- 8048c6c:	89 c2                	mov    %eax,%edx
- 8048c6e:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8048c73:	01 c2                	add    %eax,%edx
- 8048c75:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8048c7a:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 8048c7d:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
- 8048c82:	89 c8                	mov    %ecx,%eax
- 8048c84:	f7 e2                	mul    %edx
- 8048c86:	d1 ea                	shr    %edx
- 8048c88:	89 d0                	mov    %edx,%eax
- 8048c8a:	01 c0                	add    %eax,%eax
- 8048c8c:	01 d0                	add    %edx,%eax
- 8048c8e:	29 c1                	sub    %eax,%ecx
- 8048c90:	89 ca                	mov    %ecx,%edx
- 8048c92:	8d 42 ff             	lea    -0x1(%edx),%eax
- 8048c95:	89 c1                	mov    %eax,%ecx
- 8048c97:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048c9a:	89 c2                	mov    %eax,%edx
- 8048c9c:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 8048ca3:	89 c2                	mov    %eax,%edx
- 8048ca5:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 8048cac:	29 d0                	sub    %edx,%eax
- 8048cae:	83 c0 10             	add    $0x10,%eax
- 8048cb1:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048cb6:	89 08                	mov    %ecx,(%eax)
+ 8048c6e:	e8 21 f4 ff ff       	call   8048094 <UKISS>
+ 8048c73:	89 c2                	mov    %eax,%edx
+ 8048c75:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8048c7a:	01 c2                	add    %eax,%edx
+ 8048c7c:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8048c81:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 8048c84:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+ 8048c89:	89 c8                	mov    %ecx,%eax
+ 8048c8b:	f7 e2                	mul    %edx
+ 8048c8d:	d1 ea                	shr    %edx
+ 8048c8f:	89 d0                	mov    %edx,%eax
+ 8048c91:	01 c0                	add    %eax,%eax
+ 8048c93:	01 d0                	add    %edx,%eax
+ 8048c95:	29 c1                	sub    %eax,%ecx
+ 8048c97:	89 ca                	mov    %ecx,%edx
+ 8048c99:	8d 42 ff             	lea    -0x1(%edx),%eax
+ 8048c9c:	89 c1                	mov    %eax,%ecx
+ 8048c9e:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048ca1:	89 c2                	mov    %eax,%edx
+ 8048ca3:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 8048caa:	89 c2                	mov    %eax,%edx
+ 8048cac:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 8048cb3:	29 d0                	sub    %edx,%eax
+ 8048cb5:	83 c0 10             	add    $0x10,%eax
+ 8048cb8:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048cbd:	89 08                	mov    %ecx,(%eax)
 	return 0;
 }
 
 void drawMonster(){
 	int i=0;
 	REP_MONSTER(){
- 8048cb8:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
- 8048cbc:	83 7d f4 13          	cmpl   $0x13,-0xc(%ebp)
- 8048cc0:	0f 8e 6d fc ff ff    	jle    8048933 <drawMonster+0x14>
+ 8048cbf:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+ 8048cc3:	83 7d f4 13          	cmpl   $0x13,-0xc(%ebp)
+ 8048cc7:	0f 8e 6d fc ff ff    	jle    804893a <drawMonster+0x14>
 				mon.sx = -1 + KISS()%3;
 				mon.sy = -1 + KISS()%3;
 			}
 		}
 	}
 }
- 8048cc6:	8d 65 f8             	lea    -0x8(%ebp),%esp
- 8048cc9:	5b                   	pop    %ebx
- 8048cca:	5e                   	pop    %esi
- 8048ccb:	5d                   	pop    %ebp
- 8048ccc:	c3                   	ret    
+ 8048ccd:	8d 65 f8             	lea    -0x8(%ebp),%esp
+ 8048cd0:	5b                   	pop    %ebx
+ 8048cd1:	5e                   	pop    %esi
+ 8048cd2:	5d                   	pop    %ebp
+ 8048cd3:	c3                   	ret    
 
-08048ccd <createMonster>:
+08048cd4 <createMonster>:
 void createMonster(){
- 8048ccd:	55                   	push   %ebp
- 8048cce:	89 e5                	mov    %esp,%ebp
- 8048cd0:	83 ec 18             	sub    $0x18,%esp
+ 8048cd4:	55                   	push   %ebp
+ 8048cd5:	89 e5                	mov    %esp,%ebp
+ 8048cd7:	83 ec 18             	sub    $0x18,%esp
 	int i=0;
- 8048cd3:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+ 8048cda:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
 	REP_MONSTER(){
- 8048cda:	e9 e0 01 00 00       	jmp    8048ebf <createMonster+0x1f2>
+ 8048ce1:	e9 e0 01 00 00       	jmp    8048ec6 <createMonster+0x1f2>
 		if(mon.status == MONSTER_ALIVE) continue;
- 8048cdf:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048ce2:	89 c2                	mov    %eax,%edx
- 8048ce4:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 8048ceb:	89 c2                	mov    %eax,%edx
- 8048ced:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 8048cf4:	29 d0                	sub    %edx,%eax
- 8048cf6:	83 c0 10             	add    $0x10,%eax
- 8048cf9:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048cfe:	8b 40 04             	mov    0x4(%eax),%eax
- 8048d01:	85 c0                	test   %eax,%eax
- 8048d03:	75 05                	jne    8048d0a <createMonster+0x3d>
- 8048d05:	e9 b1 01 00 00       	jmp    8048ebb <createMonster+0x1ee>
+ 8048ce6:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048ce9:	89 c2                	mov    %eax,%edx
+ 8048ceb:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 8048cf2:	89 c2                	mov    %eax,%edx
+ 8048cf4:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 8048cfb:	29 d0                	sub    %edx,%eax
+ 8048cfd:	83 c0 10             	add    $0x10,%eax
+ 8048d00:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048d05:	8b 40 04             	mov    0x4(%eax),%eax
+ 8048d08:	85 c0                	test   %eax,%eax
+ 8048d0a:	75 05                	jne    8048d11 <createMonster+0x3d>
+ 8048d0c:	e9 b1 01 00 00       	jmp    8048ec2 <createMonster+0x1ee>
 		if(KISS()%(250*MONSTER_SIZE) == 0){
- 8048d0a:	e8 85 f3 ff ff       	call   8048094 <UKISS>
- 8048d0f:	89 c2                	mov    %eax,%edx
- 8048d11:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8048d16:	01 c2                	add    %eax,%edx
- 8048d18:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8048d1d:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 8048d20:	ba 59 17 b7 d1       	mov    $0xd1b71759,%edx
- 8048d25:	89 c8                	mov    %ecx,%eax
- 8048d27:	f7 e2                	mul    %edx
- 8048d29:	89 d0                	mov    %edx,%eax
- 8048d2b:	c1 e8 0c             	shr    $0xc,%eax
- 8048d2e:	69 c0 88 13 00 00    	imul   $0x1388,%eax,%eax
- 8048d34:	29 c1                	sub    %eax,%ecx
- 8048d36:	89 c8                	mov    %ecx,%eax
- 8048d38:	85 c0                	test   %eax,%eax
- 8048d3a:	0f 85 7b 01 00 00    	jne    8048ebb <createMonster+0x1ee>
+ 8048d11:	e8 7e f3 ff ff       	call   8048094 <UKISS>
+ 8048d16:	89 c2                	mov    %eax,%edx
+ 8048d18:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8048d1d:	01 c2                	add    %eax,%edx
+ 8048d1f:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8048d24:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 8048d27:	ba 59 17 b7 d1       	mov    $0xd1b71759,%edx
+ 8048d2c:	89 c8                	mov    %ecx,%eax
+ 8048d2e:	f7 e2                	mul    %edx
+ 8048d30:	89 d0                	mov    %edx,%eax
+ 8048d32:	c1 e8 0c             	shr    $0xc,%eax
+ 8048d35:	69 c0 88 13 00 00    	imul   $0x1388,%eax,%eax
+ 8048d3b:	29 c1                	sub    %eax,%ecx
+ 8048d3d:	89 c8                	mov    %ecx,%eax
+ 8048d3f:	85 c0                	test   %eax,%eax
+ 8048d41:	0f 85 7b 01 00 00    	jne    8048ec2 <createMonster+0x1ee>
 			mon.status = MONSTER_ALIVE;
- 8048d40:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048d43:	89 c2                	mov    %eax,%edx
- 8048d45:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 8048d4c:	89 c2                	mov    %eax,%edx
- 8048d4e:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 8048d55:	29 d0                	sub    %edx,%eax
- 8048d57:	83 c0 10             	add    $0x10,%eax
- 8048d5a:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048d5f:	c7 40 04 00 00 00 00 	movl   $0x0,0x4(%eax)
+ 8048d47:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048d4a:	89 c2                	mov    %eax,%edx
+ 8048d4c:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 8048d53:	89 c2                	mov    %eax,%edx
+ 8048d55:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 8048d5c:	29 d0                	sub    %edx,%eax
+ 8048d5e:	83 c0 10             	add    $0x10,%eax
+ 8048d61:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048d66:	c7 40 04 00 00 00 00 	movl   $0x0,0x4(%eax)
 			mon.size = 2 + 2*(KISS()%size);
- 8048d66:	e8 29 f3 ff ff       	call   8048094 <UKISS>
- 8048d6b:	89 c2                	mov    %eax,%edx
- 8048d6d:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8048d72:	01 c2                	add    %eax,%edx
- 8048d74:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8048d79:	01 d0                	add    %edx,%eax
- 8048d7b:	8b 15 34 ba 04 08    	mov    0x804ba34,%edx
- 8048d81:	89 d1                	mov    %edx,%ecx
- 8048d83:	ba 00 00 00 00       	mov    $0x0,%edx
- 8048d88:	f7 f1                	div    %ecx
- 8048d8a:	89 d0                	mov    %edx,%eax
- 8048d8c:	83 c0 01             	add    $0x1,%eax
- 8048d8f:	01 c0                	add    %eax,%eax
- 8048d91:	89 c1                	mov    %eax,%ecx
- 8048d93:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048d96:	c1 e0 02             	shl    $0x2,%eax
- 8048d99:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048da0:	29 c2                	sub    %eax,%edx
- 8048da2:	89 d0                	mov    %edx,%eax
- 8048da4:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048da9:	89 08                	mov    %ecx,(%eax)
+ 8048d6d:	e8 22 f3 ff ff       	call   8048094 <UKISS>
+ 8048d72:	89 c2                	mov    %eax,%edx
+ 8048d74:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8048d79:	01 c2                	add    %eax,%edx
+ 8048d7b:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8048d80:	01 d0                	add    %edx,%eax
+ 8048d82:	8b 15 34 ba 04 08    	mov    0x804ba34,%edx
+ 8048d88:	89 d1                	mov    %edx,%ecx
+ 8048d8a:	ba 00 00 00 00       	mov    $0x0,%edx
+ 8048d8f:	f7 f1                	div    %ecx
+ 8048d91:	89 d0                	mov    %edx,%eax
+ 8048d93:	83 c0 01             	add    $0x1,%eax
+ 8048d96:	01 c0                	add    %eax,%eax
+ 8048d98:	89 c1                	mov    %eax,%ecx
+ 8048d9a:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048d9d:	c1 e0 02             	shl    $0x2,%eax
+ 8048da0:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048da7:	29 c2                	sub    %eax,%edx
+ 8048da9:	89 d0                	mov    %edx,%eax
+ 8048dab:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048db0:	89 08                	mov    %ecx,(%eax)
 			mon.size = mon.size >14?14:mon.size; 
- 8048dab:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048dae:	c1 e0 02             	shl    $0x2,%eax
- 8048db1:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048db8:	29 c2                	sub    %eax,%edx
- 8048dba:	89 d0                	mov    %edx,%eax
- 8048dbc:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048dc1:	8b 00                	mov    (%eax),%eax
- 8048dc3:	89 c2                	mov    %eax,%edx
- 8048dc5:	83 fa 0e             	cmp    $0xe,%edx
- 8048dc8:	7e 05                	jle    8048dcf <createMonster+0x102>
- 8048dca:	ba 0e 00 00 00       	mov    $0xe,%edx
- 8048dcf:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048dd2:	c1 e0 02             	shl    $0x2,%eax
- 8048dd5:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
- 8048ddc:	29 c1                	sub    %eax,%ecx
- 8048dde:	89 c8                	mov    %ecx,%eax
- 8048de0:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048de5:	89 10                	mov    %edx,(%eax)
+ 8048db2:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048db5:	c1 e0 02             	shl    $0x2,%eax
+ 8048db8:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048dbf:	29 c2                	sub    %eax,%edx
+ 8048dc1:	89 d0                	mov    %edx,%eax
+ 8048dc3:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048dc8:	8b 00                	mov    (%eax),%eax
+ 8048dca:	89 c2                	mov    %eax,%edx
+ 8048dcc:	83 fa 0e             	cmp    $0xe,%edx
+ 8048dcf:	7e 05                	jle    8048dd6 <createMonster+0x102>
+ 8048dd1:	ba 0e 00 00 00       	mov    $0xe,%edx
+ 8048dd6:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048dd9:	c1 e0 02             	shl    $0x2,%eax
+ 8048ddc:	8d 0c c5 00 00 00 00 	lea    0x0(,%eax,8),%ecx
+ 8048de3:	29 c1                	sub    %eax,%ecx
+ 8048de5:	89 c8                	mov    %ecx,%eax
+ 8048de7:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048dec:	89 10                	mov    %edx,(%eax)
 			mon.x = VWIDTH/2;
- 8048de7:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048dea:	c1 e0 02             	shl    $0x2,%eax
- 8048ded:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048df4:	29 c2                	sub    %eax,%edx
- 8048df6:	89 d0                	mov    %edx,%eax
- 8048df8:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048dfd:	c7 40 04 a0 00 00 00 	movl   $0xa0,0x4(%eax)
+ 8048dee:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048df1:	c1 e0 02             	shl    $0x2,%eax
+ 8048df4:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048dfb:	29 c2                	sub    %eax,%edx
+ 8048dfd:	89 d0                	mov    %edx,%eax
+ 8048dff:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048e04:	c7 40 04 a0 00 00 00 	movl   $0xa0,0x4(%eax)
 			mon.y = VHEIGHT/2;
- 8048e04:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048e07:	c1 e0 02             	shl    $0x2,%eax
- 8048e0a:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048e11:	29 c2                	sub    %eax,%edx
- 8048e13:	89 d0                	mov    %edx,%eax
- 8048e15:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048e1a:	c7 40 08 64 00 00 00 	movl   $0x64,0x8(%eax)
+ 8048e0b:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048e0e:	c1 e0 02             	shl    $0x2,%eax
+ 8048e11:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048e18:	29 c2                	sub    %eax,%edx
+ 8048e1a:	89 d0                	mov    %edx,%eax
+ 8048e1c:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048e21:	c7 40 08 64 00 00 00 	movl   $0x64,0x8(%eax)
 			mon.sx = -1 + KISS()%3;
- 8048e21:	e8 6e f2 ff ff       	call   8048094 <UKISS>
- 8048e26:	89 c2                	mov    %eax,%edx
- 8048e28:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8048e2d:	01 c2                	add    %eax,%edx
- 8048e2f:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8048e34:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 8048e37:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
- 8048e3c:	89 c8                	mov    %ecx,%eax
- 8048e3e:	f7 e2                	mul    %edx
- 8048e40:	d1 ea                	shr    %edx
- 8048e42:	89 d0                	mov    %edx,%eax
- 8048e44:	01 c0                	add    %eax,%eax
- 8048e46:	01 d0                	add    %edx,%eax
- 8048e48:	29 c1                	sub    %eax,%ecx
- 8048e4a:	89 ca                	mov    %ecx,%edx
- 8048e4c:	8d 42 ff             	lea    -0x1(%edx),%eax
- 8048e4f:	89 c1                	mov    %eax,%ecx
- 8048e51:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048e54:	c1 e0 02             	shl    $0x2,%eax
- 8048e57:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048e5e:	29 c2                	sub    %eax,%edx
- 8048e60:	89 d0                	mov    %edx,%eax
- 8048e62:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048e67:	89 48 0c             	mov    %ecx,0xc(%eax)
+ 8048e28:	e8 67 f2 ff ff       	call   8048094 <UKISS>
+ 8048e2d:	89 c2                	mov    %eax,%edx
+ 8048e2f:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8048e34:	01 c2                	add    %eax,%edx
+ 8048e36:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8048e3b:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 8048e3e:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+ 8048e43:	89 c8                	mov    %ecx,%eax
+ 8048e45:	f7 e2                	mul    %edx
+ 8048e47:	d1 ea                	shr    %edx
+ 8048e49:	89 d0                	mov    %edx,%eax
+ 8048e4b:	01 c0                	add    %eax,%eax
+ 8048e4d:	01 d0                	add    %edx,%eax
+ 8048e4f:	29 c1                	sub    %eax,%ecx
+ 8048e51:	89 ca                	mov    %ecx,%edx
+ 8048e53:	8d 42 ff             	lea    -0x1(%edx),%eax
+ 8048e56:	89 c1                	mov    %eax,%ecx
+ 8048e58:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048e5b:	c1 e0 02             	shl    $0x2,%eax
+ 8048e5e:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048e65:	29 c2                	sub    %eax,%edx
+ 8048e67:	89 d0                	mov    %edx,%eax
+ 8048e69:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048e6e:	89 48 0c             	mov    %ecx,0xc(%eax)
 			mon.sy = -1 + KISS()%3;
- 8048e6a:	e8 25 f2 ff ff       	call   8048094 <UKISS>
- 8048e6f:	89 c2                	mov    %eax,%edx
- 8048e71:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8048e76:	01 c2                	add    %eax,%edx
- 8048e78:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8048e7d:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 8048e80:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
- 8048e85:	89 c8                	mov    %ecx,%eax
- 8048e87:	f7 e2                	mul    %edx
- 8048e89:	d1 ea                	shr    %edx
- 8048e8b:	89 d0                	mov    %edx,%eax
- 8048e8d:	01 c0                	add    %eax,%eax
- 8048e8f:	01 d0                	add    %edx,%eax
- 8048e91:	29 c1                	sub    %eax,%ecx
- 8048e93:	89 ca                	mov    %ecx,%edx
- 8048e95:	8d 42 ff             	lea    -0x1(%edx),%eax
- 8048e98:	89 c1                	mov    %eax,%ecx
- 8048e9a:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048e9d:	89 c2                	mov    %eax,%edx
- 8048e9f:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 8048ea6:	89 c2                	mov    %eax,%edx
- 8048ea8:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 8048eaf:	29 d0                	sub    %edx,%eax
- 8048eb1:	83 c0 10             	add    $0x10,%eax
- 8048eb4:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048eb9:	89 08                	mov    %ecx,(%eax)
+ 8048e71:	e8 1e f2 ff ff       	call   8048094 <UKISS>
+ 8048e76:	89 c2                	mov    %eax,%edx
+ 8048e78:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8048e7d:	01 c2                	add    %eax,%edx
+ 8048e7f:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8048e84:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 8048e87:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+ 8048e8c:	89 c8                	mov    %ecx,%eax
+ 8048e8e:	f7 e2                	mul    %edx
+ 8048e90:	d1 ea                	shr    %edx
+ 8048e92:	89 d0                	mov    %edx,%eax
+ 8048e94:	01 c0                	add    %eax,%eax
+ 8048e96:	01 d0                	add    %edx,%eax
+ 8048e98:	29 c1                	sub    %eax,%ecx
+ 8048e9a:	89 ca                	mov    %ecx,%edx
+ 8048e9c:	8d 42 ff             	lea    -0x1(%edx),%eax
+ 8048e9f:	89 c1                	mov    %eax,%ecx
+ 8048ea1:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048ea4:	89 c2                	mov    %eax,%edx
+ 8048ea6:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 8048ead:	89 c2                	mov    %eax,%edx
+ 8048eaf:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 8048eb6:	29 d0                	sub    %edx,%eax
+ 8048eb8:	83 c0 10             	add    $0x10,%eax
+ 8048ebb:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048ec0:	89 08                	mov    %ecx,(%eax)
 		}
 	}
 }
 void createMonster(){
 	int i=0;
 	REP_MONSTER(){
- 8048ebb:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
- 8048ebf:	83 7d f4 13          	cmpl   $0x13,-0xc(%ebp)
- 8048ec3:	0f 8e 16 fe ff ff    	jle    8048cdf <createMonster+0x12>
+ 8048ec2:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+ 8048ec6:	83 7d f4 13          	cmpl   $0x13,-0xc(%ebp)
+ 8048eca:	0f 8e 16 fe ff ff    	jle    8048ce6 <createMonster+0x12>
 			mon.y = VHEIGHT/2;
 			mon.sx = -1 + KISS()%3;
 			mon.sy = -1 + KISS()%3;
 		}
 	}
 }
- 8048ec9:	c9                   	leave  
- 8048eca:	c3                   	ret    
+ 8048ed0:	c9                   	leave  
+ 8048ed1:	c3                   	ret    
 
-08048ecb <dreamOf100HZ>:
+08048ed2 <dreamOf100HZ>:
 
 void dreamOf100HZ(int timestamp){
- 8048ecb:	55                   	push   %ebp
- 8048ecc:	89 e5                	mov    %esp,%ebp
- 8048ece:	83 ec 18             	sub    $0x18,%esp
+ 8048ed2:	55                   	push   %ebp
+ 8048ed3:	89 e5                	mov    %esp,%ebp
+ 8048ed5:	83 ec 18             	sub    $0x18,%esp
 		//drawRect(60+x, 60+y, 40, 40, 3);
 		drawCirc(60+x, 60+y, 15, 3);
 		drawCirc(70+x, 60+y, 15, 6);
 		drawStage();
 	}*/
 	if(key('l')){
- 8048ed1:	6a 6c                	push   $0x6c
- 8048ed3:	e8 a1 f7 ff ff       	call   8048679 <key>
- 8048ed8:	83 c4 04             	add    $0x4,%esp
- 8048edb:	84 c0                	test   %al,%al
- 8048edd:	74 23                	je     8048f02 <dreamOf100HZ+0x37>
+ 8048ed8:	6a 6c                	push   $0x6c
+ 8048eda:	e8 a1 f7 ff ff       	call   8048680 <key>
+ 8048edf:	83 c4 04             	add    $0x4,%esp
+ 8048ee2:	84 c0                	test   %al,%al
+ 8048ee4:	74 23                	je     8048f09 <dreamOf100HZ+0x37>
 		printf("GAME#%d: Sleep 5s!\n", getpid());
- 8048edf:	e8 ab f2 ff ff       	call   804818f <sys_pid>
- 8048ee4:	83 ec 08             	sub    $0x8,%esp
- 8048ee7:	50                   	push   %eax
- 8048ee8:	68 0e a2 04 08       	push   $0x804a20e
- 8048eed:	e8 8b 09 00 00       	call   804987d <printf>
- 8048ef2:	83 c4 10             	add    $0x10,%esp
+ 8048ee6:	e8 ab f2 ff ff       	call   8048196 <sys_pid>
+ 8048eeb:	83 ec 08             	sub    $0x8,%esp
+ 8048eee:	50                   	push   %eax
+ 8048eef:	68 0e a2 04 08       	push   $0x804a20e
+ 8048ef4:	e8 8b 09 00 00       	call   8049884 <printf>
+ 8048ef9:	83 c4 10             	add    $0x10,%esp
 		sleep(5);
- 8048ef5:	83 ec 0c             	sub    $0xc,%esp
- 8048ef8:	6a 05                	push   $0x5
- 8048efa:	e8 ac f2 ff ff       	call   80481ab <sys_sleep>
- 8048eff:	83 c4 10             	add    $0x10,%esp
+ 8048efc:	83 ec 0c             	sub    $0xc,%esp
+ 8048eff:	6a 05                	push   $0x5
+ 8048f01:	e8 ac f2 ff ff       	call   80481b2 <sys_sleep>
+ 8048f06:	83 c4 10             	add    $0x10,%esp
 	}
 	if(key('m')){
- 8048f02:	83 ec 0c             	sub    $0xc,%esp
- 8048f05:	6a 6d                	push   $0x6d
- 8048f07:	e8 6d f7 ff ff       	call   8048679 <key>
- 8048f0c:	83 c4 10             	add    $0x10,%esp
- 8048f0f:	84 c0                	test   %al,%al
- 8048f11:	74 25                	je     8048f38 <dreamOf100HZ+0x6d>
+ 8048f09:	83 ec 0c             	sub    $0xc,%esp
+ 8048f0c:	6a 6d                	push   $0x6d
+ 8048f0e:	e8 6d f7 ff ff       	call   8048680 <key>
+ 8048f13:	83 c4 10             	add    $0x10,%esp
+ 8048f16:	84 c0                	test   %al,%al
+ 8048f18:	74 25                	je     8048f3f <dreamOf100HZ+0x6d>
 		clearStage();
- 8048f13:	e8 ea f3 ff ff       	call   8048302 <clearStage>
+ 8048f1a:	e8 ea f3 ff ff       	call   8048309 <clearStage>
 		drawStage();
- 8048f18:	e8 37 f7 ff ff       	call   8048654 <drawStage>
+ 8048f1f:	e8 37 f7 ff ff       	call   804865b <drawStage>
 		printf("GAME#%d: Ready to exit! Bye!\n", getpid());
- 8048f1d:	e8 6d f2 ff ff       	call   804818f <sys_pid>
- 8048f22:	83 ec 08             	sub    $0x8,%esp
- 8048f25:	50                   	push   %eax
- 8048f26:	68 22 a2 04 08       	push   $0x804a222
- 8048f2b:	e8 4d 09 00 00       	call   804987d <printf>
- 8048f30:	83 c4 10             	add    $0x10,%esp
+ 8048f24:	e8 6d f2 ff ff       	call   8048196 <sys_pid>
+ 8048f29:	83 ec 08             	sub    $0x8,%esp
+ 8048f2c:	50                   	push   %eax
+ 8048f2d:	68 22 a2 04 08       	push   $0x804a222
+ 8048f32:	e8 4d 09 00 00       	call   8049884 <printf>
+ 8048f37:	83 c4 10             	add    $0x10,%esp
 		exit();
- 8048f33:	e8 2f f2 ff ff       	call   8048167 <sys_exit>
+ 8048f3a:	e8 28 f2 ff ff       	call   8048167 <sys_exit>
 	}
 	if(gameStatus == GAME_START){
- 8048f38:	a1 28 ba 04 08       	mov    0x804ba28,%eax
- 8048f3d:	85 c0                	test   %eax,%eax
- 8048f3f:	0f 85 2b 04 00 00    	jne    8049370 <dreamOf100HZ+0x4a5>
+ 8048f3f:	a1 28 ba 04 08       	mov    0x804ba28,%eax
+ 8048f44:	85 c0                	test   %eax,%eax
+ 8048f46:	0f 85 2b 04 00 00    	jne    8049377 <dreamOf100HZ+0x4a5>
 		//printf("%x\n", st);
 		//printf("Score: %d\n", curtime);
 		clearStage();
- 8048f45:	e8 b8 f3 ff ff       	call   8048302 <clearStage>
+ 8048f4c:	e8 b8 f3 ff ff       	call   8048309 <clearStage>
 		drawText1();
- 8048f4a:	e8 2c f5 ff ff       	call   804847b <drawText1>
+ 8048f51:	e8 2c f5 ff ff       	call   8048482 <drawText1>
 		//drawNumber(timestamp, 0, 0, 2, 15);
 		drawStage();
- 8048f4f:	e8 00 f7 ff ff       	call   8048654 <drawStage>
+ 8048f56:	e8 00 f7 ff ff       	call   804865b <drawStage>
 
 		int i=0;
- 8048f54:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
+ 8048f5b:	c7 45 f4 00 00 00 00 	movl   $0x0,-0xc(%ebp)
 		x = 30;
- 8048f5b:	c7 05 2c ba 04 08 1e 	movl   $0x1e,0x804ba2c
- 8048f62:	00 00 00 
+ 8048f62:	c7 05 2c ba 04 08 1e 	movl   $0x1e,0x804ba2c
+ 8048f69:	00 00 00 
 		y = 30;
- 8048f65:	c7 05 30 ba 04 08 1e 	movl   $0x1e,0x804ba30
- 8048f6c:	00 00 00 
+ 8048f6c:	c7 05 30 ba 04 08 1e 	movl   $0x1e,0x804ba30
+ 8048f73:	00 00 00 
 		size = 4;
- 8048f6f:	c7 05 34 ba 04 08 04 	movl   $0x4,0x804ba34
- 8048f76:	00 00 00 
+ 8048f76:	c7 05 34 ba 04 08 04 	movl   $0x4,0x804ba34
+ 8048f7d:	00 00 00 
 		score = 0;
- 8048f79:	c7 05 24 ba 04 08 00 	movl   $0x0,0x804ba24
- 8048f80:	00 00 00 
+ 8048f80:	c7 05 24 ba 04 08 00 	movl   $0x0,0x804ba24
+ 8048f87:	00 00 00 
 		monsters[i].status = MONSTER_ALIVE;
- 8048f83:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048f86:	89 c2                	mov    %eax,%edx
- 8048f88:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 8048f8f:	89 c2                	mov    %eax,%edx
- 8048f91:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 8048f98:	29 d0                	sub    %edx,%eax
- 8048f9a:	83 c0 10             	add    $0x10,%eax
- 8048f9d:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048fa2:	c7 40 04 00 00 00 00 	movl   $0x0,0x4(%eax)
+ 8048f8a:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048f8d:	89 c2                	mov    %eax,%edx
+ 8048f8f:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 8048f96:	89 c2                	mov    %eax,%edx
+ 8048f98:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 8048f9f:	29 d0                	sub    %edx,%eax
+ 8048fa1:	83 c0 10             	add    $0x10,%eax
+ 8048fa4:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048fa9:	c7 40 04 00 00 00 00 	movl   $0x0,0x4(%eax)
 		monsters[i].size = 1 + (KISS()%size);
- 8048fa9:	e8 e6 f0 ff ff       	call   8048094 <UKISS>
- 8048fae:	89 c2                	mov    %eax,%edx
- 8048fb0:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8048fb5:	01 c2                	add    %eax,%edx
- 8048fb7:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8048fbc:	01 d0                	add    %edx,%eax
- 8048fbe:	8b 15 34 ba 04 08    	mov    0x804ba34,%edx
- 8048fc4:	89 d1                	mov    %edx,%ecx
- 8048fc6:	ba 00 00 00 00       	mov    $0x0,%edx
- 8048fcb:	f7 f1                	div    %ecx
- 8048fcd:	89 d0                	mov    %edx,%eax
- 8048fcf:	83 c0 01             	add    $0x1,%eax
- 8048fd2:	89 c1                	mov    %eax,%ecx
- 8048fd4:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8048fd7:	c1 e0 02             	shl    $0x2,%eax
- 8048fda:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8048fe1:	29 c2                	sub    %eax,%edx
- 8048fe3:	89 d0                	mov    %edx,%eax
- 8048fe5:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8048fea:	89 08                	mov    %ecx,(%eax)
+ 8048fb0:	e8 df f0 ff ff       	call   8048094 <UKISS>
+ 8048fb5:	89 c2                	mov    %eax,%edx
+ 8048fb7:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8048fbc:	01 c2                	add    %eax,%edx
+ 8048fbe:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8048fc3:	01 d0                	add    %edx,%eax
+ 8048fc5:	8b 15 34 ba 04 08    	mov    0x804ba34,%edx
+ 8048fcb:	89 d1                	mov    %edx,%ecx
+ 8048fcd:	ba 00 00 00 00       	mov    $0x0,%edx
+ 8048fd2:	f7 f1                	div    %ecx
+ 8048fd4:	89 d0                	mov    %edx,%eax
+ 8048fd6:	83 c0 01             	add    $0x1,%eax
+ 8048fd9:	89 c1                	mov    %eax,%ecx
+ 8048fdb:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8048fde:	c1 e0 02             	shl    $0x2,%eax
+ 8048fe1:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8048fe8:	29 c2                	sub    %eax,%edx
+ 8048fea:	89 d0                	mov    %edx,%eax
+ 8048fec:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8048ff1:	89 08                	mov    %ecx,(%eax)
 		monsters[i].x = KISS()%VWIDTH;
- 8048fec:	e8 a3 f0 ff ff       	call   8048094 <UKISS>
- 8048ff1:	89 c2                	mov    %eax,%edx
- 8048ff3:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8048ff8:	01 c2                	add    %eax,%edx
- 8048ffa:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8048fff:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 8049002:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
- 8049007:	89 c8                	mov    %ecx,%eax
- 8049009:	f7 e2                	mul    %edx
- 804900b:	c1 ea 08             	shr    $0x8,%edx
- 804900e:	89 d0                	mov    %edx,%eax
- 8049010:	c1 e0 02             	shl    $0x2,%eax
- 8049013:	01 d0                	add    %edx,%eax
- 8049015:	c1 e0 06             	shl    $0x6,%eax
- 8049018:	29 c1                	sub    %eax,%ecx
- 804901a:	89 ca                	mov    %ecx,%edx
- 804901c:	89 d1                	mov    %edx,%ecx
- 804901e:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8049021:	c1 e0 02             	shl    $0x2,%eax
- 8049024:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 804902b:	29 c2                	sub    %eax,%edx
- 804902d:	89 d0                	mov    %edx,%eax
- 804902f:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8049034:	89 48 04             	mov    %ecx,0x4(%eax)
+ 8048ff3:	e8 9c f0 ff ff       	call   8048094 <UKISS>
+ 8048ff8:	89 c2                	mov    %eax,%edx
+ 8048ffa:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8048fff:	01 c2                	add    %eax,%edx
+ 8049001:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8049006:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 8049009:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
+ 804900e:	89 c8                	mov    %ecx,%eax
+ 8049010:	f7 e2                	mul    %edx
+ 8049012:	c1 ea 08             	shr    $0x8,%edx
+ 8049015:	89 d0                	mov    %edx,%eax
+ 8049017:	c1 e0 02             	shl    $0x2,%eax
+ 804901a:	01 d0                	add    %edx,%eax
+ 804901c:	c1 e0 06             	shl    $0x6,%eax
+ 804901f:	29 c1                	sub    %eax,%ecx
+ 8049021:	89 ca                	mov    %ecx,%edx
+ 8049023:	89 d1                	mov    %edx,%ecx
+ 8049025:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049028:	c1 e0 02             	shl    $0x2,%eax
+ 804902b:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8049032:	29 c2                	sub    %eax,%edx
+ 8049034:	89 d0                	mov    %edx,%eax
+ 8049036:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 804903b:	89 48 04             	mov    %ecx,0x4(%eax)
 		monsters[i].y = KISS()%VHEIGHT;
- 8049037:	e8 58 f0 ff ff       	call   8048094 <UKISS>
- 804903c:	89 c2                	mov    %eax,%edx
- 804903e:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8049043:	01 c2                	add    %eax,%edx
- 8049045:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 804904a:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 804904d:	ba 1f 85 eb 51       	mov    $0x51eb851f,%edx
- 8049052:	89 c8                	mov    %ecx,%eax
- 8049054:	f7 e2                	mul    %edx
- 8049056:	89 d0                	mov    %edx,%eax
- 8049058:	c1 e8 06             	shr    $0x6,%eax
- 804905b:	69 c0 c8 00 00 00    	imul   $0xc8,%eax,%eax
- 8049061:	29 c1                	sub    %eax,%ecx
- 8049063:	89 c8                	mov    %ecx,%eax
- 8049065:	89 c1                	mov    %eax,%ecx
- 8049067:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 804906a:	c1 e0 02             	shl    $0x2,%eax
- 804906d:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8049074:	29 c2                	sub    %eax,%edx
- 8049076:	89 d0                	mov    %edx,%eax
- 8049078:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 804907d:	89 48 08             	mov    %ecx,0x8(%eax)
+ 804903e:	e8 51 f0 ff ff       	call   8048094 <UKISS>
+ 8049043:	89 c2                	mov    %eax,%edx
+ 8049045:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 804904a:	01 c2                	add    %eax,%edx
+ 804904c:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8049051:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 8049054:	ba 1f 85 eb 51       	mov    $0x51eb851f,%edx
+ 8049059:	89 c8                	mov    %ecx,%eax
+ 804905b:	f7 e2                	mul    %edx
+ 804905d:	89 d0                	mov    %edx,%eax
+ 804905f:	c1 e8 06             	shr    $0x6,%eax
+ 8049062:	69 c0 c8 00 00 00    	imul   $0xc8,%eax,%eax
+ 8049068:	29 c1                	sub    %eax,%ecx
+ 804906a:	89 c8                	mov    %ecx,%eax
+ 804906c:	89 c1                	mov    %eax,%ecx
+ 804906e:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049071:	c1 e0 02             	shl    $0x2,%eax
+ 8049074:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 804907b:	29 c2                	sub    %eax,%edx
+ 804907d:	89 d0                	mov    %edx,%eax
+ 804907f:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8049084:	89 48 08             	mov    %ecx,0x8(%eax)
 		monsters[i].sx = -1 + KISS()%3;
- 8049080:	e8 0f f0 ff ff       	call   8048094 <UKISS>
- 8049085:	89 c2                	mov    %eax,%edx
- 8049087:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 804908c:	01 c2                	add    %eax,%edx
- 804908e:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8049093:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 8049096:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
- 804909b:	89 c8                	mov    %ecx,%eax
- 804909d:	f7 e2                	mul    %edx
- 804909f:	d1 ea                	shr    %edx
- 80490a1:	89 d0                	mov    %edx,%eax
- 80490a3:	01 c0                	add    %eax,%eax
- 80490a5:	01 d0                	add    %edx,%eax
- 80490a7:	29 c1                	sub    %eax,%ecx
- 80490a9:	89 ca                	mov    %ecx,%edx
- 80490ab:	8d 42 ff             	lea    -0x1(%edx),%eax
- 80490ae:	89 c1                	mov    %eax,%ecx
- 80490b0:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80490b3:	c1 e0 02             	shl    $0x2,%eax
- 80490b6:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 80490bd:	29 c2                	sub    %eax,%edx
- 80490bf:	89 d0                	mov    %edx,%eax
- 80490c1:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80490c6:	89 48 0c             	mov    %ecx,0xc(%eax)
+ 8049087:	e8 08 f0 ff ff       	call   8048094 <UKISS>
+ 804908c:	89 c2                	mov    %eax,%edx
+ 804908e:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8049093:	01 c2                	add    %eax,%edx
+ 8049095:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 804909a:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 804909d:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+ 80490a2:	89 c8                	mov    %ecx,%eax
+ 80490a4:	f7 e2                	mul    %edx
+ 80490a6:	d1 ea                	shr    %edx
+ 80490a8:	89 d0                	mov    %edx,%eax
+ 80490aa:	01 c0                	add    %eax,%eax
+ 80490ac:	01 d0                	add    %edx,%eax
+ 80490ae:	29 c1                	sub    %eax,%ecx
+ 80490b0:	89 ca                	mov    %ecx,%edx
+ 80490b2:	8d 42 ff             	lea    -0x1(%edx),%eax
+ 80490b5:	89 c1                	mov    %eax,%ecx
+ 80490b7:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80490ba:	c1 e0 02             	shl    $0x2,%eax
+ 80490bd:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 80490c4:	29 c2                	sub    %eax,%edx
+ 80490c6:	89 d0                	mov    %edx,%eax
+ 80490c8:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 80490cd:	89 48 0c             	mov    %ecx,0xc(%eax)
 		monsters[i].sy = -1 + KISS()%3;
- 80490c9:	e8 c6 ef ff ff       	call   8048094 <UKISS>
- 80490ce:	89 c2                	mov    %eax,%edx
- 80490d0:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 80490d5:	01 c2                	add    %eax,%edx
- 80490d7:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 80490dc:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 80490df:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
- 80490e4:	89 c8                	mov    %ecx,%eax
- 80490e6:	f7 e2                	mul    %edx
- 80490e8:	d1 ea                	shr    %edx
- 80490ea:	89 d0                	mov    %edx,%eax
- 80490ec:	01 c0                	add    %eax,%eax
- 80490ee:	01 d0                	add    %edx,%eax
- 80490f0:	29 c1                	sub    %eax,%ecx
- 80490f2:	89 ca                	mov    %ecx,%edx
- 80490f4:	8d 42 ff             	lea    -0x1(%edx),%eax
- 80490f7:	89 c1                	mov    %eax,%ecx
- 80490f9:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80490fc:	89 c2                	mov    %eax,%edx
- 80490fe:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 8049105:	89 c2                	mov    %eax,%edx
- 8049107:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 804910e:	29 d0                	sub    %edx,%eax
- 8049110:	83 c0 10             	add    $0x10,%eax
- 8049113:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8049118:	89 08                	mov    %ecx,(%eax)
+ 80490d0:	e8 bf ef ff ff       	call   8048094 <UKISS>
+ 80490d5:	89 c2                	mov    %eax,%edx
+ 80490d7:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 80490dc:	01 c2                	add    %eax,%edx
+ 80490de:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 80490e3:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 80490e6:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+ 80490eb:	89 c8                	mov    %ecx,%eax
+ 80490ed:	f7 e2                	mul    %edx
+ 80490ef:	d1 ea                	shr    %edx
+ 80490f1:	89 d0                	mov    %edx,%eax
+ 80490f3:	01 c0                	add    %eax,%eax
+ 80490f5:	01 d0                	add    %edx,%eax
+ 80490f7:	29 c1                	sub    %eax,%ecx
+ 80490f9:	89 ca                	mov    %ecx,%edx
+ 80490fb:	8d 42 ff             	lea    -0x1(%edx),%eax
+ 80490fe:	89 c1                	mov    %eax,%ecx
+ 8049100:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049103:	89 c2                	mov    %eax,%edx
+ 8049105:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 804910c:	89 c2                	mov    %eax,%edx
+ 804910e:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 8049115:	29 d0                	sub    %edx,%eax
+ 8049117:	83 c0 10             	add    $0x10,%eax
+ 804911a:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 804911f:	89 08                	mov    %ecx,(%eax)
 		i++;
- 804911a:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+ 8049121:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
 		REP_MONSTER(){
- 804911e:	e9 29 02 00 00       	jmp    804934c <dreamOf100HZ+0x481>
+ 8049125:	e9 29 02 00 00       	jmp    8049353 <dreamOf100HZ+0x481>
 			monsters[i].status = MONSTER_SLEEP;
- 8049123:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8049126:	89 c2                	mov    %eax,%edx
- 8049128:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 804912f:	89 c2                	mov    %eax,%edx
- 8049131:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 8049138:	29 d0                	sub    %edx,%eax
- 804913a:	83 c0 10             	add    $0x10,%eax
- 804913d:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8049142:	c7 40 04 04 00 00 00 	movl   $0x4,0x4(%eax)
+ 804912a:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 804912d:	89 c2                	mov    %eax,%edx
+ 804912f:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 8049136:	89 c2                	mov    %eax,%edx
+ 8049138:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 804913f:	29 d0                	sub    %edx,%eax
+ 8049141:	83 c0 10             	add    $0x10,%eax
+ 8049144:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8049149:	c7 40 04 04 00 00 00 	movl   $0x4,0x4(%eax)
 			monsters[i].count = 0;
- 8049149:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 804914c:	89 c2                	mov    %eax,%edx
- 804914e:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 8049155:	89 c2                	mov    %eax,%edx
- 8049157:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 804915e:	29 d0                	sub    %edx,%eax
- 8049160:	83 c0 10             	add    $0x10,%eax
- 8049163:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8049168:	c7 40 08 00 00 00 00 	movl   $0x0,0x8(%eax)
+ 8049150:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049153:	89 c2                	mov    %eax,%edx
+ 8049155:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 804915c:	89 c2                	mov    %eax,%edx
+ 804915e:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 8049165:	29 d0                	sub    %edx,%eax
+ 8049167:	83 c0 10             	add    $0x10,%eax
+ 804916a:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 804916f:	c7 40 08 00 00 00 00 	movl   $0x0,0x8(%eax)
 			if(KISS()%MONSTER_SIZE < size+3){
- 804916f:	e8 20 ef ff ff       	call   8048094 <UKISS>
- 8049174:	89 c2                	mov    %eax,%edx
- 8049176:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 804917b:	01 c2                	add    %eax,%edx
- 804917d:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8049182:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 8049185:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
- 804918a:	89 c8                	mov    %ecx,%eax
- 804918c:	f7 e2                	mul    %edx
- 804918e:	c1 ea 04             	shr    $0x4,%edx
- 8049191:	89 d0                	mov    %edx,%eax
- 8049193:	c1 e0 02             	shl    $0x2,%eax
- 8049196:	01 d0                	add    %edx,%eax
- 8049198:	c1 e0 02             	shl    $0x2,%eax
- 804919b:	29 c1                	sub    %eax,%ecx
- 804919d:	89 ca                	mov    %ecx,%edx
- 804919f:	a1 34 ba 04 08       	mov    0x804ba34,%eax
- 80491a4:	83 c0 03             	add    $0x3,%eax
- 80491a7:	39 c2                	cmp    %eax,%edx
- 80491a9:	0f 83 99 01 00 00    	jae    8049348 <dreamOf100HZ+0x47d>
+ 8049176:	e8 19 ef ff ff       	call   8048094 <UKISS>
+ 804917b:	89 c2                	mov    %eax,%edx
+ 804917d:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8049182:	01 c2                	add    %eax,%edx
+ 8049184:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8049189:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 804918c:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
+ 8049191:	89 c8                	mov    %ecx,%eax
+ 8049193:	f7 e2                	mul    %edx
+ 8049195:	c1 ea 04             	shr    $0x4,%edx
+ 8049198:	89 d0                	mov    %edx,%eax
+ 804919a:	c1 e0 02             	shl    $0x2,%eax
+ 804919d:	01 d0                	add    %edx,%eax
+ 804919f:	c1 e0 02             	shl    $0x2,%eax
+ 80491a2:	29 c1                	sub    %eax,%ecx
+ 80491a4:	89 ca                	mov    %ecx,%edx
+ 80491a6:	a1 34 ba 04 08       	mov    0x804ba34,%eax
+ 80491ab:	83 c0 03             	add    $0x3,%eax
+ 80491ae:	39 c2                	cmp    %eax,%edx
+ 80491b0:	0f 83 99 01 00 00    	jae    804934f <dreamOf100HZ+0x47d>
 				monsters[i].status = MONSTER_ALIVE;
- 80491af:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80491b2:	89 c2                	mov    %eax,%edx
- 80491b4:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 80491bb:	89 c2                	mov    %eax,%edx
- 80491bd:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 80491c4:	29 d0                	sub    %edx,%eax
- 80491c6:	83 c0 10             	add    $0x10,%eax
- 80491c9:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80491ce:	c7 40 04 00 00 00 00 	movl   $0x0,0x4(%eax)
+ 80491b6:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80491b9:	89 c2                	mov    %eax,%edx
+ 80491bb:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 80491c2:	89 c2                	mov    %eax,%edx
+ 80491c4:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 80491cb:	29 d0                	sub    %edx,%eax
+ 80491cd:	83 c0 10             	add    $0x10,%eax
+ 80491d0:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 80491d5:	c7 40 04 00 00 00 00 	movl   $0x0,0x4(%eax)
 				monsters[i].size = 1 + 2*(KISS()%size);
- 80491d5:	e8 ba ee ff ff       	call   8048094 <UKISS>
- 80491da:	89 c2                	mov    %eax,%edx
- 80491dc:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 80491e1:	01 c2                	add    %eax,%edx
- 80491e3:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 80491e8:	01 d0                	add    %edx,%eax
- 80491ea:	8b 15 34 ba 04 08    	mov    0x804ba34,%edx
- 80491f0:	89 d1                	mov    %edx,%ecx
- 80491f2:	ba 00 00 00 00       	mov    $0x0,%edx
- 80491f7:	f7 f1                	div    %ecx
- 80491f9:	89 d0                	mov    %edx,%eax
- 80491fb:	01 c0                	add    %eax,%eax
- 80491fd:	83 c0 01             	add    $0x1,%eax
- 8049200:	89 c1                	mov    %eax,%ecx
- 8049202:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8049205:	c1 e0 02             	shl    $0x2,%eax
- 8049208:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 804920f:	29 c2                	sub    %eax,%edx
- 8049211:	89 d0                	mov    %edx,%eax
- 8049213:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8049218:	89 08                	mov    %ecx,(%eax)
+ 80491dc:	e8 b3 ee ff ff       	call   8048094 <UKISS>
+ 80491e1:	89 c2                	mov    %eax,%edx
+ 80491e3:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 80491e8:	01 c2                	add    %eax,%edx
+ 80491ea:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 80491ef:	01 d0                	add    %edx,%eax
+ 80491f1:	8b 15 34 ba 04 08    	mov    0x804ba34,%edx
+ 80491f7:	89 d1                	mov    %edx,%ecx
+ 80491f9:	ba 00 00 00 00       	mov    $0x0,%edx
+ 80491fe:	f7 f1                	div    %ecx
+ 8049200:	89 d0                	mov    %edx,%eax
+ 8049202:	01 c0                	add    %eax,%eax
+ 8049204:	83 c0 01             	add    $0x1,%eax
+ 8049207:	89 c1                	mov    %eax,%ecx
+ 8049209:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 804920c:	c1 e0 02             	shl    $0x2,%eax
+ 804920f:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8049216:	29 c2                	sub    %eax,%edx
+ 8049218:	89 d0                	mov    %edx,%eax
+ 804921a:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 804921f:	89 08                	mov    %ecx,(%eax)
 				monsters[i].x = KISS()%VWIDTH;
- 804921a:	e8 75 ee ff ff       	call   8048094 <UKISS>
- 804921f:	89 c2                	mov    %eax,%edx
- 8049221:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8049226:	01 c2                	add    %eax,%edx
- 8049228:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 804922d:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 8049230:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
- 8049235:	89 c8                	mov    %ecx,%eax
- 8049237:	f7 e2                	mul    %edx
- 8049239:	c1 ea 08             	shr    $0x8,%edx
- 804923c:	89 d0                	mov    %edx,%eax
- 804923e:	c1 e0 02             	shl    $0x2,%eax
- 8049241:	01 d0                	add    %edx,%eax
- 8049243:	c1 e0 06             	shl    $0x6,%eax
- 8049246:	29 c1                	sub    %eax,%ecx
- 8049248:	89 ca                	mov    %ecx,%edx
- 804924a:	89 d1                	mov    %edx,%ecx
- 804924c:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 804924f:	c1 e0 02             	shl    $0x2,%eax
- 8049252:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 8049259:	29 c2                	sub    %eax,%edx
- 804925b:	89 d0                	mov    %edx,%eax
- 804925d:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8049262:	89 48 04             	mov    %ecx,0x4(%eax)
+ 8049221:	e8 6e ee ff ff       	call   8048094 <UKISS>
+ 8049226:	89 c2                	mov    %eax,%edx
+ 8049228:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 804922d:	01 c2                	add    %eax,%edx
+ 804922f:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8049234:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 8049237:	ba cd cc cc cc       	mov    $0xcccccccd,%edx
+ 804923c:	89 c8                	mov    %ecx,%eax
+ 804923e:	f7 e2                	mul    %edx
+ 8049240:	c1 ea 08             	shr    $0x8,%edx
+ 8049243:	89 d0                	mov    %edx,%eax
+ 8049245:	c1 e0 02             	shl    $0x2,%eax
+ 8049248:	01 d0                	add    %edx,%eax
+ 804924a:	c1 e0 06             	shl    $0x6,%eax
+ 804924d:	29 c1                	sub    %eax,%ecx
+ 804924f:	89 ca                	mov    %ecx,%edx
+ 8049251:	89 d1                	mov    %edx,%ecx
+ 8049253:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049256:	c1 e0 02             	shl    $0x2,%eax
+ 8049259:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 8049260:	29 c2                	sub    %eax,%edx
+ 8049262:	89 d0                	mov    %edx,%eax
+ 8049264:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 8049269:	89 48 04             	mov    %ecx,0x4(%eax)
 				monsters[i].y = KISS()%VHEIGHT;
- 8049265:	e8 2a ee ff ff       	call   8048094 <UKISS>
- 804926a:	89 c2                	mov    %eax,%edx
- 804926c:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8049271:	01 c2                	add    %eax,%edx
- 8049273:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8049278:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 804927b:	ba 1f 85 eb 51       	mov    $0x51eb851f,%edx
- 8049280:	89 c8                	mov    %ecx,%eax
- 8049282:	f7 e2                	mul    %edx
- 8049284:	89 d0                	mov    %edx,%eax
- 8049286:	c1 e8 06             	shr    $0x6,%eax
- 8049289:	69 c0 c8 00 00 00    	imul   $0xc8,%eax,%eax
- 804928f:	29 c1                	sub    %eax,%ecx
- 8049291:	89 c8                	mov    %ecx,%eax
- 8049293:	89 c1                	mov    %eax,%ecx
- 8049295:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8049298:	c1 e0 02             	shl    $0x2,%eax
- 804929b:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 80492a2:	29 c2                	sub    %eax,%edx
- 80492a4:	89 d0                	mov    %edx,%eax
- 80492a6:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80492ab:	89 48 08             	mov    %ecx,0x8(%eax)
+ 804926c:	e8 23 ee ff ff       	call   8048094 <UKISS>
+ 8049271:	89 c2                	mov    %eax,%edx
+ 8049273:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8049278:	01 c2                	add    %eax,%edx
+ 804927a:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 804927f:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 8049282:	ba 1f 85 eb 51       	mov    $0x51eb851f,%edx
+ 8049287:	89 c8                	mov    %ecx,%eax
+ 8049289:	f7 e2                	mul    %edx
+ 804928b:	89 d0                	mov    %edx,%eax
+ 804928d:	c1 e8 06             	shr    $0x6,%eax
+ 8049290:	69 c0 c8 00 00 00    	imul   $0xc8,%eax,%eax
+ 8049296:	29 c1                	sub    %eax,%ecx
+ 8049298:	89 c8                	mov    %ecx,%eax
+ 804929a:	89 c1                	mov    %eax,%ecx
+ 804929c:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 804929f:	c1 e0 02             	shl    $0x2,%eax
+ 80492a2:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 80492a9:	29 c2                	sub    %eax,%edx
+ 80492ab:	89 d0                	mov    %edx,%eax
+ 80492ad:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 80492b2:	89 48 08             	mov    %ecx,0x8(%eax)
 				monsters[i].sx = -1 + KISS()%3;
- 80492ae:	e8 e1 ed ff ff       	call   8048094 <UKISS>
- 80492b3:	89 c2                	mov    %eax,%edx
- 80492b5:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 80492ba:	01 c2                	add    %eax,%edx
- 80492bc:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 80492c1:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 80492c4:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
- 80492c9:	89 c8                	mov    %ecx,%eax
- 80492cb:	f7 e2                	mul    %edx
- 80492cd:	d1 ea                	shr    %edx
- 80492cf:	89 d0                	mov    %edx,%eax
- 80492d1:	01 c0                	add    %eax,%eax
- 80492d3:	01 d0                	add    %edx,%eax
- 80492d5:	29 c1                	sub    %eax,%ecx
- 80492d7:	89 ca                	mov    %ecx,%edx
- 80492d9:	8d 42 ff             	lea    -0x1(%edx),%eax
- 80492dc:	89 c1                	mov    %eax,%ecx
- 80492de:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80492e1:	c1 e0 02             	shl    $0x2,%eax
- 80492e4:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
- 80492eb:	29 c2                	sub    %eax,%edx
- 80492ed:	89 d0                	mov    %edx,%eax
- 80492ef:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 80492f4:	89 48 0c             	mov    %ecx,0xc(%eax)
+ 80492b5:	e8 da ed ff ff       	call   8048094 <UKISS>
+ 80492ba:	89 c2                	mov    %eax,%edx
+ 80492bc:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 80492c1:	01 c2                	add    %eax,%edx
+ 80492c3:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 80492c8:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 80492cb:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+ 80492d0:	89 c8                	mov    %ecx,%eax
+ 80492d2:	f7 e2                	mul    %edx
+ 80492d4:	d1 ea                	shr    %edx
+ 80492d6:	89 d0                	mov    %edx,%eax
+ 80492d8:	01 c0                	add    %eax,%eax
+ 80492da:	01 d0                	add    %edx,%eax
+ 80492dc:	29 c1                	sub    %eax,%ecx
+ 80492de:	89 ca                	mov    %ecx,%edx
+ 80492e0:	8d 42 ff             	lea    -0x1(%edx),%eax
+ 80492e3:	89 c1                	mov    %eax,%ecx
+ 80492e5:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80492e8:	c1 e0 02             	shl    $0x2,%eax
+ 80492eb:	8d 14 c5 00 00 00 00 	lea    0x0(,%eax,8),%edx
+ 80492f2:	29 c2                	sub    %eax,%edx
+ 80492f4:	89 d0                	mov    %edx,%eax
+ 80492f6:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 80492fb:	89 48 0c             	mov    %ecx,0xc(%eax)
 				monsters[i].sy = -1 + KISS()%3;
- 80492f7:	e8 98 ed ff ff       	call   8048094 <UKISS>
- 80492fc:	89 c2                	mov    %eax,%edx
- 80492fe:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8049303:	01 c2                	add    %eax,%edx
- 8049305:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 804930a:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
- 804930d:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
- 8049312:	89 c8                	mov    %ecx,%eax
- 8049314:	f7 e2                	mul    %edx
- 8049316:	d1 ea                	shr    %edx
- 8049318:	89 d0                	mov    %edx,%eax
- 804931a:	01 c0                	add    %eax,%eax
- 804931c:	01 d0                	add    %edx,%eax
- 804931e:	29 c1                	sub    %eax,%ecx
- 8049320:	89 ca                	mov    %ecx,%edx
- 8049322:	8d 42 ff             	lea    -0x1(%edx),%eax
- 8049325:	89 c1                	mov    %eax,%ecx
- 8049327:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 804932a:	89 c2                	mov    %eax,%edx
- 804932c:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
- 8049333:	89 c2                	mov    %eax,%edx
- 8049335:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
- 804933c:	29 d0                	sub    %edx,%eax
- 804933e:	83 c0 10             	add    $0x10,%eax
- 8049341:	05 40 ba 04 08       	add    $0x804ba40,%eax
- 8049346:	89 08                	mov    %ecx,(%eax)
+ 80492fe:	e8 91 ed ff ff       	call   8048094 <UKISS>
+ 8049303:	89 c2                	mov    %eax,%edx
+ 8049305:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 804930a:	01 c2                	add    %eax,%edx
+ 804930c:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8049311:	8d 0c 02             	lea    (%edx,%eax,1),%ecx
+ 8049314:	ba ab aa aa aa       	mov    $0xaaaaaaab,%edx
+ 8049319:	89 c8                	mov    %ecx,%eax
+ 804931b:	f7 e2                	mul    %edx
+ 804931d:	d1 ea                	shr    %edx
+ 804931f:	89 d0                	mov    %edx,%eax
+ 8049321:	01 c0                	add    %eax,%eax
+ 8049323:	01 d0                	add    %edx,%eax
+ 8049325:	29 c1                	sub    %eax,%ecx
+ 8049327:	89 ca                	mov    %ecx,%edx
+ 8049329:	8d 42 ff             	lea    -0x1(%edx),%eax
+ 804932c:	89 c1                	mov    %eax,%ecx
+ 804932e:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049331:	89 c2                	mov    %eax,%edx
+ 8049333:	8d 04 95 00 00 00 00 	lea    0x0(,%edx,4),%eax
+ 804933a:	89 c2                	mov    %eax,%edx
+ 804933c:	8d 04 d5 00 00 00 00 	lea    0x0(,%edx,8),%eax
+ 8049343:	29 d0                	sub    %edx,%eax
+ 8049345:	83 c0 10             	add    $0x10,%eax
+ 8049348:	05 40 ba 04 08       	add    $0x804ba40,%eax
+ 804934d:	89 08                	mov    %ecx,(%eax)
 		monsters[i].x = KISS()%VWIDTH;
 		monsters[i].y = KISS()%VHEIGHT;
 		monsters[i].sx = -1 + KISS()%3;
 		monsters[i].sy = -1 + KISS()%3;
 		i++;
 		REP_MONSTER(){
- 8049348:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
- 804934c:	83 7d f4 13          	cmpl   $0x13,-0xc(%ebp)
- 8049350:	0f 8e cd fd ff ff    	jle    8049123 <dreamOf100HZ+0x258>
+ 804934f:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+ 8049353:	83 7d f4 13          	cmpl   $0x13,-0xc(%ebp)
+ 8049357:	0f 8e cd fd ff ff    	jle    804912a <dreamOf100HZ+0x258>
 				monsters[i].y = KISS()%VHEIGHT;
 				monsters[i].sx = -1 + KISS()%3;
 				monsters[i].sy = -1 + KISS()%3;
 			}
 		}
 		printf("Press Q to start\n");
- 8049356:	83 ec 0c             	sub    $0xc,%esp
- 8049359:	68 40 a2 04 08       	push   $0x804a240
- 804935e:	e8 1a 05 00 00       	call   804987d <printf>
- 8049363:	83 c4 10             	add    $0x10,%esp
+ 804935d:	83 ec 0c             	sub    $0xc,%esp
+ 8049360:	68 40 a2 04 08       	push   $0x804a240
+ 8049365:	e8 1a 05 00 00       	call   8049884 <printf>
+ 804936a:	83 c4 10             	add    $0x10,%esp
 		gameStatus = GAME_READY;
- 8049366:	c7 05 28 ba 04 08 01 	movl   $0x1,0x804ba28
- 804936d:	00 00 00 
+ 804936d:	c7 05 28 ba 04 08 01 	movl   $0x1,0x804ba28
+ 8049374:	00 00 00 
 	}
 	if(gameStatus == GAME_READY){
- 8049370:	a1 28 ba 04 08       	mov    0x804ba28,%eax
- 8049375:	83 f8 01             	cmp    $0x1,%eax
- 8049378:	75 30                	jne    80493aa <dreamOf100HZ+0x4df>
+ 8049377:	a1 28 ba 04 08       	mov    0x804ba28,%eax
+ 804937c:	83 f8 01             	cmp    $0x1,%eax
+ 804937f:	75 30                	jne    80493b1 <dreamOf100HZ+0x4df>
 		//printf("%d\n", key('q'));
 		if(key('q')){
- 804937a:	83 ec 0c             	sub    $0xc,%esp
- 804937d:	6a 71                	push   $0x71
- 804937f:	e8 f5 f2 ff ff       	call   8048679 <key>
- 8049384:	83 c4 10             	add    $0x10,%esp
- 8049387:	84 c0                	test   %al,%al
- 8049389:	74 1f                	je     80493aa <dreamOf100HZ+0x4df>
+ 8049381:	83 ec 0c             	sub    $0xc,%esp
+ 8049384:	6a 71                	push   $0x71
+ 8049386:	e8 f5 f2 ff ff       	call   8048680 <key>
+ 804938b:	83 c4 10             	add    $0x10,%esp
+ 804938e:	84 c0                	test   %al,%al
+ 8049390:	74 1f                	je     80493b1 <dreamOf100HZ+0x4df>
 			printf("Press W, A, S, D to move\n");
- 804938b:	83 ec 0c             	sub    $0xc,%esp
- 804938e:	68 52 a2 04 08       	push   $0x804a252
- 8049393:	e8 e5 04 00 00       	call   804987d <printf>
- 8049398:	83 c4 10             	add    $0x10,%esp
+ 8049392:	83 ec 0c             	sub    $0xc,%esp
+ 8049395:	68 52 a2 04 08       	push   $0x804a252
+ 804939a:	e8 e5 04 00 00       	call   8049884 <printf>
+ 804939f:	83 c4 10             	add    $0x10,%esp
 			gameStatus = GAME_ING;
- 804939b:	c7 05 28 ba 04 08 02 	movl   $0x2,0x804ba28
- 80493a2:	00 00 00 
+ 80493a2:	c7 05 28 ba 04 08 02 	movl   $0x2,0x804ba28
+ 80493a9:	00 00 00 
 			return;
- 80493a5:	e9 e4 01 00 00       	jmp    804958e <dreamOf100HZ+0x6c3>
+ 80493ac:	e9 e4 01 00 00       	jmp    8049595 <dreamOf100HZ+0x6c3>
 		}
 		
 	}
 
 	if(gameStatus == GAME_ING){
- 80493aa:	a1 28 ba 04 08       	mov    0x804ba28,%eax
- 80493af:	83 f8 02             	cmp    $0x2,%eax
- 80493b2:	0f 85 92 01 00 00    	jne    804954a <dreamOf100HZ+0x67f>
+ 80493b1:	a1 28 ba 04 08       	mov    0x804ba28,%eax
+ 80493b6:	83 f8 02             	cmp    $0x2,%eax
+ 80493b9:	0f 85 92 01 00 00    	jne    8049551 <dreamOf100HZ+0x67f>
 
 
 
 		//if(x>0 && x<VWIDTH && y>0 && y<VHEIGHT){
 		//if(timestamp % 3){
 		if(key('a'))x--;
- 80493b8:	83 ec 0c             	sub    $0xc,%esp
- 80493bb:	6a 61                	push   $0x61
- 80493bd:	e8 b7 f2 ff ff       	call   8048679 <key>
- 80493c2:	83 c4 10             	add    $0x10,%esp
- 80493c5:	84 c0                	test   %al,%al
- 80493c7:	74 0d                	je     80493d6 <dreamOf100HZ+0x50b>
- 80493c9:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 80493ce:	83 e8 01             	sub    $0x1,%eax
- 80493d1:	a3 2c ba 04 08       	mov    %eax,0x804ba2c
+ 80493bf:	83 ec 0c             	sub    $0xc,%esp
+ 80493c2:	6a 61                	push   $0x61
+ 80493c4:	e8 b7 f2 ff ff       	call   8048680 <key>
+ 80493c9:	83 c4 10             	add    $0x10,%esp
+ 80493cc:	84 c0                	test   %al,%al
+ 80493ce:	74 0d                	je     80493dd <dreamOf100HZ+0x50b>
+ 80493d0:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 80493d5:	83 e8 01             	sub    $0x1,%eax
+ 80493d8:	a3 2c ba 04 08       	mov    %eax,0x804ba2c
 		if(key('d'))x++;
- 80493d6:	83 ec 0c             	sub    $0xc,%esp
- 80493d9:	6a 64                	push   $0x64
- 80493db:	e8 99 f2 ff ff       	call   8048679 <key>
- 80493e0:	83 c4 10             	add    $0x10,%esp
- 80493e3:	84 c0                	test   %al,%al
- 80493e5:	74 0d                	je     80493f4 <dreamOf100HZ+0x529>
- 80493e7:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 80493ec:	83 c0 01             	add    $0x1,%eax
- 80493ef:	a3 2c ba 04 08       	mov    %eax,0x804ba2c
+ 80493dd:	83 ec 0c             	sub    $0xc,%esp
+ 80493e0:	6a 64                	push   $0x64
+ 80493e2:	e8 99 f2 ff ff       	call   8048680 <key>
+ 80493e7:	83 c4 10             	add    $0x10,%esp
+ 80493ea:	84 c0                	test   %al,%al
+ 80493ec:	74 0d                	je     80493fb <dreamOf100HZ+0x529>
+ 80493ee:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 80493f3:	83 c0 01             	add    $0x1,%eax
+ 80493f6:	a3 2c ba 04 08       	mov    %eax,0x804ba2c
 		if(key('w'))y--;
- 80493f4:	83 ec 0c             	sub    $0xc,%esp
- 80493f7:	6a 77                	push   $0x77
- 80493f9:	e8 7b f2 ff ff       	call   8048679 <key>
- 80493fe:	83 c4 10             	add    $0x10,%esp
- 8049401:	84 c0                	test   %al,%al
- 8049403:	74 0d                	je     8049412 <dreamOf100HZ+0x547>
- 8049405:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 804940a:	83 e8 01             	sub    $0x1,%eax
- 804940d:	a3 30 ba 04 08       	mov    %eax,0x804ba30
+ 80493fb:	83 ec 0c             	sub    $0xc,%esp
+ 80493fe:	6a 77                	push   $0x77
+ 8049400:	e8 7b f2 ff ff       	call   8048680 <key>
+ 8049405:	83 c4 10             	add    $0x10,%esp
+ 8049408:	84 c0                	test   %al,%al
+ 804940a:	74 0d                	je     8049419 <dreamOf100HZ+0x547>
+ 804940c:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8049411:	83 e8 01             	sub    $0x1,%eax
+ 8049414:	a3 30 ba 04 08       	mov    %eax,0x804ba30
 		if(key('s'))y++;
- 8049412:	83 ec 0c             	sub    $0xc,%esp
- 8049415:	6a 73                	push   $0x73
- 8049417:	e8 5d f2 ff ff       	call   8048679 <key>
- 804941c:	83 c4 10             	add    $0x10,%esp
- 804941f:	84 c0                	test   %al,%al
- 8049421:	74 0d                	je     8049430 <dreamOf100HZ+0x565>
- 8049423:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8049428:	83 c0 01             	add    $0x1,%eax
- 804942b:	a3 30 ba 04 08       	mov    %eax,0x804ba30
+ 8049419:	83 ec 0c             	sub    $0xc,%esp
+ 804941c:	6a 73                	push   $0x73
+ 804941e:	e8 5d f2 ff ff       	call   8048680 <key>
+ 8049423:	83 c4 10             	add    $0x10,%esp
+ 8049426:	84 c0                	test   %al,%al
+ 8049428:	74 0d                	je     8049437 <dreamOf100HZ+0x565>
+ 804942a:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 804942f:	83 c0 01             	add    $0x1,%eax
+ 8049432:	a3 30 ba 04 08       	mov    %eax,0x804ba30
 		//}
 		if(x < 0) x++;
- 8049430:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8049435:	85 c0                	test   %eax,%eax
- 8049437:	79 0d                	jns    8049446 <dreamOf100HZ+0x57b>
- 8049439:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 804943e:	83 c0 01             	add    $0x1,%eax
- 8049441:	a3 2c ba 04 08       	mov    %eax,0x804ba2c
+ 8049437:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 804943c:	85 c0                	test   %eax,%eax
+ 804943e:	79 0d                	jns    804944d <dreamOf100HZ+0x57b>
+ 8049440:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8049445:	83 c0 01             	add    $0x1,%eax
+ 8049448:	a3 2c ba 04 08       	mov    %eax,0x804ba2c
 		if(x > VWIDTH) x--;
- 8049446:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 804944b:	3d 40 01 00 00       	cmp    $0x140,%eax
- 8049450:	7e 0d                	jle    804945f <dreamOf100HZ+0x594>
- 8049452:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 8049457:	83 e8 01             	sub    $0x1,%eax
- 804945a:	a3 2c ba 04 08       	mov    %eax,0x804ba2c
+ 804944d:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 8049452:	3d 40 01 00 00       	cmp    $0x140,%eax
+ 8049457:	7e 0d                	jle    8049466 <dreamOf100HZ+0x594>
+ 8049459:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 804945e:	83 e8 01             	sub    $0x1,%eax
+ 8049461:	a3 2c ba 04 08       	mov    %eax,0x804ba2c
 		if(y < 0) y++;
- 804945f:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8049464:	85 c0                	test   %eax,%eax
- 8049466:	79 0d                	jns    8049475 <dreamOf100HZ+0x5aa>
- 8049468:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 804946d:	83 c0 01             	add    $0x1,%eax
- 8049470:	a3 30 ba 04 08       	mov    %eax,0x804ba30
+ 8049466:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 804946b:	85 c0                	test   %eax,%eax
+ 804946d:	79 0d                	jns    804947c <dreamOf100HZ+0x5aa>
+ 804946f:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8049474:	83 c0 01             	add    $0x1,%eax
+ 8049477:	a3 30 ba 04 08       	mov    %eax,0x804ba30
 		if(y > VHEIGHT) y--;
- 8049475:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 804947a:	3d c8 00 00 00       	cmp    $0xc8,%eax
- 804947f:	7e 0d                	jle    804948e <dreamOf100HZ+0x5c3>
- 8049481:	a1 30 ba 04 08       	mov    0x804ba30,%eax
- 8049486:	83 e8 01             	sub    $0x1,%eax
- 8049489:	a3 30 ba 04 08       	mov    %eax,0x804ba30
+ 804947c:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 8049481:	3d c8 00 00 00       	cmp    $0xc8,%eax
+ 8049486:	7e 0d                	jle    8049495 <dreamOf100HZ+0x5c3>
+ 8049488:	a1 30 ba 04 08       	mov    0x804ba30,%eax
+ 804948d:	83 e8 01             	sub    $0x1,%eax
+ 8049490:	a3 30 ba 04 08       	mov    %eax,0x804ba30
 		//}
 		//else{
 		clearStage();
- 804948e:	e8 6f ee ff ff       	call   8048302 <clearStage>
+ 8049495:	e8 6f ee ff ff       	call   8048309 <clearStage>
 		drawCirc(x, y, size, 3);
- 8049493:	8b 0d 34 ba 04 08    	mov    0x804ba34,%ecx
- 8049499:	8b 15 30 ba 04 08    	mov    0x804ba30,%edx
- 804949f:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 80494a4:	6a 03                	push   $0x3
- 80494a6:	51                   	push   %ecx
- 80494a7:	52                   	push   %edx
- 80494a8:	50                   	push   %eax
- 80494a9:	e8 20 ef ff ff       	call   80483ce <drawCirc>
- 80494ae:	83 c4 10             	add    $0x10,%esp
+ 804949a:	8b 0d 34 ba 04 08    	mov    0x804ba34,%ecx
+ 80494a0:	8b 15 30 ba 04 08    	mov    0x804ba30,%edx
+ 80494a6:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 80494ab:	6a 03                	push   $0x3
+ 80494ad:	51                   	push   %ecx
+ 80494ae:	52                   	push   %edx
+ 80494af:	50                   	push   %eax
+ 80494b0:	e8 20 ef ff ff       	call   80483d5 <drawCirc>
+ 80494b5:	83 c4 10             	add    $0x10,%esp
 		
 
 		drawMonster();
- 80494b1:	e8 69 f4 ff ff       	call   804891f <drawMonster>
+ 80494b8:	e8 69 f4 ff ff       	call   8048926 <drawMonster>
 		drawCirc(x, y, size, 3);
- 80494b6:	8b 0d 34 ba 04 08    	mov    0x804ba34,%ecx
- 80494bc:	8b 15 30 ba 04 08    	mov    0x804ba30,%edx
- 80494c2:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
- 80494c7:	6a 03                	push   $0x3
- 80494c9:	51                   	push   %ecx
- 80494ca:	52                   	push   %edx
- 80494cb:	50                   	push   %eax
- 80494cc:	e8 fd ee ff ff       	call   80483ce <drawCirc>
- 80494d1:	83 c4 10             	add    $0x10,%esp
+ 80494bd:	8b 0d 34 ba 04 08    	mov    0x804ba34,%ecx
+ 80494c3:	8b 15 30 ba 04 08    	mov    0x804ba30,%edx
+ 80494c9:	a1 2c ba 04 08       	mov    0x804ba2c,%eax
+ 80494ce:	6a 03                	push   $0x3
+ 80494d0:	51                   	push   %ecx
+ 80494d1:	52                   	push   %edx
+ 80494d2:	50                   	push   %eax
+ 80494d3:	e8 fd ee ff ff       	call   80483d5 <drawCirc>
+ 80494d8:	83 c4 10             	add    $0x10,%esp
 		drawNumber(score, 10, 180, 1, 7);
- 80494d4:	a1 24 ba 04 08       	mov    0x804ba24,%eax
- 80494d9:	83 ec 0c             	sub    $0xc,%esp
- 80494dc:	6a 07                	push   $0x7
- 80494de:	6a 01                	push   $0x1
- 80494e0:	68 b4 00 00 00       	push   $0xb4
- 80494e5:	6a 0a                	push   $0xa
- 80494e7:	50                   	push   %eax
- 80494e8:	e8 06 f0 ff ff       	call   80484f3 <drawNumber>
- 80494ed:	83 c4 20             	add    $0x20,%esp
+ 80494db:	a1 24 ba 04 08       	mov    0x804ba24,%eax
+ 80494e0:	83 ec 0c             	sub    $0xc,%esp
+ 80494e3:	6a 07                	push   $0x7
+ 80494e5:	6a 01                	push   $0x1
+ 80494e7:	68 b4 00 00 00       	push   $0xb4
+ 80494ec:	6a 0a                	push   $0xa
+ 80494ee:	50                   	push   %eax
+ 80494ef:	e8 06 f0 ff ff       	call   80484fa <drawNumber>
+ 80494f4:	83 c4 20             	add    $0x20,%esp
 		drawNumber(getpid(), 300, 10, 1, 7);
- 80494f0:	e8 9a ec ff ff       	call   804818f <sys_pid>
- 80494f5:	83 ec 0c             	sub    $0xc,%esp
- 80494f8:	6a 07                	push   $0x7
- 80494fa:	6a 01                	push   $0x1
- 80494fc:	6a 0a                	push   $0xa
- 80494fe:	68 2c 01 00 00       	push   $0x12c
- 8049503:	50                   	push   %eax
- 8049504:	e8 ea ef ff ff       	call   80484f3 <drawNumber>
- 8049509:	83 c4 20             	add    $0x20,%esp
+ 80494f7:	e8 9a ec ff ff       	call   8048196 <sys_pid>
+ 80494fc:	83 ec 0c             	sub    $0xc,%esp
+ 80494ff:	6a 07                	push   $0x7
+ 8049501:	6a 01                	push   $0x1
+ 8049503:	6a 0a                	push   $0xa
+ 8049505:	68 2c 01 00 00       	push   $0x12c
+ 804950a:	50                   	push   %eax
+ 804950b:	e8 ea ef ff ff       	call   80484fa <drawNumber>
+ 8049510:	83 c4 20             	add    $0x20,%esp
 		if(key('p')){
- 804950c:	83 ec 0c             	sub    $0xc,%esp
- 804950f:	6a 70                	push   $0x70
- 8049511:	e8 63 f1 ff ff       	call   8048679 <key>
- 8049516:	83 c4 10             	add    $0x10,%esp
- 8049519:	84 c0                	test   %al,%al
- 804951b:	74 19                	je     8049536 <dreamOf100HZ+0x66b>
+ 8049513:	83 ec 0c             	sub    $0xc,%esp
+ 8049516:	6a 70                	push   $0x70
+ 8049518:	e8 63 f1 ff ff       	call   8048680 <key>
+ 804951d:	83 c4 10             	add    $0x10,%esp
+ 8049520:	84 c0                	test   %al,%al
+ 8049522:	74 19                	je     804953d <dreamOf100HZ+0x66b>
 			drawNumber(getpid(), 100, 100, 5, 7);
- 804951d:	e8 6d ec ff ff       	call   804818f <sys_pid>
- 8049522:	83 ec 0c             	sub    $0xc,%esp
- 8049525:	6a 07                	push   $0x7
- 8049527:	6a 05                	push   $0x5
- 8049529:	6a 64                	push   $0x64
- 804952b:	6a 64                	push   $0x64
- 804952d:	50                   	push   %eax
- 804952e:	e8 c0 ef ff ff       	call   80484f3 <drawNumber>
- 8049533:	83 c4 20             	add    $0x20,%esp
+ 8049524:	e8 6d ec ff ff       	call   8048196 <sys_pid>
+ 8049529:	83 ec 0c             	sub    $0xc,%esp
+ 804952c:	6a 07                	push   $0x7
+ 804952e:	6a 05                	push   $0x5
+ 8049530:	6a 64                	push   $0x64
+ 8049532:	6a 64                	push   $0x64
+ 8049534:	50                   	push   %eax
+ 8049535:	e8 c0 ef ff ff       	call   80484fa <drawNumber>
+ 804953a:	83 c4 20             	add    $0x20,%esp
 		}
 		drawStage();
- 8049536:	e8 19 f1 ff ff       	call   8048654 <drawStage>
+ 804953d:	e8 19 f1 ff ff       	call   804865b <drawStage>
 		
 		
 		createMonster();
- 804953b:	e8 8d f7 ff ff       	call   8048ccd <createMonster>
+ 8049542:	e8 8d f7 ff ff       	call   8048cd4 <createMonster>
 		while(hitMonster());
- 8049540:	90                   	nop
- 8049541:	e8 1a f2 ff ff       	call   8048760 <hitMonster>
- 8049546:	85 c0                	test   %eax,%eax
- 8049548:	75 f7                	jne    8049541 <dreamOf100HZ+0x676>
+ 8049547:	90                   	nop
+ 8049548:	e8 1a f2 ff ff       	call   8048767 <hitMonster>
+ 804954d:	85 c0                	test   %eax,%eax
+ 804954f:	75 f7                	jne    8049548 <dreamOf100HZ+0x676>
 		//}
 	}
 	if(gameStatus == GAME_END){
- 804954a:	a1 28 ba 04 08       	mov    0x804ba28,%eax
- 804954f:	83 f8 03             	cmp    $0x3,%eax
- 8049552:	75 3a                	jne    804958e <dreamOf100HZ+0x6c3>
+ 8049551:	a1 28 ba 04 08       	mov    0x804ba28,%eax
+ 8049556:	83 f8 03             	cmp    $0x3,%eax
+ 8049559:	75 3a                	jne    8049595 <dreamOf100HZ+0x6c3>
 		printf("You're dead\n");
- 8049554:	83 ec 0c             	sub    $0xc,%esp
- 8049557:	68 6c a2 04 08       	push   $0x804a26c
- 804955c:	e8 1c 03 00 00       	call   804987d <printf>
- 8049561:	83 c4 10             	add    $0x10,%esp
+ 804955b:	83 ec 0c             	sub    $0xc,%esp
+ 804955e:	68 6c a2 04 08       	push   $0x804a26c
+ 8049563:	e8 1c 03 00 00       	call   8049884 <printf>
+ 8049568:	83 c4 10             	add    $0x10,%esp
 		printf("Score: %d\n", score);
- 8049564:	a1 24 ba 04 08       	mov    0x804ba24,%eax
- 8049569:	83 ec 08             	sub    $0x8,%esp
- 804956c:	50                   	push   %eax
- 804956d:	68 79 a2 04 08       	push   $0x804a279
- 8049572:	e8 06 03 00 00       	call   804987d <printf>
- 8049577:	83 c4 10             	add    $0x10,%esp
+ 804956b:	a1 24 ba 04 08       	mov    0x804ba24,%eax
+ 8049570:	83 ec 08             	sub    $0x8,%esp
+ 8049573:	50                   	push   %eax
+ 8049574:	68 79 a2 04 08       	push   $0x804a279
+ 8049579:	e8 06 03 00 00       	call   8049884 <printf>
+ 804957e:	83 c4 10             	add    $0x10,%esp
 		clearStage();
- 804957a:	e8 83 ed ff ff       	call   8048302 <clearStage>
+ 8049581:	e8 83 ed ff ff       	call   8048309 <clearStage>
 		drawStage();
- 804957f:	e8 d0 f0 ff ff       	call   8048654 <drawStage>
+ 8049586:	e8 d0 f0 ff ff       	call   804865b <drawStage>
 		gameStatus = GAME_START;
- 8049584:	c7 05 28 ba 04 08 00 	movl   $0x0,0x804ba28
- 804958b:	00 00 00 
+ 804958b:	c7 05 28 ba 04 08 00 	movl   $0x0,0x804ba28
+ 8049592:	00 00 00 
 	}
- 804958e:	c9                   	leave  
- 804958f:	c3                   	ret    
+ 8049595:	c9                   	leave  
+ 8049596:	c3                   	ret    
 
-08049590 <sys_printch>:
+08049597 <sys_printch>:
 
 static inline void sys_join(int pid){
 	asm volatile("int $0x80": : "a"(SYS_JOIN), "b"(pid)); //SYSCALL HERE!
 }
 
 static inline void sys_printch(char c){
- 8049590:	55                   	push   %ebp
- 8049591:	89 e5                	mov    %esp,%ebp
- 8049593:	53                   	push   %ebx
- 8049594:	83 ec 04             	sub    $0x4,%esp
- 8049597:	8b 45 08             	mov    0x8(%ebp),%eax
- 804959a:	88 45 f8             	mov    %al,-0x8(%ebp)
+ 8049597:	55                   	push   %ebp
+ 8049598:	89 e5                	mov    %esp,%ebp
+ 804959a:	53                   	push   %ebx
+ 804959b:	83 ec 04             	sub    $0x4,%esp
+ 804959e:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80495a1:	88 45 f8             	mov    %al,-0x8(%ebp)
 	asm volatile("int $0x80": : "a"(SYS_PRINT_CHAR), "b"(c)); //SYSCALL HERE!
- 804959d:	b8 e8 03 00 00       	mov    $0x3e8,%eax
- 80495a2:	0f b6 55 f8          	movzbl -0x8(%ebp),%edx
- 80495a6:	89 d3                	mov    %edx,%ebx
- 80495a8:	cd 80                	int    $0x80
+ 80495a4:	b8 e8 03 00 00       	mov    $0x3e8,%eax
+ 80495a9:	0f b6 55 f8          	movzbl -0x8(%ebp),%edx
+ 80495ad:	89 d3                	mov    %edx,%ebx
+ 80495af:	cd 80                	int    $0x80
 }
- 80495aa:	83 c4 04             	add    $0x4,%esp
- 80495ad:	5b                   	pop    %ebx
- 80495ae:	5d                   	pop    %ebp
- 80495af:	c3                   	ret    
+ 80495b1:	83 c4 04             	add    $0x4,%esp
+ 80495b4:	5b                   	pop    %ebx
+ 80495b5:	5d                   	pop    %ebp
+ 80495b6:	c3                   	ret    
 
-080495b0 <printp>:
+080495b7 <printp>:
 enum{
 	NONE,
 	READ
 };
 #define cur (*str)
 void printp(void (*printer)(char), const char *ctl){
- 80495b0:	55                   	push   %ebp
- 80495b1:	89 e5                	mov    %esp,%ebp
- 80495b3:	83 ec 18             	sub    $0x18,%esp
+ 80495b7:	55                   	push   %ebp
+ 80495b8:	89 e5                	mov    %esp,%ebp
+ 80495ba:	83 ec 18             	sub    $0x18,%esp
 	const char *str = ctl;
- 80495b6:	8b 45 0c             	mov    0xc(%ebp),%eax
- 80495b9:	89 45 f4             	mov    %eax,-0xc(%ebp)
+ 80495bd:	8b 45 0c             	mov    0xc(%ebp),%eax
+ 80495c0:	89 45 f4             	mov    %eax,-0xc(%ebp)
 	for(;cur!='\0';str++){
- 80495bc:	eb 19                	jmp    80495d7 <printp+0x27>
+ 80495c3:	eb 19                	jmp    80495de <printp+0x27>
 		printer(cur);
- 80495be:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80495c1:	0f b6 00             	movzbl (%eax),%eax
- 80495c4:	0f be c0             	movsbl %al,%eax
- 80495c7:	83 ec 0c             	sub    $0xc,%esp
- 80495ca:	50                   	push   %eax
- 80495cb:	8b 45 08             	mov    0x8(%ebp),%eax
- 80495ce:	ff d0                	call   *%eax
- 80495d0:	83 c4 10             	add    $0x10,%esp
+ 80495c5:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80495c8:	0f b6 00             	movzbl (%eax),%eax
+ 80495cb:	0f be c0             	movsbl %al,%eax
+ 80495ce:	83 ec 0c             	sub    $0xc,%esp
+ 80495d1:	50                   	push   %eax
+ 80495d2:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80495d5:	ff d0                	call   *%eax
+ 80495d7:	83 c4 10             	add    $0x10,%esp
 	READ
 };
 #define cur (*str)
 void printp(void (*printer)(char), const char *ctl){
 	const char *str = ctl;
 	for(;cur!='\0';str++){
- 80495d3:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
- 80495d7:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 80495da:	0f b6 00             	movzbl (%eax),%eax
- 80495dd:	84 c0                	test   %al,%al
- 80495df:	75 dd                	jne    80495be <printp+0xe>
+ 80495da:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+ 80495de:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 80495e1:	0f b6 00             	movzbl (%eax),%eax
+ 80495e4:	84 c0                	test   %al,%al
+ 80495e6:	75 dd                	jne    80495c5 <printp+0xe>
 		printer(cur);
 	}
 }
- 80495e1:	c9                   	leave  
- 80495e2:	c3                   	ret    
+ 80495e8:	c9                   	leave  
+ 80495e9:	c3                   	ret    
 
-080495e3 <vfprintf>:
+080495ea <vfprintf>:
 void vfprintf(void (*printer)(char), const char *ctl, void **args) {
- 80495e3:	55                   	push   %ebp
- 80495e4:	89 e5                	mov    %esp,%ebp
- 80495e6:	83 ec 58             	sub    $0x58,%esp
+ 80495ea:	55                   	push   %ebp
+ 80495eb:	89 e5                	mov    %esp,%ebp
+ 80495ed:	83 ec 58             	sub    $0x58,%esp
 	const char *str = ctl;
- 80495e9:	8b 45 0c             	mov    0xc(%ebp),%eax
- 80495ec:	89 45 f4             	mov    %eax,-0xc(%ebp)
+ 80495f0:	8b 45 0c             	mov    0xc(%ebp),%eax
+ 80495f3:	89 45 f4             	mov    %eax,-0xc(%ebp)
 	int32_t i = 0;
- 80495ef:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
+ 80495f6:	c7 45 f0 00 00 00 00 	movl   $0x0,-0x10(%ebp)
 	int32_t type = NONE;
- 80495f6:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 80495fd:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 	void** pointer = args;
- 80495fd:	8b 45 10             	mov    0x10(%ebp),%eax
- 8049600:	89 45 e8             	mov    %eax,-0x18(%ebp)
+ 8049604:	8b 45 10             	mov    0x10(%ebp),%eax
+ 8049607:	89 45 e8             	mov    %eax,-0x18(%ebp)
 	//char last='\0';
 	for(;*str != '\0'; str ++){
- 8049603:	e9 65 02 00 00       	jmp    804986d <vfprintf+0x28a>
+ 804960a:	e9 65 02 00 00       	jmp    8049874 <vfprintf+0x28a>
 
 		if(cur == '%'){
- 8049608:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 804960b:	0f b6 00             	movzbl (%eax),%eax
- 804960e:	3c 25                	cmp    $0x25,%al
- 8049610:	75 0c                	jne    804961e <vfprintf+0x3b>
+ 804960f:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049612:	0f b6 00             	movzbl (%eax),%eax
+ 8049615:	3c 25                	cmp    $0x25,%al
+ 8049617:	75 0c                	jne    8049625 <vfprintf+0x3b>
 			//sys_printch('0');
 			type = READ;
- 8049612:	c7 45 ec 01 00 00 00 	movl   $0x1,-0x14(%ebp)
+ 8049619:	c7 45 ec 01 00 00 00 	movl   $0x1,-0x14(%ebp)
 			continue;
- 8049619:	e9 4b 02 00 00       	jmp    8049869 <vfprintf+0x286>
+ 8049620:	e9 4b 02 00 00       	jmp    8049870 <vfprintf+0x286>
 		}
 		if(type == READ){
- 804961e:	83 7d ec 01          	cmpl   $0x1,-0x14(%ebp)
- 8049622:	0f 85 26 02 00 00    	jne    804984e <vfprintf+0x26b>
+ 8049625:	83 7d ec 01          	cmpl   $0x1,-0x14(%ebp)
+ 8049629:	0f 85 26 02 00 00    	jne    8049855 <vfprintf+0x26b>
 			//sys_printch('1');
 			//sys_printch(cur);
 			if(cur == 's'){
- 8049628:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 804962b:	0f b6 00             	movzbl (%eax),%eax
- 804962e:	3c 73                	cmp    $0x73,%al
- 8049630:	75 35                	jne    8049667 <vfprintf+0x84>
+ 804962f:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049632:	0f b6 00             	movzbl (%eax),%eax
+ 8049635:	3c 73                	cmp    $0x73,%al
+ 8049637:	75 35                	jne    804966e <vfprintf+0x84>
 				char* p= XGET(pointer, char*);
- 8049632:	8b 45 e8             	mov    -0x18(%ebp),%eax
- 8049635:	8b 00                	mov    (%eax),%eax
- 8049637:	89 45 e4             	mov    %eax,-0x1c(%ebp)
+ 8049639:	8b 45 e8             	mov    -0x18(%ebp),%eax
+ 804963c:	8b 00                	mov    (%eax),%eax
+ 804963e:	89 45 e4             	mov    %eax,-0x1c(%ebp)
 				for(; *p != '\0';p++){
- 804963a:	eb 19                	jmp    8049655 <vfprintf+0x72>
+ 8049641:	eb 19                	jmp    804965c <vfprintf+0x72>
 					printer(*p);
- 804963c:	8b 45 e4             	mov    -0x1c(%ebp),%eax
- 804963f:	0f b6 00             	movzbl (%eax),%eax
- 8049642:	0f be c0             	movsbl %al,%eax
- 8049645:	83 ec 0c             	sub    $0xc,%esp
- 8049648:	50                   	push   %eax
- 8049649:	8b 45 08             	mov    0x8(%ebp),%eax
- 804964c:	ff d0                	call   *%eax
- 804964e:	83 c4 10             	add    $0x10,%esp
+ 8049643:	8b 45 e4             	mov    -0x1c(%ebp),%eax
+ 8049646:	0f b6 00             	movzbl (%eax),%eax
+ 8049649:	0f be c0             	movsbl %al,%eax
+ 804964c:	83 ec 0c             	sub    $0xc,%esp
+ 804964f:	50                   	push   %eax
+ 8049650:	8b 45 08             	mov    0x8(%ebp),%eax
+ 8049653:	ff d0                	call   *%eax
+ 8049655:	83 c4 10             	add    $0x10,%esp
 		if(type == READ){
 			//sys_printch('1');
 			//sys_printch(cur);
 			if(cur == 's'){
 				char* p= XGET(pointer, char*);
 				for(; *p != '\0';p++){
- 8049651:	83 45 e4 01          	addl   $0x1,-0x1c(%ebp)
- 8049655:	8b 45 e4             	mov    -0x1c(%ebp),%eax
- 8049658:	0f b6 00             	movzbl (%eax),%eax
- 804965b:	84 c0                	test   %al,%al
- 804965d:	75 dd                	jne    804963c <vfprintf+0x59>
+ 8049658:	83 45 e4 01          	addl   $0x1,-0x1c(%ebp)
+ 804965c:	8b 45 e4             	mov    -0x1c(%ebp),%eax
+ 804965f:	0f b6 00             	movzbl (%eax),%eax
+ 8049662:	84 c0                	test   %al,%al
+ 8049664:	75 dd                	jne    8049643 <vfprintf+0x59>
 					printer(*p);
 				}
 				XNEXT(pointer);
- 804965f:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 8049666:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
- 8049663:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+ 804966a:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
 			//sys_printch('2');
 			//sys_printch(cur);
 			if(cur == 'x'){
- 8049667:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 804966a:	0f b6 00             	movzbl (%eax),%eax
- 804966d:	3c 78                	cmp    $0x78,%al
- 804966f:	0f 85 99 00 00 00    	jne    804970e <vfprintf+0x12b>
+ 804966e:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049671:	0f b6 00             	movzbl (%eax),%eax
+ 8049674:	3c 78                	cmp    $0x78,%al
+ 8049676:	0f 85 99 00 00 00    	jne    8049715 <vfprintf+0x12b>
 				uint32_t x = XGET(pointer, int);
- 8049675:	8b 45 e8             	mov    -0x18(%ebp),%eax
- 8049678:	8b 00                	mov    (%eax),%eax
- 804967a:	89 45 e0             	mov    %eax,-0x20(%ebp)
+ 804967c:	8b 45 e8             	mov    -0x18(%ebp),%eax
+ 804967f:	8b 00                	mov    (%eax),%eax
+ 8049681:	89 45 e0             	mov    %eax,-0x20(%ebp)
 				if(x==0){
- 804967d:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
- 8049681:	75 1d                	jne    80496a0 <vfprintf+0xbd>
+ 8049684:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
+ 8049688:	75 1d                	jne    80496a7 <vfprintf+0xbd>
 					printer('0');
- 8049683:	83 ec 0c             	sub    $0xc,%esp
- 8049686:	6a 30                	push   $0x30
- 8049688:	8b 45 08             	mov    0x8(%ebp),%eax
- 804968b:	ff d0                	call   *%eax
- 804968d:	83 c4 10             	add    $0x10,%esp
+ 804968a:	83 ec 0c             	sub    $0xc,%esp
+ 804968d:	6a 30                	push   $0x30
+ 804968f:	8b 45 08             	mov    0x8(%ebp),%eax
+ 8049692:	ff d0                	call   *%eax
+ 8049694:	83 c4 10             	add    $0x10,%esp
 					XNEXT(pointer);
- 8049690:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 8049697:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 					type = NONE;
- 8049694:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
- 804969b:	e9 c9 01 00 00       	jmp    8049869 <vfprintf+0x286>
+ 804969b:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 80496a2:	e9 c9 01 00 00       	jmp    8049870 <vfprintf+0x286>
 					continue;
 				}
 				char digits[15];
 				int di=0;
- 80496a0:	c7 45 dc 00 00 00 00 	movl   $0x0,-0x24(%ebp)
+ 80496a7:	c7 45 dc 00 00 00 00 	movl   $0x0,-0x24(%ebp)
 				while(x>=1){
- 80496a7:	eb 2d                	jmp    80496d6 <vfprintf+0xf3>
+ 80496ae:	eb 2d                	jmp    80496dd <vfprintf+0xf3>
 					int d=(x%16);
- 80496a9:	8b 45 e0             	mov    -0x20(%ebp),%eax
- 80496ac:	83 e0 0f             	and    $0xf,%eax
- 80496af:	89 45 d8             	mov    %eax,-0x28(%ebp)
+ 80496b0:	8b 45 e0             	mov    -0x20(%ebp),%eax
+ 80496b3:	83 e0 0f             	and    $0xf,%eax
+ 80496b6:	89 45 d8             	mov    %eax,-0x28(%ebp)
 					if(d>=10){
- 80496b2:	83 7d d8 09          	cmpl   $0x9,-0x28(%ebp)
- 80496b6:	7e 04                	jle    80496bc <vfprintf+0xd9>
+ 80496b9:	83 7d d8 09          	cmpl   $0x9,-0x28(%ebp)
+ 80496bd:	7e 04                	jle    80496c3 <vfprintf+0xd9>
 						d+='a'-'0'-10;
- 80496b8:	83 45 d8 27          	addl   $0x27,-0x28(%ebp)
+ 80496bf:	83 45 d8 27          	addl   $0x27,-0x28(%ebp)
 					}
 					digits[di] = '0'+d;
- 80496bc:	8b 45 d8             	mov    -0x28(%ebp),%eax
- 80496bf:	83 c0 30             	add    $0x30,%eax
- 80496c2:	89 c1                	mov    %eax,%ecx
- 80496c4:	8d 55 c1             	lea    -0x3f(%ebp),%edx
- 80496c7:	8b 45 dc             	mov    -0x24(%ebp),%eax
- 80496ca:	01 d0                	add    %edx,%eax
- 80496cc:	88 08                	mov    %cl,(%eax)
+ 80496c3:	8b 45 d8             	mov    -0x28(%ebp),%eax
+ 80496c6:	83 c0 30             	add    $0x30,%eax
+ 80496c9:	89 c1                	mov    %eax,%ecx
+ 80496cb:	8d 55 c1             	lea    -0x3f(%ebp),%edx
+ 80496ce:	8b 45 dc             	mov    -0x24(%ebp),%eax
+ 80496d1:	01 d0                	add    %edx,%eax
+ 80496d3:	88 08                	mov    %cl,(%eax)
 					x>>=4;
- 80496ce:	c1 6d e0 04          	shrl   $0x4,-0x20(%ebp)
+ 80496d5:	c1 6d e0 04          	shrl   $0x4,-0x20(%ebp)
 					di ++;
- 80496d2:	83 45 dc 01          	addl   $0x1,-0x24(%ebp)
+ 80496d9:	83 45 dc 01          	addl   $0x1,-0x24(%ebp)
 					type = NONE;
 					continue;
 				}
 				char digits[15];
 				int di=0;
 				while(x>=1){
- 80496d6:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
- 80496da:	75 cd                	jne    80496a9 <vfprintf+0xc6>
+ 80496dd:	83 7d e0 00          	cmpl   $0x0,-0x20(%ebp)
+ 80496e1:	75 cd                	jne    80496b0 <vfprintf+0xc6>
 					}
 					digits[di] = '0'+d;
 					x>>=4;
 					di ++;
 				};
 				di--;
- 80496dc:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
+ 80496e3:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
 				for(;di>=0;di--){
- 80496e0:	eb 1e                	jmp    8049700 <vfprintf+0x11d>
+ 80496e7:	eb 1e                	jmp    8049707 <vfprintf+0x11d>
 					printer(digits[di]);
- 80496e2:	8d 55 c1             	lea    -0x3f(%ebp),%edx
- 80496e5:	8b 45 dc             	mov    -0x24(%ebp),%eax
- 80496e8:	01 d0                	add    %edx,%eax
- 80496ea:	0f b6 00             	movzbl (%eax),%eax
- 80496ed:	0f be c0             	movsbl %al,%eax
- 80496f0:	83 ec 0c             	sub    $0xc,%esp
- 80496f3:	50                   	push   %eax
- 80496f4:	8b 45 08             	mov    0x8(%ebp),%eax
- 80496f7:	ff d0                	call   *%eax
- 80496f9:	83 c4 10             	add    $0x10,%esp
+ 80496e9:	8d 55 c1             	lea    -0x3f(%ebp),%edx
+ 80496ec:	8b 45 dc             	mov    -0x24(%ebp),%eax
+ 80496ef:	01 d0                	add    %edx,%eax
+ 80496f1:	0f b6 00             	movzbl (%eax),%eax
+ 80496f4:	0f be c0             	movsbl %al,%eax
+ 80496f7:	83 ec 0c             	sub    $0xc,%esp
+ 80496fa:	50                   	push   %eax
+ 80496fb:	8b 45 08             	mov    0x8(%ebp),%eax
+ 80496fe:	ff d0                	call   *%eax
+ 8049700:	83 c4 10             	add    $0x10,%esp
 					digits[di] = '0'+d;
 					x>>=4;
 					di ++;
 				};
 				di--;
 				for(;di>=0;di--){
- 80496fc:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
- 8049700:	83 7d dc 00          	cmpl   $0x0,-0x24(%ebp)
- 8049704:	79 dc                	jns    80496e2 <vfprintf+0xff>
+ 8049703:	83 6d dc 01          	subl   $0x1,-0x24(%ebp)
+ 8049707:	83 7d dc 00          	cmpl   $0x0,-0x24(%ebp)
+ 804970b:	79 dc                	jns    80496e9 <vfprintf+0xff>
 					printer(digits[di]);
 				}
 				XNEXT(pointer);
- 8049706:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 804970d:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
- 804970a:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+ 8049711:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
 			//sys_printch(cur);
 			//sys_printch('3');
 			if(cur == 'd'){
- 804970e:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8049711:	0f b6 00             	movzbl (%eax),%eax
- 8049714:	3c 64                	cmp    $0x64,%al
- 8049716:	0f 85 02 01 00 00    	jne    804981e <vfprintf+0x23b>
+ 8049715:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049718:	0f b6 00             	movzbl (%eax),%eax
+ 804971b:	3c 64                	cmp    $0x64,%al
+ 804971d:	0f 85 02 01 00 00    	jne    8049825 <vfprintf+0x23b>
 				//sys_printch('6');
 				//sys_printch('e');
 				int x = XGET(pointer, int);
- 804971c:	8b 45 e8             	mov    -0x18(%ebp),%eax
- 804971f:	8b 00                	mov    (%eax),%eax
- 8049721:	89 45 d4             	mov    %eax,-0x2c(%ebp)
+ 8049723:	8b 45 e8             	mov    -0x18(%ebp),%eax
+ 8049726:	8b 00                	mov    (%eax),%eax
+ 8049728:	89 45 d4             	mov    %eax,-0x2c(%ebp)
 				if(x==-2147483648){
- 8049724:	81 7d d4 00 00 00 80 	cmpl   $0x80000000,-0x2c(%ebp)
- 804972b:	75 23                	jne    8049750 <vfprintf+0x16d>
+ 804972b:	81 7d d4 00 00 00 80 	cmpl   $0x80000000,-0x2c(%ebp)
+ 8049732:	75 23                	jne    8049757 <vfprintf+0x16d>
 					printp(printer, "-2147483648");
- 804972d:	83 ec 08             	sub    $0x8,%esp
- 8049730:	68 84 a2 04 08       	push   $0x804a284
- 8049735:	ff 75 08             	pushl  0x8(%ebp)
- 8049738:	e8 73 fe ff ff       	call   80495b0 <printp>
- 804973d:	83 c4 10             	add    $0x10,%esp
+ 8049734:	83 ec 08             	sub    $0x8,%esp
+ 8049737:	68 84 a2 04 08       	push   $0x804a284
+ 804973c:	ff 75 08             	pushl  0x8(%ebp)
+ 804973f:	e8 73 fe ff ff       	call   80495b7 <printp>
+ 8049744:	83 c4 10             	add    $0x10,%esp
 					XNEXT(pointer);
- 8049740:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 8049747:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 					type = NONE;
- 8049744:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 804974b:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 					continue;
- 804974b:	e9 19 01 00 00       	jmp    8049869 <vfprintf+0x286>
+ 8049752:	e9 19 01 00 00       	jmp    8049870 <vfprintf+0x286>
 				}
 				if(x==0){
- 8049750:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
- 8049754:	75 1e                	jne    8049774 <vfprintf+0x191>
+ 8049757:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+ 804975b:	75 1e                	jne    804977b <vfprintf+0x191>
 					printer('0');
- 8049756:	83 ec 0c             	sub    $0xc,%esp
- 8049759:	6a 30                	push   $0x30
- 804975b:	8b 45 08             	mov    0x8(%ebp),%eax
- 804975e:	ff d0                	call   *%eax
- 8049760:	83 c4 10             	add    $0x10,%esp
+ 804975d:	83 ec 0c             	sub    $0xc,%esp
+ 8049760:	6a 30                	push   $0x30
+ 8049762:	8b 45 08             	mov    0x8(%ebp),%eax
+ 8049765:	ff d0                	call   *%eax
+ 8049767:	83 c4 10             	add    $0x10,%esp
 					XNEXT(pointer);
- 8049763:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 804976a:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 					type = NONE;
- 8049767:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 804976e:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 					continue;
- 804976e:	90                   	nop
- 804976f:	e9 f5 00 00 00       	jmp    8049869 <vfprintf+0x286>
+ 8049775:	90                   	nop
+ 8049776:	e9 f5 00 00 00       	jmp    8049870 <vfprintf+0x286>
 				}
 				if(x<0){
- 8049774:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
- 8049778:	79 10                	jns    804978a <vfprintf+0x1a7>
+ 804977b:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+ 804977f:	79 10                	jns    8049791 <vfprintf+0x1a7>
 					printer('-');
- 804977a:	83 ec 0c             	sub    $0xc,%esp
- 804977d:	6a 2d                	push   $0x2d
- 804977f:	8b 45 08             	mov    0x8(%ebp),%eax
- 8049782:	ff d0                	call   *%eax
- 8049784:	83 c4 10             	add    $0x10,%esp
+ 8049781:	83 ec 0c             	sub    $0xc,%esp
+ 8049784:	6a 2d                	push   $0x2d
+ 8049786:	8b 45 08             	mov    0x8(%ebp),%eax
+ 8049789:	ff d0                	call   *%eax
+ 804978b:	83 c4 10             	add    $0x10,%esp
 					x=-x;
- 8049787:	f7 5d d4             	negl   -0x2c(%ebp)
+ 804978e:	f7 5d d4             	negl   -0x2c(%ebp)
 				}
 				char digits[15];
 				int di=0;
- 804978a:	c7 45 d0 00 00 00 00 	movl   $0x0,-0x30(%ebp)
+ 8049791:	c7 45 d0 00 00 00 00 	movl   $0x0,-0x30(%ebp)
 				while(x>=1){
- 8049791:	eb 53                	jmp    80497e6 <vfprintf+0x203>
+ 8049798:	eb 53                	jmp    80497ed <vfprintf+0x203>
 					digits[di] = '0'+(x%10);
- 8049793:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
- 8049796:	ba 67 66 66 66       	mov    $0x66666667,%edx
- 804979b:	89 c8                	mov    %ecx,%eax
- 804979d:	f7 ea                	imul   %edx
- 804979f:	c1 fa 02             	sar    $0x2,%edx
+ 804979a:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
+ 804979d:	ba 67 66 66 66       	mov    $0x66666667,%edx
  80497a2:	89 c8                	mov    %ecx,%eax
- 80497a4:	c1 f8 1f             	sar    $0x1f,%eax
- 80497a7:	29 c2                	sub    %eax,%edx
- 80497a9:	89 d0                	mov    %edx,%eax
- 80497ab:	c1 e0 02             	shl    $0x2,%eax
- 80497ae:	01 d0                	add    %edx,%eax
- 80497b0:	01 c0                	add    %eax,%eax
- 80497b2:	29 c1                	sub    %eax,%ecx
- 80497b4:	89 ca                	mov    %ecx,%edx
- 80497b6:	89 d0                	mov    %edx,%eax
- 80497b8:	83 c0 30             	add    $0x30,%eax
- 80497bb:	89 c1                	mov    %eax,%ecx
- 80497bd:	8d 55 b2             	lea    -0x4e(%ebp),%edx
- 80497c0:	8b 45 d0             	mov    -0x30(%ebp),%eax
- 80497c3:	01 d0                	add    %edx,%eax
- 80497c5:	88 08                	mov    %cl,(%eax)
+ 80497a4:	f7 ea                	imul   %edx
+ 80497a6:	c1 fa 02             	sar    $0x2,%edx
+ 80497a9:	89 c8                	mov    %ecx,%eax
+ 80497ab:	c1 f8 1f             	sar    $0x1f,%eax
+ 80497ae:	29 c2                	sub    %eax,%edx
+ 80497b0:	89 d0                	mov    %edx,%eax
+ 80497b2:	c1 e0 02             	shl    $0x2,%eax
+ 80497b5:	01 d0                	add    %edx,%eax
+ 80497b7:	01 c0                	add    %eax,%eax
+ 80497b9:	29 c1                	sub    %eax,%ecx
+ 80497bb:	89 ca                	mov    %ecx,%edx
+ 80497bd:	89 d0                	mov    %edx,%eax
+ 80497bf:	83 c0 30             	add    $0x30,%eax
+ 80497c2:	89 c1                	mov    %eax,%ecx
+ 80497c4:	8d 55 b2             	lea    -0x4e(%ebp),%edx
+ 80497c7:	8b 45 d0             	mov    -0x30(%ebp),%eax
+ 80497ca:	01 d0                	add    %edx,%eax
+ 80497cc:	88 08                	mov    %cl,(%eax)
 					x/=10;
- 80497c7:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
- 80497ca:	ba 67 66 66 66       	mov    $0x66666667,%edx
- 80497cf:	89 c8                	mov    %ecx,%eax
- 80497d1:	f7 ea                	imul   %edx
- 80497d3:	c1 fa 02             	sar    $0x2,%edx
+ 80497ce:	8b 4d d4             	mov    -0x2c(%ebp),%ecx
+ 80497d1:	ba 67 66 66 66       	mov    $0x66666667,%edx
  80497d6:	89 c8                	mov    %ecx,%eax
- 80497d8:	c1 f8 1f             	sar    $0x1f,%eax
- 80497db:	29 c2                	sub    %eax,%edx
- 80497dd:	89 d0                	mov    %edx,%eax
- 80497df:	89 45 d4             	mov    %eax,-0x2c(%ebp)
+ 80497d8:	f7 ea                	imul   %edx
+ 80497da:	c1 fa 02             	sar    $0x2,%edx
+ 80497dd:	89 c8                	mov    %ecx,%eax
+ 80497df:	c1 f8 1f             	sar    $0x1f,%eax
+ 80497e2:	29 c2                	sub    %eax,%edx
+ 80497e4:	89 d0                	mov    %edx,%eax
+ 80497e6:	89 45 d4             	mov    %eax,-0x2c(%ebp)
 					di++;
- 80497e2:	83 45 d0 01          	addl   $0x1,-0x30(%ebp)
+ 80497e9:	83 45 d0 01          	addl   $0x1,-0x30(%ebp)
 					printer('-');
 					x=-x;
 				}
 				char digits[15];
 				int di=0;
 				while(x>=1){
- 80497e6:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
- 80497ea:	7f a7                	jg     8049793 <vfprintf+0x1b0>
+ 80497ed:	83 7d d4 00          	cmpl   $0x0,-0x2c(%ebp)
+ 80497f1:	7f a7                	jg     804979a <vfprintf+0x1b0>
 					digits[di] = '0'+(x%10);
 					x/=10;
 					di++;
 				};
 				di--;
- 80497ec:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
+ 80497f3:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
 				for(;di>=0;di--){
- 80497f0:	eb 1e                	jmp    8049810 <vfprintf+0x22d>
+ 80497f7:	eb 1e                	jmp    8049817 <vfprintf+0x22d>
 					printer(digits[di]);
- 80497f2:	8d 55 b2             	lea    -0x4e(%ebp),%edx
- 80497f5:	8b 45 d0             	mov    -0x30(%ebp),%eax
- 80497f8:	01 d0                	add    %edx,%eax
- 80497fa:	0f b6 00             	movzbl (%eax),%eax
- 80497fd:	0f be c0             	movsbl %al,%eax
- 8049800:	83 ec 0c             	sub    $0xc,%esp
- 8049803:	50                   	push   %eax
- 8049804:	8b 45 08             	mov    0x8(%ebp),%eax
- 8049807:	ff d0                	call   *%eax
- 8049809:	83 c4 10             	add    $0x10,%esp
+ 80497f9:	8d 55 b2             	lea    -0x4e(%ebp),%edx
+ 80497fc:	8b 45 d0             	mov    -0x30(%ebp),%eax
+ 80497ff:	01 d0                	add    %edx,%eax
+ 8049801:	0f b6 00             	movzbl (%eax),%eax
+ 8049804:	0f be c0             	movsbl %al,%eax
+ 8049807:	83 ec 0c             	sub    $0xc,%esp
+ 804980a:	50                   	push   %eax
+ 804980b:	8b 45 08             	mov    0x8(%ebp),%eax
+ 804980e:	ff d0                	call   *%eax
+ 8049810:	83 c4 10             	add    $0x10,%esp
 					digits[di] = '0'+(x%10);
 					x/=10;
 					di++;
 				};
 				di--;
 				for(;di>=0;di--){
- 804980c:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
- 8049810:	83 7d d0 00          	cmpl   $0x0,-0x30(%ebp)
- 8049814:	79 dc                	jns    80497f2 <vfprintf+0x20f>
+ 8049813:	83 6d d0 01          	subl   $0x1,-0x30(%ebp)
+ 8049817:	83 7d d0 00          	cmpl   $0x0,-0x30(%ebp)
+ 804981b:	79 dc                	jns    80497f9 <vfprintf+0x20f>
 					printer(digits[di]);
 				}
 				XNEXT(pointer);
- 8049816:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 804981d:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
- 804981a:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+ 8049821:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
 			if(cur == 'c'){
- 804981e:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8049821:	0f b6 00             	movzbl (%eax),%eax
- 8049824:	3c 63                	cmp    $0x63,%al
- 8049826:	75 1d                	jne    8049845 <vfprintf+0x262>
+ 8049825:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049828:	0f b6 00             	movzbl (%eax),%eax
+ 804982b:	3c 63                	cmp    $0x63,%al
+ 804982d:	75 1d                	jne    804984c <vfprintf+0x262>
 				//char* pointer = (char*)args;
 				//printer(*pointer);
 				printer(XGET(pointer, char));
- 8049828:	8b 45 e8             	mov    -0x18(%ebp),%eax
- 804982b:	0f b6 00             	movzbl (%eax),%eax
- 804982e:	0f be c0             	movsbl %al,%eax
- 8049831:	83 ec 0c             	sub    $0xc,%esp
- 8049834:	50                   	push   %eax
- 8049835:	8b 45 08             	mov    0x8(%ebp),%eax
- 8049838:	ff d0                	call   *%eax
- 804983a:	83 c4 10             	add    $0x10,%esp
+ 804982f:	8b 45 e8             	mov    -0x18(%ebp),%eax
+ 8049832:	0f b6 00             	movzbl (%eax),%eax
+ 8049835:	0f be c0             	movsbl %al,%eax
+ 8049838:	83 ec 0c             	sub    $0xc,%esp
+ 804983b:	50                   	push   %eax
+ 804983c:	8b 45 08             	mov    0x8(%ebp),%eax
+ 804983f:	ff d0                	call   *%eax
+ 8049841:	83 c4 10             	add    $0x10,%esp
 				XNEXT(pointer);
- 804983d:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
+ 8049844:	83 45 e8 04          	addl   $0x4,-0x18(%ebp)
 				i++;
- 8049841:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
+ 8049848:	83 45 f0 01          	addl   $0x1,-0x10(%ebp)
 			}
 			type = NONE;
- 8049845:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
+ 804984c:	c7 45 ec 00 00 00 00 	movl   $0x0,-0x14(%ebp)
 			continue;
- 804984c:	eb 1b                	jmp    8049869 <vfprintf+0x286>
+ 8049853:	eb 1b                	jmp    8049870 <vfprintf+0x286>
 		}
 		if(type == NONE){
- 804984e:	83 7d ec 00          	cmpl   $0x0,-0x14(%ebp)
- 8049852:	75 15                	jne    8049869 <vfprintf+0x286>
+ 8049855:	83 7d ec 00          	cmpl   $0x0,-0x14(%ebp)
+ 8049859:	75 15                	jne    8049870 <vfprintf+0x286>
 			printer(cur);
- 8049854:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8049857:	0f b6 00             	movzbl (%eax),%eax
- 804985a:	0f be c0             	movsbl %al,%eax
- 804985d:	83 ec 0c             	sub    $0xc,%esp
- 8049860:	50                   	push   %eax
- 8049861:	8b 45 08             	mov    0x8(%ebp),%eax
- 8049864:	ff d0                	call   *%eax
- 8049866:	83 c4 10             	add    $0x10,%esp
+ 804985b:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 804985e:	0f b6 00             	movzbl (%eax),%eax
+ 8049861:	0f be c0             	movsbl %al,%eax
+ 8049864:	83 ec 0c             	sub    $0xc,%esp
+ 8049867:	50                   	push   %eax
+ 8049868:	8b 45 08             	mov    0x8(%ebp),%eax
+ 804986b:	ff d0                	call   *%eax
+ 804986d:	83 c4 10             	add    $0x10,%esp
 	const char *str = ctl;
 	int32_t i = 0;
 	int32_t type = NONE;
 	void** pointer = args;
 	//char last='\0';
 	for(;*str != '\0'; str ++){
- 8049869:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
- 804986d:	8b 45 f4             	mov    -0xc(%ebp),%eax
- 8049870:	0f b6 00             	movzbl (%eax),%eax
- 8049873:	84 c0                	test   %al,%al
- 8049875:	0f 85 8d fd ff ff    	jne    8049608 <vfprintf+0x25>
+ 8049870:	83 45 f4 01          	addl   $0x1,-0xc(%ebp)
+ 8049874:	8b 45 f4             	mov    -0xc(%ebp),%eax
+ 8049877:	0f b6 00             	movzbl (%eax),%eax
+ 804987a:	84 c0                	test   %al,%al
+ 804987c:	0f 85 8d fd ff ff    	jne    804960f <vfprintf+0x25>
 		if(type == NONE){
 			printer(cur);
 		}
 		//last = cur;
 	}
 }
- 804987b:	c9                   	leave  
- 804987c:	c3                   	ret    
+ 8049882:	c9                   	leave  
+ 8049883:	c3                   	ret    
 
-0804987d <printf>:
+08049884 <printf>:
 
 void __attribute__((__noinline__)) 
 printf(const char *ctl, ...) {
- 804987d:	55                   	push   %ebp
- 804987e:	89 e5                	mov    %esp,%ebp
- 8049880:	83 ec 18             	sub    $0x18,%esp
+ 8049884:	55                   	push   %ebp
+ 8049885:	89 e5                	mov    %esp,%ebp
+ 8049887:	83 ec 18             	sub    $0x18,%esp
 	void **args = (void **)&ctl + 1;
- 8049883:	8d 45 0c             	lea    0xc(%ebp),%eax
- 8049886:	89 45 f4             	mov    %eax,-0xc(%ebp)
+ 804988a:	8d 45 0c             	lea    0xc(%ebp),%eax
+ 804988d:	89 45 f4             	mov    %eax,-0xc(%ebp)
 	//sys_printch('e');
 	vfprintf(sys_printch, ctl, args);
- 8049889:	8b 45 08             	mov    0x8(%ebp),%eax
- 804988c:	83 ec 04             	sub    $0x4,%esp
- 804988f:	ff 75 f4             	pushl  -0xc(%ebp)
- 8049892:	50                   	push   %eax
- 8049893:	68 90 95 04 08       	push   $0x8049590
- 8049898:	e8 46 fd ff ff       	call   80495e3 <vfprintf>
- 804989d:	83 c4 10             	add    $0x10,%esp
+ 8049890:	8b 45 08             	mov    0x8(%ebp),%eax
+ 8049893:	83 ec 04             	sub    $0x4,%esp
+ 8049896:	ff 75 f4             	pushl  -0xc(%ebp)
+ 8049899:	50                   	push   %eax
+ 804989a:	68 97 95 04 08       	push   $0x8049597
+ 804989f:	e8 46 fd ff ff       	call   80495ea <vfprintf>
+ 80498a4:	83 c4 10             	add    $0x10,%esp
 }
- 80498a0:	c9                   	leave  
- 80498a1:	c3                   	ret    
+ 80498a7:	c9                   	leave  
+ 80498a8:	c3                   	ret    

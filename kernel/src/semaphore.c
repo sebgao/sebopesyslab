@@ -13,10 +13,17 @@ void sem_init_kr(Semaphore* sem, int count){
 void sem_close_kr(Semaphore* sem){
 	if(sem->used){
 		sem->used = 0;
+		PCB* pcb;
+		while(1){
+			pcb = ll_pop(&sem->block_list);
+			if(pcb == NULL) break;
+			ll_entail(&ready_list, pcb);
+		}
 	}
 }
 
 void sem_post_kr(Semaphore* sem){
+	if(!sem->used)return;
 	sem->count ++;
 	if(sem->count<=0){
 		PCB* pcb = ll_pop(&sem->block_list);
@@ -25,6 +32,7 @@ void sem_post_kr(Semaphore* sem){
 }
 
 void sem_wait_kr(Semaphore* sem){
+	if(!sem->used)return;
 	sem->count --;
 	if(sem->count < 0){
 		PCB* cur = current;
@@ -35,6 +43,7 @@ void sem_wait_kr(Semaphore* sem){
 }
 
 int sem_get_kr(Semaphore* sem){
+	if(!sem->used)return 0;
 	return sem->count;
 }
 

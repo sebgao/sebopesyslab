@@ -1,6 +1,7 @@
 #include "common.h"
 #include "lib/syscall.h"
-
+#include "rnd.h"
+/*
 void test_process_sem(){
 	fork();
 	fork();
@@ -19,35 +20,75 @@ void test_process_sem(){
 		printf("TASK#%d, %d!\n", getpid(), i);
 	}
 	sys_sem_post(sem);
+
+
 	exit();
+}*/
+#define N 2
+semaphore mutex;
+semaphore empty;
+semaphore full;
+int index;
+int buffer[N];
+
+void insert_item(int item){
+	buffer[index] = item;
+	index ++;
 }
-semaphore sem;
-void test_thread_sem(){
-	sys_sem_wait(&sem);
-	int i=0;
-	for(; i<2; i++){
-		sleep(1);
-		printf("TASK#%d!\n", getpid());
+int remove_item(){
+	index --;
+	return buffer[index];
+}
+
+void producer(){
+	int item;
+	while(1){
+		sleep(1+rand()%5);
+		item = rand()%10;
+
+		sem_wait(&empty);
+		sem_wait(&mutex);
+
+		insert_item(item);
+
+		printf("PRODUCER: %d sent, now %d space left!\n", item, N-index);
+
+		sem_post(&mutex);
+		sem_post(&full);
 	}
-	sys_sem_post(&sem);
-	exit();
+}
+
+void consumer(){
+	int item;
+	int asleep;
+	while(1){
+
+		sem_wait(&full);
+		sem_wait(&mutex);
+
+		item = remove_item();
+
+		sem_post(&mutex);
+		sem_post(&empty);
+
+		asleep = 1+rand()%15;
+		printf("CONSUMER: %d received, now I want to consumer it in %ds!\n", item, asleep);
+		sleep(asleep); //consume
+
+	}
 }
 int main(){
-	sys_sem_init(&sem, 3);
-	int i=0;
-	for (i = 0; i < 15; ++i)
-	{
-		int pid = thread(test_thread_sem, 0xeebfd000-i*0x1000);
-		printf("%d created!\n", pid);
-	}
-	for(i=3; i<18; i++){
-		sys_join(i);
-	}
-	//sys_join(3);
-	sys_sem_close(&sem);
-	//sleep(40);
-	printf("All taskes are done!\n");
+	sem_init(&mutex, 1);
+	sem_init(&empty, N);
+	sem_init(&full,	0);
+	index = 0;
+	thread_t prod, cons;
+	prod = thread(producer, 0xeebfd000);
+	cons = thread(consumer, 0xeebfd000);
+
+	thread_join(prod);
+	thread_join(cons);
+
+	printf("You should not see this, because the producer and consumer are sisyphean\n");
 	exit();
-	while(1);
-	//test_process_sem();
 }
