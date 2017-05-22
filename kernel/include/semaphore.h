@@ -19,6 +19,8 @@ void sem_post_kr(Semaphore* sem);
 
 void sem_wait_kr(Semaphore* sem);
 
+int sem_trywait_kr(Semaphore* sem);
+
 Semaphore* sem_open_kr(int index, int count);
 
 int sem_get_kr(Semaphore* sem);

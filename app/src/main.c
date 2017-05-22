@@ -25,9 +25,9 @@ void test_process_sem(){
 	exit();
 }*/
 #define N 2
-semaphore mutex;
-semaphore empty;
-semaphore full;
+sem_t mutex;
+sem_t empty;
+sem_t full;
 int index;
 int buffer[N];
 
@@ -45,7 +45,7 @@ void producer(){
 	while(1){
 		sleep(1+rand()%5);
 		item = rand()%10;
-
+		printf("PRODUCER: %d produced!\n", item);
 		sem_wait(&empty);
 		sem_wait(&mutex);
 
@@ -62,9 +62,9 @@ void consumer(){
 	int item;
 	int asleep;
 	while(1){
-
-		sem_wait(&full);
-		sem_wait(&mutex);
+		printf("CONSUMER: ready to receive!\n");
+		while(!sem_trywait(&full));
+		while(!sem_trywait(&mutex));
 
 		item = remove_item();
 
@@ -89,6 +89,6 @@ int main(){
 	thread_join(prod);
 	thread_join(cons);
 
-	printf("You should not see this, because the producer and consumer are sisyphean\n");
+	printf("You should not see this, since the producer and consumer are sisyphean\n");
 	exit();
 }

@@ -26,6 +26,9 @@ void do_syscall(struct TrapFrame *tf) {
 		case SYS_SEM_WAIT:
 			sem_wait_kr((Semaphore*)tf->ebx);
 		break;
+		case SYS_SEM_TRYWAIT:
+			tf->eax = sem_trywait_kr((Semaphore*)tf->ebx);
+		break;
 		case SYS_SEM_CLOSE:
 			sem_close_kr((Semaphore*)tf->ebx);
 		break;

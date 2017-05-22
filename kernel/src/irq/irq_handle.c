@@ -64,7 +64,8 @@ void irq_handle(struct TrapFrame *tf) {
 	} else {
 		
 	}
-	if((tf->irq == 0x80 && (tf->eax == SYS_HANDOUT || tf->eax == SYS_SLEEP))){
+	//if((tf->irq == 0x80 && (tf->eax == SYS_HANDOUT || tf->eax == SYS_SLEEP))){
+	if((tf->irq == 0x80) && (tf->eax != SYS_PRINT_CHAR)){
 		//printk("handout");
 		//current->ts = STOP;
 		do_scheduler();

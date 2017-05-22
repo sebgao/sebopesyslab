@@ -42,6 +42,18 @@ void sem_wait_kr(Semaphore* sem){
 	}
 }
 
+int sem_trywait_kr(Semaphore* sem){
+	if(!sem->used)return -1;
+	if(sem->count <=0){
+		return 0;
+	}
+	else{
+		sem->count--;
+		return 1;
+	}
+
+}
+
 int sem_get_kr(Semaphore* sem){
 	if(!sem->used)return 0;
 	return sem->count;

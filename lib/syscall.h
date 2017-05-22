@@ -30,7 +30,7 @@
 #define SYS_SEM_WAIT	1603
 #define SYS_SEM_CLOSE	1604
 #define SYS_SEM_GET		1605
-
+#define SYS_SEM_TRYWAIT	1606
 //alias begin
 
 #define sleep sys_sleep
@@ -45,6 +45,7 @@
 #define sem_open sys_sem_open
 #define sem_post sys_sem_post
 #define sem_wait sys_sem_wait
+#define sem_trywait sys_sem_trywait
 #define sem_get sys_sem_get
 #define sem_close sys_sem_close
 #define thread_join sys_join
@@ -73,6 +74,12 @@ static inline void sys_sem_post(semaphore *sem){
 
 static inline void sys_sem_wait(semaphore *sem){
 	asm volatile("int $0x80": : "a"(SYS_SEM_WAIT), "b"(sem)); //SYSCALL HERE!
+}
+
+static inline int sys_sem_trywait(semaphore *sem){
+	int ret;
+	asm volatile("int $0x80": "=a"(ret) : "a"(SYS_SEM_TRYWAIT), "b"(sem)); //SYSCALL HERE!
+	return ret;
 }
 
 static inline void sys_sem_close(semaphore *sem){

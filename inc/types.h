@@ -41,6 +41,7 @@ typedef int32_t off_t;
 typedef struct semaphore{
 	uint32_t justinbieber[3];
 }semaphore;
+typedef semaphore sem_t;
 typedef uint32_t thread_t;
 typedef uint32_t process_t;
 
