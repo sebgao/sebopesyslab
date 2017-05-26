@@ -86,11 +86,11 @@ unsigned int UKISS()
  8048166:	c3                   	ret    
 
 08048167 <sys_exit>:
+	int count;
+	asm volatile("int $0x80": "=a"(count) : "a"(SYS_SEM_GET), "b"(sem)); //SYSCALL HERE!
+	return count;
 }
 
-static inline void sys_handout(){
-	asm volatile("int $0x80": : "a"(SYS_HANDOUT)); //SYSCALL HERE!
-}
 static inline void sys_exit(){
  8048167:	55                   	push   %ebp
  8048168:	89 e5                	mov    %esp,%ebp
@@ -105,6 +105,11 @@ static inline void sys_exit(){
  8048179:	c3                   	ret    
 
 0804817a <sys_fork>:
+}
+
+static inline void sys_handout(){
+	asm volatile("int $0x80": : "a"(SYS_HANDOUT)); //SYSCALL HERE!
+}
 static inline uint32_t sys_fork(){
  804817a:	55                   	push   %ebp
  804817b:	89 e5                	mov    %esp,%ebp

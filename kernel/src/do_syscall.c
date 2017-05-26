@@ -36,7 +36,7 @@ void do_syscall(struct TrapFrame *tf) {
 			tf->eax = sem_get_kr((Semaphore*)tf->ebx);
 		break;
 		case SYS_THREAD:
-			thread_current(tf->ebx, tf->ecx);
+			thread_current(tf->ebx, tf->ecx, tf->edx);
 		break;
 		case SYS_JOIN:
 			join_current(tf->ebx);

@@ -78,17 +78,18 @@ void consumer(){
 	}
 }
 int main(){
+
 	sem_init(&mutex, 1);
 	sem_init(&empty, N);
 	sem_init(&full,	0);
 	index = 0;
 	thread_t prod, cons;
-	prod = thread(producer, 0xeebfd000);
-	cons = thread(consumer, 0xeebfd000);
-
+	prod = thread(producer, NULL);
+	cons = thread(consumer, NULL);
 	thread_join(prod);
 	thread_join(cons);
 
 	printf("You should not see this, since the producer and consumer are sisyphean\n");
+
 	exit();
 }

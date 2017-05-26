@@ -64,7 +64,7 @@ uint32_t ll_entail(PCB** head, PCB* p);
 uint32_t ll_delete(PCB** head, PCB* p);
 void exit_current();
 void fork_current();
-void thread_current(uint32_t entry, uint32_t esp);
+void thread_current(uint32_t entry, uint32_t exit, uint32_t arg);
 
 void join_current(int pid);
 #endif

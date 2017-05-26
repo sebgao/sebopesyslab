@@ -200,7 +200,7 @@ void copy_pcb(PCB *dst, PCB *src)
 	//dst->tf->esp = (uint32_t)((void*)dst->kstack + ((void*)src->tf->esp - (void*)src->kstack));
 	dst->tt = src->tt;
 
-	if(dst->tt == KERNEL || dst->tt == THREAD){
+	if(dst->tt == KERNEL){
 		
 		dst->tf->ebp += offset;
 		uint32_t* ptr = (uint32_t*)dst->tf->ebp;
@@ -210,7 +210,7 @@ void copy_pcb(PCB *dst, PCB *src)
 		}
 	//printk("KTOP: %x %x\n", (dst->tf->cs), (src->tf->cs));
 		dst->ts = src->ts;
-	}else{
+	}else if(dst->tt != THREAD){
 		copy_pgdir(dst->pgdir, src->pgdir);
 	}
 	//lcr3(PADDR(kern_pgdir));
@@ -230,32 +230,36 @@ void fork_current(){
 	ll_push(&ready_list, son);
 }
 
-void thread_current(uint32_t entry, uint32_t esp){
-	//printk("ahh? %x\n", entry);
+void thread_current(uint32_t entry, uint32_t exit, uint32_t arg){
 	PCB* son = pcb_create();
-	
 	son->tt = THREAD;
-
-
-
 	son->ppid = current->pid;
 
 	copy_pcb(son, current);
 	memcpy(son->pgdir, current->pgdir, PGSIZE);
+
+	uint32_t esp = 0xeebfd000;
 	mm_alloc(son->pgdir, esp-2*NPKSTACKSIZE, 2*NPKSTACKSIZE);
 
-	son->tf->esp = esp-0x7F;
+	son->tf->ebp = esp-0x40;
+	son->tf->esp = esp-0x40;
 	son->tf->eip = entry;
 
 	current->tf->eax = son->pid;
 	son->tf->eax = 0;
 	
+	lcr3(PADDR(son->pgdir));
+
+	uint32_t* ptr=(uint32_t*)(esp-0x40);
+	ptr[0] = (uint32_t)exit;
+	ptr[1] = arg;
+
+	lcr3(PADDR(current->pgdir));
+
 	ll_push(&ready_list, son);
 }
 
 void exit_current(){
-
-	
 
 	PCB* p;
 

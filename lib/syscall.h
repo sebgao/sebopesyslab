@@ -92,18 +92,20 @@ static inline int sys_sem_get(semaphore *sem){
 	return count;
 }
 
-static inline int sys_thread(void* entry, uint32_t esp){
+static inline void sys_exit(){
+	asm volatile("int $0x80": : "a"(SYS_HANDOUT));
+	asm volatile("int $0x80": : "a"(SYS_EXIT)); //SYSCALL HERE!
+}
+
+
+static inline int sys_thread(void* entry, void* arg){
 	int pid;
-	asm volatile("int $0x80": "=a"(pid) : "a"(SYS_THREAD), "b"(entry), "c"(esp)); //SYSCALL HERE!
+	asm volatile("int $0x80": "=a"(pid) : "a"(SYS_THREAD), "b"(entry), "c"(sys_exit), "d"(arg)); //SYSCALL HERE!
 	return pid;
 }
 
 static inline void sys_handout(){
 	asm volatile("int $0x80": : "a"(SYS_HANDOUT)); //SYSCALL HERE!
-}
-static inline void sys_exit(){
-	asm volatile("int $0x80": : "a"(SYS_HANDOUT));
-	asm volatile("int $0x80": : "a"(SYS_EXIT)); //SYSCALL HERE!
 }
 static inline uint32_t sys_fork(){
 	uint32_t r_eax = 0;
