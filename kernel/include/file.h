@@ -53,9 +53,13 @@ typedef struct{
 	uint32_t inode_offset;
 	uint32_t file_size;
 	char filename[LEN_FILENAME];
-	uint8_t buffer[BLOCK_SIZE];
+	//uint8_t buffer[BLOCK_SIZE];
 	char used;
 } FILE_STREAM;
 
-#define NR_FILE_STREAM 256
+void fs_lseek_kr(int fd, int32_t index);
+int32_t fs_read_kr(int fd, void* buf, int32_t len);
+int32_t fs_write_kr(int fd, void* buf, int32_t len);
+int fs_open_kr(char* filename);
+#define NR_FILE_STREAM 32
 #endif

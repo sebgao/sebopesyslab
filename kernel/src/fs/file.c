@@ -9,27 +9,27 @@ uint8_t buffer[BLOCK_SIZE];
 void readBitmap(){
 	int count;
 	for(count = 0; count < SC_BITMAP; count++){
-		readsect((uint8_t*)bitmap.mask+(count<<9), LOC_BITMAP()+(count<<9));
+		readsect(bitmap.mask+(count<<9), LOC_BITMAP()+(count<<9));
 	}
 }
 
 void saveBitmap(){
 	int count;
 	for(count = 0; count < SC_BITMAP; count++){
-		writesect((uint8_t*)bitmap.mask+(count<<9), LOC_BITMAP()+(count<<9));
+		writesect(bitmap.mask+(count<<9), LOC_BITMAP()+(count<<9));
 	}
 }
 void readDir(int offset){
 	readsect(dir.entries, LOC_DIR(offset));
 }
 void saveDir(int offset){
-	writesect((uint8_t*)dir.entries, LOC_DIR(offset));
+	writesect(dir.entries, LOC_DIR(offset));
 }
 void readINode(int offset){
-	readsect((uint8_t*)inode.data_block_offsets, LOC_INODE(offset));
+	readsect(inode.data_block_offsets, LOC_INODE(offset));
 }
 void saveINode(int offset){
-	writesect((uint8_t*)inode.data_block_offsets, LOC_INODE(offset));
+	writesect(inode.data_block_offsets, LOC_INODE(offset));
 }
 void readData(int offset){
 	readsect(buffer, LOC_DATA(offset));
@@ -38,6 +38,7 @@ void saveData(int offset){
 	writesect(buffer, LOC_DATA(offset));
 }
 int INodeAlloc(){
+	readBitmap();
 	int i = 0;
 	for(i = 0; i < SC_INODE; i++){
 		int sec = LOC_INODE(i);
@@ -53,6 +54,7 @@ int INodeAlloc(){
 	return -1;
 }
 int dataAlloc(){
+	readBitmap();
 	int i = 0;
 	for(i = 0; i < SC_DATA; i++){
 		int sec = LOC_DATA(i);
@@ -118,12 +120,13 @@ void fs_read_base_kr(int fd, void* buf, int32_t len){
 	if(R + len > BLOCK_SIZE){
 		readData(inode.data_block_offsets[D]);
 		memcpy2(buf, buffer+R, BLOCK_SIZE-R);
-		fs->offset += BLOCK_SIZE-R;
+		f->offset += BLOCK_SIZE-R;
 		offset += BLOCK_SIZE-R;
 		len -= BLOCK_SIZE-R;
 		//printk("??\n")
 		while(len >= BLOCK_SIZE){
 			D = f->offset >> 9;
+			//printk("YYY:%d\n", D);
 			readData(inode.data_block_offsets[D]);
 			memcpy2(buf+offset, buffer, BLOCK_SIZE);
 			len -= BLOCK_SIZE;
@@ -137,7 +140,7 @@ void fs_read_base_kr(int fd, void* buf, int32_t len){
 	}else{
 		readData(inode.data_block_offsets[D]);
 		memcpy2(buf, buffer+R, len);
-		fs->offset += len;
+		f->offset += len;
 	}
 
 	/*while(len > BLOCK_SIZE){
@@ -169,7 +172,7 @@ void fs_write_base_kr(int fd, void* buf, int32_t len){
 		readData(inode.data_block_offsets[D]);
 		memcpy2(buffer+R, buf, BLOCK_SIZE-R);
 		saveData(inode.data_block_offsets[D]);
-		fs->offset += BLOCK_SIZE-R;
+		f->offset += BLOCK_SIZE-R;
 		offset += BLOCK_SIZE-R;
 		len -= BLOCK_SIZE-R;
 		//printk("??\n")
@@ -190,7 +193,7 @@ void fs_write_base_kr(int fd, void* buf, int32_t len){
 		readData(inode.data_block_offsets[D]);
 		memcpy2(buffer+R, buf, len);
 		saveData(inode.data_block_offsets[D]);
-		fs->offset += len;
+		f->offset += len;
 	}
 
 	/*while(len > BLOCK_SIZE){
@@ -236,25 +239,17 @@ int fs_close_kr(int fd){
 		return 1;
 }
 void init_fs(){
-	readBitmap();
 	//readDir(0);
 	int i=0;
 	for(i=0; i< NR_FILE_STREAM; i++){
 		fs[i].used = 0;
 	}
 	int fd = fs_open_kr("test.txt");
-	char woc[1024];
-	fs_read_kr(fd, woc, 1024);
-	printk("%s\n", woc);
-	char buf[1024];
-	fs_lseek_kr(fd, 0);
-	//for(i=0; i<2000; i+=6){
-	memset2(buf, 0x4F, 1024);
-	fs_write_kr(fd, buf, 1024);
-	fs_lseek_kr(fd, 1010);
-	char fsc[20];
-	fs_read_kr(fd, fsc, 10);
-	printk("%s\n", fsc);
+	char magic[40];
+	int len = fs_read_kr(fd, magic, 40);
+	magic[len] = '\0';
+	printk("%s\n", magic);
+	
 	//}
 	/*for(i=0; i<NR_ENTRIES; i++){
 		printk("%x\n", dir.entries[i].file_size);

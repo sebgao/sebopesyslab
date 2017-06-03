@@ -99,20 +99,20 @@ int main(){
 
   PCB* pidle = pcb_create();
   empty_loader(pidle, idle);
+  enready_pcb(pidle);
+
 
   PCB* pcb = pcb_create();
-  loader(pcb, 102400);
-
-  enready_pcb(pidle);
+  loader_file(pcb, "game");
   enready_pcb(pcb);
-
+  
 
   //PCB* pcc = pcb_create();
   //empty_loader(pcc, busy);
   //enready_pcb(pcc);
 
   PCB* app = pcb_create();
-  loader(app, 2*102400);
+  loader_file(app, "app");
   enready_pcb(app);
 
   do_scheduler();

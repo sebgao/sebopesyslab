@@ -55,6 +55,7 @@ void enready_pcb(PCB* pcb);
 void do_scheduler();
 
 void loader(PCB* pcb, uint32_t offset);
+void loader_file(PCB* pcb, char* filename);
 void empty_loader(PCB* pcb, void (*ptr)(void));
 
 uint32_t ll_len(PCB** head);
