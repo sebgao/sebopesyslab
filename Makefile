@@ -80,12 +80,22 @@ APP_S := $(shell find $(APP_DIR) -name "*.S")
 APP_O := $(APP_C:%.c=$(OBJ_DIR)/%.o)
 APP_O += $(APP_S:%.S=$(OBJ_DIR)/%.o)
 
-$(IMAGE): $(BOOT) $(KERNEL) $(GAME) $(APP)
-	@$(DD) if=/dev/zero of=$(IMAGE) count=10000		 > /dev/null # 准备磁盘文件
-	@$(DD) if=$(BOOT) of=$(IMAGE) conv=notrunc		  > /dev/null # 填充 boot loader
-	@$(DD) if=$(KERNEL) of=$(IMAGE) seek=1 conv=notrunc > /dev/null # 填充 kernel, 跨过 mbr
-	@$(DD) if=$(GAME) of=$(IMAGE) seek=201 conv=notrunc > /dev/null # 填充 game
-	@$(DD) if=$(APP) of=$(IMAGE) seek=401 conv=notrunc > /dev/null # 填充 app
+$(IMAGE): $(BOOT) $(KERNEL) $(GAME) $(APP) formatter
+	./formatter
+	./copy2myfs $(KERNEL) kernel
+	./copy2myfs $(GAME) game
+	./copy2myfs $(APP) app
+	./copy2myfs test.txt test.txt
+	#@$(DD) if=/dev/zero of=$(IMAGE) count=10000		 > /dev/null # 准备磁盘文件
+	#@$(DD) if=$(BOOT) of=$(IMAGE) conv=notrunc		  > /dev/null # 填充 boot loader
+	#@$(DD) if=$(KERNEL) of=$(IMAGE) seek=2 conv=notrunc > /dev/null # 填充 kernel, 跨过 mbr
+	#@$(DD) if=$(GAME) of=$(IMAGE) seek=201 conv=notrunc > /dev/null # 填充 game
+	#@$(DD) if=$(APP) of=$(IMAGE) seek=401 conv=notrunc > /dev/null # 填充 app
+
+formatter: fmt/formatter.c fmt/copy2myfs.c fmt/read_myfs.c
+	$(CC) -o formatter fmt/formatter.c
+	$(CC) -o copy2myfs fmt/copy2myfs.c
+	$(CC) -o read_myfs fmt/read_myfs.c
 
 $(BOOT): $(BOOT_O)
 	$(LD) -e start -Ttext=0x7C00 -m elf_i386 -nostdlib -o $@.out $^
@@ -156,7 +166,8 @@ debug: $(IMAGE)
 
 gdb:
 	$(GDB) $(GDB_OPTIONS)
-
+tar:
+	tar -zcvf ../151220030.tar.gz .
 clean:
 	@rm -rf $(OBJ_DIR) 2> /dev/null
 	@rm -rf $(BOOT)	2> /dev/null

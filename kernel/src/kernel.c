@@ -93,7 +93,9 @@ int main(){
 	init_timer();
 	init_idt();
 	init_intr();
+  init_fs();
   init_pcb_pool();
+  printk("This is kernel!\n");
 
   PCB* pidle = pcb_create();
   empty_loader(pidle, idle);

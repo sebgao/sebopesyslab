@@ -7,13 +7,13 @@
 
 void readseg(unsigned char *, int, int);
 
-
+#define offset (256+256+256)*SECTSIZE
 
 int bootmain(){
 	struct ProgramHeader *ph, *eph;
 	unsigned char* pa, *i;
 
-	readseg((unsigned char*)elf, 8*SECTSIZE, 0);
+	readseg((unsigned char*)elf, 8*SECTSIZE, offset);
 
 	if (elf->magic != 0x464C457FU)
 		goto bad;
@@ -22,7 +22,7 @@ int bootmain(){
 	eph = ph + elf->phnum;
 	for(; ph < eph; ph ++) {
 		pa = (unsigned char*)ph->paddr; 
-		readseg(pa, ph->filesz, ph->off); 
+		readseg(pa, ph->filesz, offset + ph->off); 
 		for (i = pa + ph->filesz; i < pa + ph->memsz; *i ++ = 0);
 	}
 	((void(*)(void))elf->entry)();
