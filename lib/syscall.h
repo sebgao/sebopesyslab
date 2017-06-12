@@ -31,6 +31,12 @@
 #define SYS_SEM_CLOSE	1604
 #define SYS_SEM_GET		1605
 #define SYS_SEM_TRYWAIT	1606
+
+#define SYS_FS_OPEN 	1700
+#define SYS_FS_READ 	1701
+#define SYS_FS_WRITE	1702
+#define SYS_FS_LSEEK 	1703
+#define SYS_FS_CLOSE 	1704
 //alias begin
 
 #define sleep sys_sleep
@@ -50,6 +56,17 @@
 #define sem_close sys_sem_close
 #define thread_join sys_join
 #define process_join sys_join
+#define fs_open sys_fs_open
+#define fs_read sys_fs_read
+#define fs_write sys_fs_write
+#define fs_lseek sys_fs_lseek
+#define fs_close sys_fs_close
+
+#define FS_RW	0
+#define FS_RWC	1
+#define SEEK_SET	0
+#define SEEK_CUR	1
+#define	SEEK_END	2
 
 #define TIMER_HANDLERS_MAX 100
 typedef struct timer_handler{
@@ -57,6 +74,37 @@ typedef struct timer_handler{
 	int used;
 
 }timer_handler;
+
+// static inline int fs_open(const char *pathname, int flags);
+// static inline int fs_read(int fd, void *buf, int len);
+// static inline int fs_write(int fd, void *buf, int len);
+// static inline int fs_lseek(int fd, int offset, int whence);
+// static inline int fs_close(int fd);
+static inline int sys_fs_open(char *pathname, int flags){
+	int ret;
+	asm volatile("int $0x80": "=a"(ret) : "a"(SYS_FS_OPEN), "b"(pathname), "c"(flags)); //SYSCALL HERE!
+	return ret;
+}
+static inline int sys_fs_read(int fd, void *buf, int len){
+	int ret;
+	asm volatile("int $0x80": "=a"(ret) : "a"(SYS_FS_READ), "b"(fd), "c"(buf), "d"(len)); //SYSCALL HERE!
+	return ret;
+}
+static inline int sys_fs_write(int fd, void *buf, int len){
+	int ret;
+	asm volatile("int $0x80": "=a"(ret) : "a"(SYS_FS_WRITE), "b"(fd), "c"(buf), "d"(len)); //SYSCALL HERE!
+	return ret;
+}
+static inline int sys_fs_lseek(int fd, int offset, int whence){
+	int ret;
+	asm volatile("int $0x80": "=a"(ret) : "a"(SYS_FS_LSEEK), "b"(fd), "c"(offset), "d"(whence)); //SYSCALL HERE!
+	return ret;
+}
+static inline int sys_fs_close(int fd){
+	int ret;
+	asm volatile("int $0x80": "=a"(ret) : "a"(SYS_FS_CLOSE), "b"(fd)); //SYSCALL HERE!
+	return ret;
+}
 
 static inline void sys_sem_init(semaphore *sem, int count){
 	asm volatile("int $0x80": : "a"(SYS_SEM_INIT), "b"(sem), "c"(count)); //SYSCALL HERE!

@@ -1,6 +1,7 @@
 #include "common.h"
 #include <inc/types.h>
 #include <inc/disk.h>
+#include "process.h"
 struct bitmap bitmap;
 struct inode inode;
 struct dir dir;
@@ -160,6 +161,8 @@ int32_t fs_read_kr(int fd, void* buf, int32_t len){
 	if(f->offset+len >= f->file_size){
 		len = f->file_size-f->offset;
 	}
+	if(len == 0)
+		return -1;
 	fs_read_base_kr(fd, buf, len);
 	return len;
 	
@@ -286,7 +289,7 @@ int fs_create_kr(char* name){
 	saveDir(dir_offset);
 
 	readINode(index_inode);
-	memset(inode.data_block_offsets, 0xFF, sizeof(inode.data_block_offsets));
+	memset2(inode.data_block_offsets, 0xFF, sizeof(inode.data_block_offsets));
 	saveINode(index_inode);
 	for(i=0; i<NR_FILE_STREAM; i++){
 		if(fs[i].used == 0){
@@ -309,13 +312,80 @@ int fs_create_kr(char* name){
 	FAILURE:
 	return -1;
 }
+
+int fs_open_md(char *pathname, int flags){
+	int fd = fs_open_kr(pathname);
+	if(fd == -1 && flags == 1){
+		fd = fs_create_kr(pathname);
+	};
+	//printk("step 1\n");
+	return fd;
+};
+int fs_read_md(int fd, void *buf, int len){
+	return fs_read_kr(fd, buf, len);
+};
+int fs_write_md(int fd, void *buf, int len){
+	return fs_write_kr(fd, buf, len);
+};
+int fs_lseek_md(int fd, int offset, int whence){
+	FILE_STREAM *f = &fs[fd];
+	int32_t index = 0;
+	if(whence == 0){
+		index = offset;
+	}else if(whence == 1){
+		index = f->offset + offset;
+	}else if(whence == 2){
+		index = f->file_size + offset;
+	}
+	fs_lseek_kr(fd, index);
+	return index;
+};
+int fs_close_md(int fd){
+	return fs_close_kr(fd);
+};
+
+int fs_open_port(char *pathname, int flags){
+	int fd = fs_open_md(pathname, flags);
+	if(fd == -1)
+		return -1;
+	int i = 0;
+	for(i = 0; i<FCBMAX; i++){
+		if(current->fcb[i].fd_kr == -1)
+			break;
+	}
+	current->fcb[i].fd_kr = fd;
+	return i;
+};
+int fs_read_port(int fd, void *buf, int len){
+	if(fd == -1)
+		return -1;
+	return fs_read_md(current->fcb[fd].fd_kr, buf, len);
+};
+int fs_write_port(int fd, void *buf, int len){
+	if(fd == -1)
+		return -1;
+	return fs_write_md(current->fcb[fd].fd_kr, buf, len);
+};
+int fs_lseek_port(int fd, int offset, int whence){
+	if(fd == -1)
+		return -1;
+	return fs_lseek_md(current->fcb[fd].fd_kr, offset, whence);
+};
+int fs_close_port(int fd){
+	if(fd == -1)
+		return -1;
+	int ret = fs_close_md(current->fcb[fd].fd_kr);
+	current->fcb[fd].fd_kr = -1;
+	return ret;
+};
+
 void init_fs(){
 	//readDir(0);
 	int i=0;
 	for(i=0; i< NR_FILE_STREAM; i++){
 		fs[i].used = 0;
 	}
-	int fd = fs_create_kr("testx.txt");
+	/*int fd = fs_create_kr("testx.txt");
 	char magic[40];
 	strcpy(magic, "File system works!\nDeus machismo!\n");
 	int len = fs_write_kr(fd, magic, 40);
@@ -329,7 +399,7 @@ void init_fs(){
 	//printk("%d bytes\n", len);
 	verif[len] = '\0';
 	fs_close_kr(fw);
-	printk("%s", verif);
+	printk("%s", verif);*/
 	//printk("%d\n", fs[fw].file_size);
 	//}
 	/*for(i=0; i<NR_ENTRIES; i++){

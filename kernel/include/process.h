@@ -5,6 +5,7 @@
 #define NPKSTACKTOP 0x200000
 #define NPKSTACKSIZE 0x1000
 #define PCBPOOLMAX 1000
+#define FCBMAX 256
 typedef enum{
 	READY,
 	RUNNING,
@@ -17,6 +18,9 @@ typedef enum{
 	USER,
 	THREAD
 }TASK_TYPE;
+typedef struct FCB {
+	int32_t fd_kr;
+} FCB;
 typedef struct PCB {
 	uint8_t kstackbottom[0x10];
 	uint8_t kstack0[NPKSTACKSIZE];
@@ -33,6 +37,7 @@ typedef struct PCB {
 		uint32_t timeslice;
 		struct TrapFrame *tf;
 		pde_t *pgdir;
+		FCB fcb[FCBMAX];
 	};
 	struct PCB *next;
 	struct PCB *tail;

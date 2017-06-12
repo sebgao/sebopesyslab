@@ -14,6 +14,21 @@ void do_syscall(struct TrapFrame *tf) {
 	//disable_interrupt();
 	//printk("%d\n", tf->cs&0x3);
 	switch(tf->eax) {
+		case SYS_FS_OPEN:
+			tf->eax = fs_open_port((char*)tf->ebx, tf->ecx);
+		break;
+		case SYS_FS_READ:
+			tf->eax = fs_read_port(tf->ebx, (void*)tf->ecx, tf->edx);
+		break;
+		case SYS_FS_WRITE:
+			tf->eax = fs_write_port(tf->ebx, (void*)tf->ecx, tf->edx);
+		break;
+		case SYS_FS_LSEEK:
+			tf->eax = fs_lseek_port(tf->ebx, tf->ecx, tf->edx);
+		break;
+		case SYS_FS_CLOSE:
+			tf->eax = fs_close_port(tf->ebx);
+		break;
 		case SYS_SEM_INIT:
 			sem_init_kr((Semaphore*)tf->ebx, tf->ecx);
 		break;

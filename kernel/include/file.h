@@ -63,5 +63,11 @@ void fs_lseek_kr(int fd, int32_t index);
 int32_t fs_read_kr(int fd, void* buf, int32_t len);
 int32_t fs_write_kr(int fd, void* buf, int32_t len);
 int fs_open_kr(char* filename);
-#define NR_FILE_STREAM 32
+
+int fs_open_port(char *pathname, int flags);
+int fs_read_port(int fd, void *buf, int len);
+int fs_write_port(int fd, void *buf, int len);
+int fs_lseek_port(int fd, int offset, int whence);
+int fs_close_port(int fd);
+#define NR_FILE_STREAM 256
 #endif

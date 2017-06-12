@@ -141,6 +141,9 @@ PCB* pcb_create()
 	}
 	PCB *p = &PCBPool[i];
 	p->tf = &tfPool[i];
+	for(i=0; i<FCBMAX; i++){
+		p->fcb[i].fd_kr = -1;
+	}
 	p->used = 1;
 	struct PageInfo *pp = page_alloc(ALLOC_ZERO);
 	//printk("0x%x\n", page2kva(pp));

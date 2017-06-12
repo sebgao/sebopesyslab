@@ -79,6 +79,7 @@ void consumer(){
 }
 int main(){
 
+	/*
 	sem_init(&mutex, 1);
 	sem_init(&empty, N);
 	sem_init(&full,	0);
@@ -90,6 +91,17 @@ int main(){
 	thread_join(cons);
 
 	printf("You should not see this, since the producer and consumer are sisyphean\n");
+	*/
+	int fd = fs_open("singer.txt", FS_RWC);
+	char buf[300];
+	fs_read(fd, buf, 300);
+	printf("APP#READ singer.txt: %s\n", buf);
+
+	char buf2[300];
+	fs_lseek(fd, 0, SEEK_SET);
+	strcpy(buf2, "你本来是英雄，直到变的，更加恐惧");
+	fs_write(fd, buf2, 300);
+	printf("APP#WRITE singer.txt: %s\n", buf2);
 
 	exit();
 }
