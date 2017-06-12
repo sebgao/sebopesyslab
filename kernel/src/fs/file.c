@@ -79,6 +79,7 @@ int fs_open_kr(char* filename){
 
 		for(entry_offset = 0; entry_offset < NR_ENTRIES; entry_offset++){
 			//printk("%d %d", dir_offset, entry_offset);
+			//printk("FN: %s\n", dir.entries[entry_offset].filename);
 			if(!strcmp(dir.entries[entry_offset].filename, filename))
 				goto OUT_OF_LOOP;
 		}
@@ -96,8 +97,11 @@ int fs_open_kr(char* filename){
 			fs[i].file_size = dir.entries[entry_offset].file_size;
 			strcpy(fs[i].filename, dir.entries[entry_offset].filename);
 			fs[i].inode_offset = dir.entries[entry_offset].inode_offset;
+			//printk("$%d %d$\n", fs[i].file_size, fs[i].inode_offset);
 			//printk("%d\n", dir.entries[entry_offset].inode_offset);
 			fs[i].offset = 0;
+			fs[i].dir_offset = dir_offset;
+			fs[i].entry_offset = entry_offset;
 			//memset(fs[i].buffer, 0, BLOCK_SIZE>>2);
 			//readINode(fs[i].inode_offset);
 			//memcpy(fs[i].inode.data_block_offsets, inode.data_block_offsets, BLOCK_SIZE>>2);
@@ -207,17 +211,29 @@ void fs_write_base_kr(int fd, void* buf, int32_t len){
 int32_t fs_write_kr(int fd, void* buf, int32_t len){
 	FILE_STREAM *f = &fs[fd];
 	int32_t D1, D2;
-	readINode(f->inode_offset);
-	D1 = f->offset >> 9;
-	D2 = (f->offset + len) >> 9;
-	D1 += 1;
-	while(D1<=D2){
-		inode.data_block_offsets[D1] = dataAlloc();
-		D1 ++;
+	if(f->file_size == 0){
+		readINode(f->inode_offset);
+		inode.data_block_offsets[0] = dataAlloc();
+		saveINode(f->inode_offset);
+		f->file_size = len>512?512:len;
+		//printk("legal high %d\n", f->file_size);
 	}
-	saveINode(f->inode_offset);
-	if(f->offset + len> f->file_size)
+	
+	if(f->offset + len > f->file_size){
+		readINode(f->inode_offset);
+		D1 = f->offset >> 9;
+		D2 = (f->offset + len) >> 9;
+		D1 += 1;
+		while(D1<=D2){
+			inode.data_block_offsets[D1] = dataAlloc();
+			D1 ++;
+		}
+		saveINode(f->inode_offset);
 		f->file_size = f->offset + len;
+	};
+	readDir(f->dir_offset);
+	dir.entries[f->entry_offset].file_size = f->file_size;
+	saveDir(f->dir_offset);
 	fs_write_base_kr(fd, buf, len);
 	return len;
 	
@@ -229,7 +245,7 @@ void fs_lseek_kr(int fd, int32_t index){
 uint32_t fs_size_kr(int fd){
 	FILE_STREAM *f = &fs[fd];
 	return f->file_size;
-}
+	}
 int fs_close_kr(int fd){
 	FILE_STREAM *f = &fs[fd];
 	if(f->used){
@@ -238,18 +254,83 @@ int fs_close_kr(int fd){
 	}else
 		return 1;
 }
+void some(){
+
+}
+int fs_create_kr(char* name){
+	int dir_offset = 0, entry_offset = 0;
+	while(dir_offset < SC_DIR){
+		readDir(dir_offset);
+		for(entry_offset = 0; entry_offset < NR_ENTRIES; entry_offset++){
+			if(dir.entries[entry_offset].inode_offset == -1)
+				goto OUT_OF_LOOP;
+		}
+		dir_offset ++;
+	}
+	goto FAILURE;
+	
+	//FILE_STREAM *f;
+	int i=0;
+
+	OUT_OF_LOOP:
+	some();
+	//printk("##%d\n", entry_offset);
+	int index_inode = INodeAlloc();
+	//printk("##%d\n", index_inode);
+	dir.entries[entry_offset].inode_offset = index_inode;
+	strcpy(dir.entries[entry_offset].filename, name);
+	//printk("##%s\n", name);
+	//printk("##%s\n", dir.entries[entry_offset].filename);
+	dir.entries[entry_offset].file_size = 0;
+	
+	saveDir(dir_offset);
+
+	readINode(index_inode);
+	memset(inode.data_block_offsets, 0xFF, sizeof(inode.data_block_offsets));
+	saveINode(index_inode);
+	for(i=0; i<NR_FILE_STREAM; i++){
+		if(fs[i].used == 0){
+			fs[i].used = 1;
+			fs[i].file_size = dir.entries[entry_offset].file_size;
+			strcpy(fs[i].filename, dir.entries[entry_offset].filename);
+			fs[i].inode_offset = dir.entries[entry_offset].inode_offset;
+			//printk("%d\n", dir.entries[entry_offset].inode_offset);
+			fs[i].offset = 0;
+			fs[i].dir_offset = dir_offset;
+			fs[i].entry_offset = entry_offset;
+			//memset(fs[i].buffer, 0, BLOCK_SIZE>>2);
+			//readINode(fs[i].inode_offset);
+			//memcpy(fs[i].inode.data_block_offsets, inode.data_block_offsets, BLOCK_SIZE>>2);
+			//printk("%s\n", fs[i].filename);
+			return i;
+		}
+	}
+	return -1;
+	FAILURE:
+	return -1;
+}
 void init_fs(){
 	//readDir(0);
 	int i=0;
 	for(i=0; i< NR_FILE_STREAM; i++){
 		fs[i].used = 0;
 	}
-	int fd = fs_open_kr("test.txt");
+	int fd = fs_create_kr("testx.txt");
 	char magic[40];
-	int len = fs_read_kr(fd, magic, 40);
-	magic[len] = '\0';
-	printk("%s\n", magic);
-	
+	strcpy(magic, "File system works!\nDeus machismo!\n");
+	int len = fs_write_kr(fd, magic, 40);
+	fs_close_kr(fd);
+	//magic[len] = '\0';
+
+	int fw = fs_open_kr("testx.txt");
+	//printk("file: %d \n", fw);
+	char verif[40];
+	len = fs_read_kr(fw, verif, 40);
+	//printk("%d bytes\n", len);
+	verif[len] = '\0';
+	fs_close_kr(fw);
+	printk("%s", verif);
+	//printk("%d\n", fs[fw].file_size);
 	//}
 	/*for(i=0; i<NR_ENTRIES; i++){
 		printk("%x\n", dir.entries[i].file_size);

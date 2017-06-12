@@ -52,6 +52,8 @@ typedef struct{
 	uint32_t offset;
 	uint32_t inode_offset;
 	uint32_t file_size;
+	uint32_t dir_offset;
+	uint32_t entry_offset;
 	char filename[LEN_FILENAME];
 	//uint8_t buffer[BLOCK_SIZE];
 	char used;
