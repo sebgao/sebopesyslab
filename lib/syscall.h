@@ -56,11 +56,18 @@
 #define sem_close sys_sem_close
 #define thread_join sys_join
 #define process_join sys_join
+
 #define fs_open sys_fs_open
 #define fs_read sys_fs_read
 #define fs_write sys_fs_write
 #define fs_lseek sys_fs_lseek
 #define fs_close sys_fs_close
+
+#define open sys_fs_open
+#define read sys_fs_read
+#define write sys_fs_write
+#define lseek sys_fs_lseek
+#define close sys_fs_close
 
 #define FS_RW	0
 #define FS_RWC	1

@@ -216,6 +216,7 @@ void copy_pcb(PCB *dst, PCB *src)
 	}else if(dst->tt != THREAD){
 		copy_pgdir(dst->pgdir, src->pgdir);
 	}
+	memcpy2(dst->fcb, src->fcb, sizeof(dst->fcb));
 	//lcr3(PADDR(kern_pgdir));
 }
 

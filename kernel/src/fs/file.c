@@ -385,26 +385,11 @@ void init_fs(){
 	for(i=0; i< NR_FILE_STREAM; i++){
 		fs[i].used = 0;
 	}
-	/*int fd = fs_create_kr("testx.txt");
-	char magic[40];
-	strcpy(magic, "File system works!\nDeus machismo!\n");
-	int len = fs_write_kr(fd, magic, 40);
+	int fd = fs_open_kr("test.txt");
+	char magic[80];
+	
+	fs_read_kr(fd, magic, 80);
 	fs_close_kr(fd);
-	//magic[len] = '\0';
-
-	int fw = fs_open_kr("testx.txt");
-	//printk("file: %d \n", fw);
-	char verif[40];
-	len = fs_read_kr(fw, verif, 40);
-	//printk("%d bytes\n", len);
-	verif[len] = '\0';
-	fs_close_kr(fw);
-	printk("%s", verif);*/
-	//printk("%d\n", fs[fw].file_size);
-	//}
-	/*for(i=0; i<NR_ENTRIES; i++){
-		printk("%x\n", dir.entries[i].file_size);
-		printk("%x\n", dir.entries[i].inode_offset);
-		printk("%s\n", dir.entries[i].filename);
-	}*/
+	printk("%s\n", magic);
+	
 }
