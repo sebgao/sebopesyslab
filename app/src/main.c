@@ -79,6 +79,7 @@ void consumer(){
 }*/
 int main(){
 
+
 	int fd = open("singer.txt", FS_RWC);
 	char buf[300];
 	read(fd, buf, 300);

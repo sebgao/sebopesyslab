@@ -13,7 +13,12 @@ extern uint32_t tick();
 void do_syscall(struct TrapFrame *tf) {
 	//disable_interrupt();
 	//printk("%d\n", tf->cs&0x3);
+	char* str; 
 	switch(tf->eax) {
+		case SYS_READLINE:
+			str = readline("$> ");
+			strcpy((char*)tf->ebx, str);
+		break;
 		case SYS_FS_OPEN:
 			tf->eax = fs_open_port((char*)tf->ebx, tf->ecx);
 		break;

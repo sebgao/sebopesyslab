@@ -5,11 +5,11 @@ temp.o:     file format elf32-i386
 Disassembly of section .text:
 
 08048094 <sys_fs_open>:
-// static inline int fs_open(const char *pathname, int flags);
-// static inline int fs_read(int fd, void *buf, int len);
-// static inline int fs_write(int fd, void *buf, int len);
 // static inline int fs_lseek(int fd, int offset, int whence);
 // static inline int fs_close(int fd);
+static inline void sys_readline(char* dest){
+	asm volatile("int $0x80": : "a"(SYS_READLINE), "b"(dest));
+}
 static inline int sys_fs_open(char *pathname, int flags){
  8048094:	55                   	push   %ebp
  8048095:	89 e5                	mov    %esp,%ebp
@@ -193,6 +193,7 @@ int main(){
  804818a:	89 e5                	mov    %esp,%ebp
  804818c:	51                   	push   %ecx
  804818d:	81 ec 64 02 00 00    	sub    $0x264,%esp
+
 
 	int fd = open("singer.txt", FS_RWC);
  8048193:	6a 01                	push   $0x1

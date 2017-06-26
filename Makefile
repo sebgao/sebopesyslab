@@ -3,6 +3,7 @@ KERNEL := kernel.bin
 GAME	:= game.bin
 IMAGE  := disk.bin
 APP 	:= app.bin
+CSHELL   := cshell.bin
 
 CC	  := gcc
 LD	  := ld
@@ -38,12 +39,16 @@ BOOT_DIR	   := boot
 KERNEL_DIR	 := kernel
 GAME_DIR     := game
 APP_DIR		:= app
+CSHELL_DIR   := cshell
 
 GAME_CFLAGS := $(CFLAGS)
 GAME_CFLAGS += -I $(GAME_DIR)/include
 
 APP_CFLAGS := $(CFLAGS)
 APP_CFLAGS += -I $(APP_DIR)/include
+
+CSHELL_CFLAGS := $(CFLAGS)
+CSHELL_CFLAGS += -I $(CSHELL_DIR)/include
 
 KERNEL_CFLAGS := $(CFLAGS)
 KERNEL_CFLAGS += -I $(KERNEL_DIR)/include
@@ -53,6 +58,7 @@ OBJ_BOOT_DIR   := $(OBJ_DIR)/$(BOOT_DIR)
 OBJ_KERNEL_DIR := $(OBJ_DIR)/$(KERNEL_DIR)
 OBJ_GAME_DIR := $(OBJ_DIR)/$(GAME_DIR)
 OBJ_APP_DIR := $(OBJ_DIR)/$(APP_DIR)
+OBJ_CSHELL_DIR := $(OBJ_DIR)/$(CSHELL_DIR)
 
 LD_SCRIPT := $(shell find $(KERNEL_DIR) -name "*.ld")
 
@@ -80,11 +86,17 @@ APP_S := $(shell find $(APP_DIR) -name "*.S")
 APP_O := $(APP_C:%.c=$(OBJ_DIR)/%.o)
 APP_O += $(APP_S:%.S=$(OBJ_DIR)/%.o)
 
-$(IMAGE): $(BOOT) $(KERNEL) $(GAME) $(APP) formatter
+CSHELL_C := $(shell find $(CSHELL_DIR) -name "*.c")
+CSHELL_S := $(shell find $(CSHELL_DIR) -name "*.S")
+CSHELL_O := $(CSHELL_C:%.c=$(OBJ_DIR)/%.o)
+CSHELL_O += $(CSHELL_S:%.S=$(OBJ_DIR)/%.o)
+
+$(IMAGE): $(BOOT) $(KERNEL) $(GAME) $(APP) $(CSHELL) formatter
 	./formatter
 	./copy2myfs $(KERNEL) kernel
 	./copy2myfs $(GAME) game
 	./copy2myfs $(APP) app
+	./copy2myfs $(CSHELL) cshell
 	./copy2myfs test.txt test.txt
 	#@$(DD) if=/dev/zero of=$(IMAGE) count=10000		 > /dev/null # 准备磁盘文件
 	#@$(DD) if=$(BOOT) of=$(IMAGE) conv=notrunc		  > /dev/null # 填充 boot loader
@@ -128,6 +140,11 @@ $(APP): $(APP_O) $(LIB_O)
 	cp $@ temp.o
 	objdump -S temp.o > APP.S
 
+$(CSHELL): $(CSHELL_O) $(LIB_O)
+	$(LD) -e main -m elf_i386 -nostdlib -o $@ $^ $(shell $(CC) $(CSHELL_CFLAGS) -print-libgcc-file-name)
+	cp $@ temp.o
+	objdump -S temp.o > CSHELL.S
+
 $(OBJ_LIB_DIR)/%.o : $(LIB_DIR)/%.c
 	@mkdir -p $(OBJ_LIB_DIR)
 	$(CC) $(CFLAGS) $< -o $@
@@ -143,6 +160,10 @@ $(OBJ_GAME_DIR)/%.o: $(GAME_DIR)/%.[cS]
 $(OBJ_APP_DIR)/%.o: $(APP_DIR)/%.[cS]
 	mkdir -p $(OBJ_DIR)/$(dir $<)
 	$(CC) $(APP_CFLAGS) $< -o $@
+
+$(OBJ_CSHELL_DIR)/%.o: $(CSHELL_DIR)/%.[cS]
+	mkdir -p $(OBJ_DIR)/$(dir $<)
+	$(CC) $(CSHELL_CFLAGS) $< -o $@
 
 DEPS := $(shell find -name "*.d")
 -include $(DEPS)
