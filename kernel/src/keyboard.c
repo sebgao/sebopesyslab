@@ -230,6 +230,8 @@ readline(const char *prompt)
 				int j=0;
 				for(j=0; j<i; j++){
 					cputchar('\b');
+					cputchar(' ');
+					cputchar('\b');
 				}
 				i = strlen(buf);
 				for(j=0; j<i; j++){
@@ -244,6 +246,8 @@ readline(const char *prompt)
 				int j=0;
 				for(j=0; j<i; j++){
 					cputchar('\b');
+					cputchar(' ');
+					cputchar('\b');
 				}
 				i = strlen(buf);
 				for(j=0; j<i; j++){
@@ -255,8 +259,11 @@ readline(const char *prompt)
 			printk("read error: %e\n", c);
 			return NULL;
 		} else if ((c == '\b' || c == '\x7f') && i > 0) {
-			if (echoing)
+			if (echoing){
 				cputchar('\b');
+				cputchar(' ');
+				cputchar('\b');
+			}
 			i--;
 		} else if (c >= ' ' && i < BUFLEN-1) {
 			if (echoing)
