@@ -315,9 +315,12 @@ int fs_create_kr(char* name){
 
 int fs_open_md(char *pathname, int flags){
 	int fd = fs_open_kr(pathname);
-	if(fd == -1 && flags == 1){
+	if(fd == -1 && flags >= 1 ){
 		fd = fs_create_kr(pathname);
 	};
+	if(flags == 2){
+		fs[fd].file_size = 0;
+	}
 	//printk("step 1\n");
 	return fd;
 };
@@ -379,6 +382,49 @@ int fs_close_port(int fd){
 	return ret;
 };
 
+void fs_ls_kr(uint32_t mask){
+	int dir_offset = 0, entry_offset = 0;
+	while(dir_offset < SC_DIR){
+		readDir(dir_offset);
+		for(entry_offset = 0; entry_offset < NR_ENTRIES; entry_offset++){
+			if(dir.entries[entry_offset].inode_offset != -1){
+				struct dirent *entry = &dir.entries[entry_offset];
+				if((mask & 0x02) == 0 && entry->filename[0] == '.')continue;
+				if((mask & 0x01) == 0){
+					printk("%s\n", entry->filename);
+				}
+				else{
+					//printk("%d %d\n", mask, mask&0x04);
+					if((mask & 0x04) != 0){
+						//printk("miaomiaomiao");
+						int size = entry->file_size;
+						if(size < 1024){
+							//printk("b!");
+							printk("%d\t%s\n", size, entry->filename);
+							continue;
+						}
+						size /= 1024;
+						if(size < 1024){
+							//printk("k!");
+							printk("%dK\t%s\n", size, entry->filename);
+							continue;
+						}
+						size /= 1024;
+						if(size < 1024){
+							//printk("m!");
+							printk("%dM\t%s\n", size, entry->filename);
+							continue;
+						}
+					}else{
+						printk("%d\t%s\n", entry->file_size, entry->filename);
+					}
+				}
+			}
+		}
+		dir_offset ++;
+	}
+}
+
 void init_fs(){
 	//readDir(0);
 	int i=0;
@@ -391,5 +437,4 @@ void init_fs(){
 	fs_read_kr(fd, magic, 80);
 	fs_close_kr(fd);
 	printk("%s\n", magic);
-	
 }

@@ -33,7 +33,20 @@ static inline void strcpy(char* dest, const char* source)
         i++;
     } 
 }
-
+static inline int strlen(const char* source){
+    int i = 0;
+    while(source[i] != '\0')
+        i++;
+    return i;
+}
+static inline char *
+strfind(const char *s, char c)
+{
+    for (; *s; s++)
+        if (*s == c)
+            break;
+    return (char *) s;
+}
 static inline char * strchr(const char *s, char c)
 {
     for (; *s; s++)

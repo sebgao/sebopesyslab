@@ -92,5 +92,7 @@ int main(){
 	strcpy(buf2, "Hello from the other side!");
 	write(fd, buf2, 26);
 	printf("APP#WRITE singer.txt: %s\n", buf2);
+	int i=0;
+	while(i<(1<<29))i++;
 	exit();
 }

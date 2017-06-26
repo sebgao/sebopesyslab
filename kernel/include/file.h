@@ -69,5 +69,6 @@ int fs_read_port(int fd, void *buf, int len);
 int fs_write_port(int fd, void *buf, int len);
 int fs_lseek_port(int fd, int offset, int whence);
 int fs_close_port(int fd);
+void fs_ls_kr(uint32_t mask);
 #define NR_FILE_STREAM 256
 #endif

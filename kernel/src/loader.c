@@ -61,7 +61,7 @@ void loader(PCB* pcb, uint32_t offset){
   //printk("e\n");
 };
 
-void loader_file(PCB* pcb, char* filename){
+int loader_file(PCB* pcb, char* filename){
   //102400
   struct ProgramHeader *ph, *eph;
   unsigned char* pa, *i;
@@ -72,7 +72,9 @@ void loader_file(PCB* pcb, char* filename){
   fs_read_kr(fd, elf_r, 8*SECTSIZE);
   //readseg((unsigned char*)elf, 8*SECTSIZE, offset);
   //printk("%x\n", *(uint32_t *)(elf_r+7*SECTSIZE));
-  printk("Magic Assertion: %x\n", (elf->magic == 0x464C457FU));
+  if((elf->magic != 0x464C457FU))
+    return -1;
+  //printk("Magic Assertion: %x\n", (elf->magic == 0x464C457FU));
 
 
   ph = (struct ProgramHeader*)((char *)elf + elf->phoff);
@@ -118,6 +120,7 @@ void loader_file(PCB* pcb, char* filename){
   //switch_pcb(pcb);
   
   //printk("e\n");
+  return 0;
 };
 
 void empty_loader(PCB* pcb, void (*ptr)(void)){

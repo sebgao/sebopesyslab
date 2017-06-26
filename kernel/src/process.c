@@ -183,8 +183,8 @@ void switch_pcb(PCB* pcb){
 	enter_pcb(pcb);
 }
 void free_pcb(PCB* pcb){
-	free_pgdir(pcb->pgdir);
-	page_decref(pa2page(PADDR(pcb->pgdir)));
+	//free_pgdir(pcb->pgdir);
+	//page_decref(pa2page(PADDR(pcb->pgdir)));
 	pcb->used = 0;
 
 }
@@ -264,7 +264,6 @@ void thread_current(uint32_t entry, uint32_t exit, uint32_t arg){
 }
 
 void exit_current(){
-
 	PCB* p;
 
 	while(1){
@@ -291,6 +290,16 @@ void join_current(int pid){
 
 	PCB* cur = current;
 	ll_entail(&p->join_list, cur);
+	current = NULL;
+	do_scheduler();
+}
+void exec_current(char* filename){
+	int status = loader_file(current, filename);
+	if(status == -1){
+		printk("Not executable\n");
+		return;
+	}
+	ll_entail(&ready_list, current);
 	current = NULL;
 	do_scheduler();
 }

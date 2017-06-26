@@ -37,8 +37,11 @@
 #define SYS_FS_WRITE	1702
 #define SYS_FS_LSEEK 	1703
 #define SYS_FS_CLOSE 	1704
+#define SYS_FS_LS 		1705
 
 #define SYS_READLINE	1800
+
+#define SYS_EXEC 		1900
 //alias begin
 
 #define sleep sys_sleep
@@ -71,10 +74,13 @@
 #define lseek sys_fs_lseek
 #define close sys_fs_close
 
+#define exec sys_exec
+
 #define creadline sys_readline
 
 #define FS_RW	0
 #define FS_RWC	1
+#define FS_RWD	2
 #define SEEK_SET	0
 #define SEEK_CUR	1
 #define	SEEK_END	2
@@ -91,8 +97,15 @@ typedef struct timer_handler{
 // static inline int fs_write(int fd, void *buf, int len);
 // static inline int fs_lseek(int fd, int offset, int whence);
 // static inline int fs_close(int fd);
+static inline void sys_exec(char* fn){
+	asm volatile("int $0x80": : "a"(SYS_EXEC), "b"(fn));
+}
+
 static inline void sys_readline(char* dest){
 	asm volatile("int $0x80": : "a"(SYS_READLINE), "b"(dest));
+}
+static inline void sys_fs_ls(uint32_t mask){
+	asm volatile("int $0x80": : "a"(SYS_FS_LS), "b"(mask));
 }
 static inline int sys_fs_open(char *pathname, int flags){
 	int ret;

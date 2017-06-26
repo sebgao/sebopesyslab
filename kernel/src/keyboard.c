@@ -8,6 +8,7 @@ static int letter[] = {
 static int keydown[26]={0};
 
 static int lastkey;
+static int ctrl;
 //static int px = 50;
 //static int py = 50;
 //static int pw = 2;
@@ -22,7 +23,11 @@ int8_t get_lastkey(){
 void press_key(int code){
 	int i=0;
 	//printk("haha\n");
+	
 	if((code & 0x80) == 0){
+		if(code == 0x1d){
+			ctrl = 1;
+		}
 		for(;i<26;i++){
 			if(letter[i]==code){
 				keydown[i] = 1;
@@ -32,6 +37,9 @@ void press_key(int code){
 		}
 	}else{
 		code &= 0x7F;
+		if(code == 0x1d){
+			ctrl = 0;
+		}
 		for(;i<26;i++){
 			if(letter[i]==code){
 				keydown[i] = 0;
@@ -41,6 +49,14 @@ void press_key(int code){
 	}
 }
 
+int ctrl_c(){
+	int ctrlc = ctrl && keydown['c'-'a'];
+	if(ctrlc){
+		ctrl = 0;
+		keydown['c'-'a'] = 0;
+	}
+	return ctrlc;
+}
 
 
 #define NO		0
@@ -151,7 +167,7 @@ int poll_key(){
 	data = inb(0x60);
 
 	while(data == 0x08)
-		data = inb(0x60);
+		data = inb(0x60); 
 
 	if (data == 0xE0) {
 		// E0 escape character

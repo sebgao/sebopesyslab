@@ -10,6 +10,7 @@ void wait_key();
 int poll_key();
 char *
 readline(const char *prompt);
+int ctrl_c();
 
 // Special keycodes
 #define KEY_HOME	0xE0

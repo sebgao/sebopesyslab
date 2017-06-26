@@ -15,9 +15,15 @@ void do_syscall(struct TrapFrame *tf) {
 	//printk("%d\n", tf->cs&0x3);
 	char* str; 
 	switch(tf->eax) {
+		case SYS_EXEC:
+			exec_current((char*)tf->ebx);
+		break;
 		case SYS_READLINE:
 			str = readline("$> ");
 			strcpy((char*)tf->ebx, str);
+		break;
+		case SYS_FS_LS:
+			fs_ls_kr(tf->ebx);
 		break;
 		case SYS_FS_OPEN:
 			tf->eax = fs_open_port((char*)tf->ebx, tf->ecx);

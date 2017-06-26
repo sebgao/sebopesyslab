@@ -60,7 +60,7 @@ void enready_pcb(PCB* pcb);
 void do_scheduler();
 
 void loader(PCB* pcb, uint32_t offset);
-void loader_file(PCB* pcb, char* filename);
+int loader_file(PCB* pcb, char* filename);
 void empty_loader(PCB* pcb, void (*ptr)(void));
 
 uint32_t ll_len(PCB** head);
@@ -73,4 +73,5 @@ void fork_current();
 void thread_current(uint32_t entry, uint32_t exit, uint32_t arg);
 
 void join_current(int pid);
+void exec_current(char* filename);
 #endif

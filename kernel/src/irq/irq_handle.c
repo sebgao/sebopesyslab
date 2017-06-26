@@ -1,7 +1,7 @@
 #include "common.h"
 //#include "serial.h"
 #include "lib/syscall.h"
-
+#include "keyboard.h"
 #include "process.h"
 //static void (*do_timer)(void);
 extern void press_key(int code);
@@ -61,6 +61,10 @@ void irq_handle(struct TrapFrame *tf) {
 		outb(0x61, val | 0x80);
 		outb(0x61, val);
 		press_key(code);
+		if(ctrl_c() && current->tt != KERNEL){
+			tf->eax = SYS_EXIT;
+			do_syscall(tf);
+		};
 	} else {
 		
 	}

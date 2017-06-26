@@ -41,14 +41,16 @@ int main(){
   init_fs();
   init_pcb_pool();
   
-
   printk("This is kernel!\n");
 
   PCB* pidle = pcb_create();
   empty_loader(pidle, idle);
   enready_pcb(pidle);
 
-
+  /*PCB* pidle2 = pcb_create();
+  empty_loader(pidle2, idle);
+  enready_pcb(pidle2);
+  */
   /*PCB* pcb = pcb_create();
   loader_file(pcb, "game");
   enready_pcb(pcb);*/

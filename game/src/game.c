@@ -36,15 +36,9 @@ int main(){
 	//printk("5\n");
 	//clear_key();
 	//printk("6\n");
-	printf("Hello this is INIT#%d! Now I want to fork GAME! WATCH ME!\n", getpid());
-	if(fork()!=0){
-		printf("INIT#%d: My duty is done! I choose goudai!\n", getpid());
-		//while(1);
-		exit();
-		printf("INIT#%d: To check whether I am alive! You should not see this!\n", getpid());
-	}else{
-		game();
-	}
+	
+	game();
+	
 	return 1;
 };
 
@@ -191,12 +185,12 @@ void dreamOf100HZ(int timestamp){
 		printf("GAME#%d: Sleep 5s!\n", getpid());
 		sleep(5);
 	}
-	if(key('m')){
+	/*if(key('m')){
 		clearStage();
 		drawStage();
 		printf("GAME#%d: Ready to exit! Bye!\n", getpid());
 		exit();
-	}
+	}*/
 	if(gameStatus == GAME_START){
 		//printf("%x\n", st);
 		//printf("Score: %d\n", curtime);

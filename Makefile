@@ -98,6 +98,7 @@ $(IMAGE): $(BOOT) $(KERNEL) $(GAME) $(APP) $(CSHELL) formatter
 	./copy2myfs $(APP) app
 	./copy2myfs $(CSHELL) cshell
 	./copy2myfs test.txt test.txt
+	./copy2myfs test.txt .hidden.txt
 	#@$(DD) if=/dev/zero of=$(IMAGE) count=10000		 > /dev/null # 准备磁盘文件
 	#@$(DD) if=$(BOOT) of=$(IMAGE) conv=notrunc		  > /dev/null # 填充 boot loader
 	#@$(DD) if=$(KERNEL) of=$(IMAGE) seek=2 conv=notrunc > /dev/null # 填充 kernel, 跨过 mbr
