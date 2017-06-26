@@ -73,4 +73,10 @@ static inline void * memmove(void *dst, const void *src, size_t n)
     }
     return dst;
 }
+static inline int strlen(const char* source){
+    int i = 0;
+    while(source[i] != '\0')
+        i++;
+    return i;
+}
 #endif

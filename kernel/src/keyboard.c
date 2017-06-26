@@ -209,7 +209,8 @@ int getchar(void)
 
 #define BUFLEN 1024
 static char buf[BUFLEN];
-
+char history[200][512];
+int history_id = 0;
 char *
 readline(const char *prompt)
 {
@@ -222,6 +223,34 @@ readline(const char *prompt)
 	echoing = 1;
 	while (1) {
 		c = getchar();
+		if(c == KEY_UP){
+			if(history_id > 0){
+				history_id -= 1;
+				strcpy(buf, history[history_id]);
+				int j=0;
+				for(j=0; j<i; j++){
+					cputchar('\b');
+				}
+				i = strlen(buf);
+				for(j=0; j<i; j++){
+					cputchar(buf[j]);
+				}
+			}
+		}else
+		if(c == KEY_DN){
+			if(history_id < 199){
+				history_id += 1;
+				strcpy(buf, history[history_id]);
+				int j=0;
+				for(j=0; j<i; j++){
+					cputchar('\b');
+				}
+				i = strlen(buf);
+				for(j=0; j<i; j++){
+					cputchar(buf[j]);
+				}
+			}
+		}else
 		if (c < 0) {
 			printk("read error: %e\n", c);
 			return NULL;
@@ -237,6 +266,8 @@ readline(const char *prompt)
 			if (echoing)
 				cputchar('\n');
 			buf[i] = 0;
+			strcpy(history[history_id], buf);
+			history_id++;
 			return buf;
 		}
 	}
